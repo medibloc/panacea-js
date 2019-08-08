@@ -1,0 +1,20 @@
+#General
+.DS_Store
+
+# Distribution folders
+dist/*.js
+dist/*.json
+lib
+
+# Dependency directories
+node_modules
+
+#IDE directories
+.idea
+.vscode
+
+##Temporary ignore for documentation
+docs/_build
+
+#Logs
+npm-debug.log*

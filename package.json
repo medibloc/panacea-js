@@ -1,0 +1,54 @@
+{
+  "name": "panacea-js",
+  "version": "1.0.0",
+  "description": "JavaScript library for MediBloc",
+  "main": "index.js",
+  "scripts": {
+    "babel": "babel src -d lib --copy-files",
+    "browserify": "browserify ./lib/index.js -o ./dist/panaceajs.js -s panaceajs",
+    "build": "npm run clean && npm run babel && npm run browserify && npm run uglify",
+    "clean": "npm run clean-dist && npm run clean-lib",
+    "clean-dist": "rm -rf dist",
+    "clean-lib": "rm -rf lib",
+    "lint": "eslint .",
+    "test": "mocha --recursive --require babel-core/register --reporter spec",
+    "uglify": "uglifyjs -nm -o ./dist/panaceajs.min.js ./dist/panaceajs.js"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "keywords": [
+    "medibloc",
+    "javascript",
+    "library",
+    "panacea"
+  ],
+  "author": "MediBloc <dev@medibloc.org>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "babel-runtime": "^6.26.0",
+    "bignumber.js": "^7.0.1",
+    "browserify": "^16.2.3",
+    "js-sha3": "^0.7.0",
+    "secp256k1": "^3.5.0"
+  },
+  "devDependencies": {
+    "axios-mock-adapter": "^1.15.0",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-add-module-exports": "^1.0.2",
+    "babel-plugin-module-resolver": "^3.2.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "chai": "^4.1.2",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-import-resolver-babel-module": "^4.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "mocha": "^6.1.4",
+    "pre-commit": "^1.2.2",
+    "sinon": "^6.3.5",
+    "sinon-chai": "^3.3.0",
+    "uglify-es": "^3.3.9"
+  }
+}

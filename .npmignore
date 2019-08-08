@@ -1,0 +1,11 @@
+.babelrc
+.eslintignore
+.eslintrc.js
+.idea
+.gitignore
+
+.vscode/
+docs/
+example/
+src/
+test/

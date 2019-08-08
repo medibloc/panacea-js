@@ -1,0 +1,16 @@
+{
+  "presets": [
+      "es2015"
+    ],
+    "plugins": [
+      "add-module-exports",
+      "babel-plugin-transform-object-rest-spread",
+      "transform-runtime",
+      ["module-resolver", {
+        "root": ["./src"],
+        "alias": {
+          "test": ["./test"]
+        }
+      }]
+	]
+}

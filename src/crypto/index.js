@@ -9,18 +9,20 @@ import uuid from 'uuid';
 import ecc from 'tiny-secp256k1';
 
 import {
-  ab2hexstring,
+  ab2hexstring, isHex,
   sha256,
   sha256ripemd160,
   sha3,
 } from '../utils';
-import { PRIVKEY_LEN, PRIVKEY_MAX } from '../../config';
+import {
+  CURVE,
+  DECODED_ADDR_LEN,
+  DEFAULT_PREFIX, HD_PATH,
+  MNEMONIC_LEN,
+  PRIVKEY_LEN,
+  PRIVKEY_MAX
+} from '../../config';
 
-
-const DECODED_ADDR_LEN = 20; // 20 byte
-const HD_PATH = "44'/371'/0'/0/";
-const MNEMONIC_LEN = 256; // 256 bit entropy
-const CURVE = 'secp256k1';
 
 const ec = new EC(CURVE);
 
@@ -46,12 +48,8 @@ const checkAddress = (address, hrp) => {
 
     const decodedAddress = bech32.decode(address);
     const decodedAddressLength = decodeAddress(address).length;
-    if (decodedAddressLength === DECODED_ADDR_LEN &&
-      decodedAddress.prefix === hrp) {
-      return true;
-    }
-
-    return false;
+    return (decodedAddressLength === DECODED_ADDR_LEN &&
+      decodedAddress.prefix === hrp);
   } catch (err) {
     return false;
   }
@@ -63,7 +61,7 @@ const checkAddress = (address, hrp) => {
  * @param {*} prefix the address prefix
  * @param {*} type the output type (default: hex)
  */
-const encodeAddress = (value, prefix = 'panacea', type = 'hex') => {
+const encodeAddress = (value, prefix = DEFAULT_PREFIX, type = 'hex') => {
   const words = bech32.toWords(Buffer.from(value, type));
   return bech32.encode(prefix, words);
 };
@@ -77,20 +75,19 @@ const generateRandomArray = length => secureRandom(length);
 
 /**
  * Generates 32 bytes of random entropy
- * @param {number} len output length (default: 32 bytes)
- * @returns {string} entropy bytes hexstring
+ * @returns {string} entropy bytes hex string
  */
 const generatePrivateKey = () => {
   const privKey = ab2hexstring(generateRandomArray(PRIVKEY_LEN));
-  if (parseInt(privKey, 10) > parseInt(PRIVKEY_MAX, 10)) return generatePrivateKey();
+  if (parseInt(privKey, 16) > parseInt(PRIVKEY_MAX, 16)) return generatePrivateKey();
   return privKey;
 };
 
 /**
  * @param {string} publicKey - Encoded public key
- * @return {Elliptic.PublicKey} public key hexstring
+ * @return {object} public key point
  */
-const getPublicKey = (publicKey) => {
+const getPublicKeyPoint = (publicKey) => {
   const keyPair = ec.keyFromPublic(publicKey, 'hex');
   return keyPair.getPublic();
 };
@@ -101,20 +98,19 @@ const getPublicKey = (publicKey) => {
  * @return {string} public key hexstring
  */
 const getPublicKeyFromPrivateKey = (privateKeyHex) => {
-  if (!privateKeyHex || privateKeyHex.length !== PRIVKEY_LEN * 2) {
+  if (!privateKeyHex || privateKeyHex.length !== PRIVKEY_LEN * 2 || !isHex(privateKeyHex)) {
     throw new Error('invalid privateKey');
   }
   const curve = new EC(CURVE);
   const keypair = curve.keyFromPrivate(privateKeyHex, 'hex');
-  const pubKey = keypair.getPublic().encode('hex');
-  return pubKey;
+  return keypair.getPublic().encode('hex');
 };
 
 /**
  * PubKey performs the point-scalar multiplication from the privKey on the
  * generator point to get the pubkey.
  * @param {Buffer} privateKey
- * @return {Elliptic.PublicKey} PubKey
+ * @return {object} PubKey point
  * */
 const generatePubKey = (privateKey) => {
   const curve = new EC(CURVE);
@@ -134,13 +130,13 @@ const getAddressFromPublicKey = (publicKeyHex, prefix) => {
   const compressed = pubPoint.encodeCompressed();
   const hexed = ab2hexstring(compressed);
   const hash = sha256ripemd160(hexed); // https://git.io/fAn8N
-  const address = encodeAddress(hash, prefix);
-  return address;
+  return encodeAddress(hash, prefix);
 };
 
 /**
  * Gets an address from a private key.
- * @param {string} privateKeyHex the private key hexstring
+ * @param {string} privateKeyHex the private key hex string
+ * @param {string} prefix the hrp
  */
 const getAddressFromPrivateKey = (privateKeyHex, prefix) => {
   const pubKey = getPublicKeyFromPrivateKey(privateKeyHex);
@@ -149,23 +145,22 @@ const getAddressFromPrivateKey = (privateKeyHex, prefix) => {
 
 /**
  * Generates a signature (64 byte <r,s>) for a transaction based on given private key.
- * @param {string} signBytesHex - Unsigned transaction sign bytes hexstring.
+ * @param {string} signBytesHex - Unsigned transaction sign bytes hex string.
  * @param {string | Buffer} privateKey - The private key.
  * @return {Buffer} Signature. Does not include tx.
  */
 const generateSignature = (signBytesHex, privateKey) => {
   const msgHash = sha256(signBytesHex);
   const msgHashBuf = Buffer.from(msgHash, 'hex');
-  const signature = ecc.sign(msgHashBuf, Buffer.from(privateKey, 'hex')); // enc ignored if buffer
-  return signature;
+  return ecc.sign(msgHashBuf, Buffer.from(privateKey, 'hex')); // enc ignored if buffer
 };
 
 /**
  * Verifies a signature (64 byte <r,s>) given the sign bytes and public key.
- * @param {string} sigHex - The signature hexstring.
- * @param {string} signBytesHex - Unsigned transaction sign bytes hexstring.
+ * @param {string} sigHex - The signature hex string.
+ * @param {string} signBytesHex - Unsigned transaction sign bytes hex string.
  * @param {string} publicKeyHex - The public key.
- * @return {Buffer} Signature. Does not include tx.
+ * @return {boolean}
  */
 const verifySignature = (sigHex, signBytesHex, publicKeyHex) => {
   const publicKey = Buffer.from(publicKeyHex, 'hex');
@@ -183,7 +178,7 @@ const verifySignature = (sigHex, signBytesHex, publicKeyHex) => {
  * @param {string} password the password.
  * @return {object} the keystore object.
  */
-const generateKeyStore = (privateKeyHex, password) => {
+const generateKeyStore = (privateKeyHex, password = '') => {
   const salt = browserifiedCrypto.randomBytes(32);
   const iv = browserifiedCrypto.randomBytes(16);
   const cipherAlg = 'aes-256-ctr';
@@ -227,10 +222,10 @@ const generateKeyStore = (privateKeyHex, password) => {
 // TODO @ggomma check compatibility with old panacea-js
 /**
  * Gets a private key from a keystore given its password.
- * @param {string} keystore the keystore in json format
+ * @param {object} keystore the keystore in json format
  * @param {string} password the password.
  */
-const getPrivateKeyFromKeyStore = (keystore, password) => {
+const getPrivateKeyFromKeyStore = (keystore, password = '') => {
   if (!is.string(password)) {
     throw new Error('No password given');
   }
@@ -270,9 +265,8 @@ const getPrivateKeyFromKeyStore = (keystore, password) => {
     derivedKey.slice(0, 32),
     Buffer.from(json.crypto.cipherparams.iv, 'hex'),
   );
-  const privateKeyBuf = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
-  const privateKey = privateKeyBuf.toString('hex');
-  return privateKey;
+  const privateKeyBuf = Buffer.concat([decipher.update(ciphertextBuf), decipher.final()]);
+  return privateKeyBuf.toString('hex');
 };
 
 /**
@@ -283,7 +277,7 @@ const generateMnemonic = () => bip39.generateMnemonic(MNEMONIC_LEN);
 /**
  * Validates mnemonic phrase words.
  * @param {string} mnemonic the mnemonic phrase words
- * @return {bool} validation result
+ * @return {boolean} validation result
  */
 const validateMnemonic = mnemonic => bip39.validateMnemonic(mnemonic);
 
@@ -293,7 +287,7 @@ const validateMnemonic = mnemonic => bip39.validateMnemonic(mnemonic);
  * @param {Boolean} derive derive a private key using the default HD path (default: true)
  * @param {number} index the bip44 address index (default: 0)
  * @param {string} password according to bip39
- * @return {string} hexstring
+ * @return {string} hex string
  */
 const getPrivateKeyFromMnemonic = (mnemonic, derive = true, index = 0, password = '') => {
   if (!validateMnemonic(mnemonic)) {
@@ -315,8 +309,7 @@ export {
   checkAddress,
   encodeAddress,
   generatePrivateKey,
-  generateRandomArray,
-  getPublicKey,
+  getPublicKeyPoint,
   getPublicKeyFromPrivateKey,
   generatePubKey,
   getAddressFromPublicKey,

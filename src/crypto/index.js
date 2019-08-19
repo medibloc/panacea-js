@@ -14,9 +14,9 @@ import {
   sha256ripemd160,
   sha3,
 } from '../utils';
+import { PRIVKEY_LEN, PRIVKEY_MAX } from '../../config';
 
 
-const PRIVKEY_LEN = 32;
 const DECODED_ADDR_LEN = 20; // 20 byte
 const HD_PATH = "44'/371'/0'/0/";
 const MNEMONIC_LEN = 256; // 256 bit entropy
@@ -80,7 +80,11 @@ const generateRandomArray = length => secureRandom(length);
  * @param {number} len output length (default: 32 bytes)
  * @returns {string} entropy bytes hexstring
  */
-const generatePrivateKey = (len = PRIVKEY_LEN) => ab2hexstring(generateRandomArray(len));
+const generatePrivateKey = () => {
+  const privKey = ab2hexstring(generateRandomArray(PRIVKEY_LEN));
+  if (parseInt(privKey, 10) > parseInt(PRIVKEY_MAX, 10)) return generatePrivateKey();
+  return privKey;
+};
 
 /**
  * @param {string} publicKey - Encoded public key

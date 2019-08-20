@@ -6,7 +6,7 @@ import browserifiedCrypto from 'crypto-browserify';
 import { ec as EC } from 'elliptic';
 import is from 'is_js';
 import uuid from 'uuid';
-import ecc from 'tiny-secp256k1';
+import ecc from 'secp256k1';
 
 import {
   ab2hexstring, isHex,
@@ -84,15 +84,6 @@ const generatePrivateKey = () => {
 };
 
 /**
- * @param {string} publicKey - Encoded public key
- * @return {object} public key point
- */
-const getPublicKeyPoint = (publicKey) => {
-  const keyPair = ec.keyFromPublic(publicKey, 'hex');
-  return keyPair.getPublic();
-};
-
-/**
  * Calculates the public key from a given private key.
  * @param {string} privateKeyHex the private key hexstring
  * @return {string} public key hexstring
@@ -101,21 +92,9 @@ const getPublicKeyFromPrivateKey = (privateKeyHex) => {
   if (!privateKeyHex || privateKeyHex.length !== PRIVKEY_LEN * 2 || !isHex(privateKeyHex)) {
     throw new Error('invalid privateKey');
   }
-  const curve = new EC(CURVE);
-  const keypair = curve.keyFromPrivate(privateKeyHex, 'hex');
-  return keypair.getPublic().encode('hex');
-};
-
-/**
- * PubKey performs the point-scalar multiplication from the privKey on the
- * generator point to get the pubkey.
- * @param {Buffer} privateKey
- * @return {object} PubKey point
- * */
-const generatePubKey = (privateKey) => {
-  const curve = new EC(CURVE);
-  const keypair = curve.keyFromPrivate(privateKey);
-  return keypair.getPublic();
+  const privKeyBuffer = Buffer.from(privateKeyHex, 'hex');
+  const pubKey = ecc.publicKeyCreate(privKeyBuffer).toString('hex');
+  return pubKey;
 };
 
 /**
@@ -147,12 +126,14 @@ const getAddressFromPrivateKey = (privateKeyHex, prefix) => {
  * Generates a signature (64 byte <r,s>) for a transaction based on given private key.
  * @param {string} signBytesHex - Unsigned transaction sign bytes hex string.
  * @param {string | Buffer} privateKey - The private key.
- * @return {Buffer} Signature. Does not include tx.
+ * @return {string} Signature. Does not include tx.
  */
 const generateSignature = (signBytesHex, privateKey) => {
   const msgHash = sha256(signBytesHex);
   const msgHashBuf = Buffer.from(msgHash, 'hex');
-  return ecc.sign(msgHashBuf, Buffer.from(privateKey, 'hex')); // enc ignored if buffer
+  const privKeyBuf = Buffer.from(privateKey, 'hex');
+  const signature = ecc.sign(msgHashBuf, privKeyBuf); // enc ignored if buffer
+  return signature.signature.toString('hex');
 };
 
 /**
@@ -163,12 +144,11 @@ const generateSignature = (signBytesHex, privateKey) => {
  * @return {boolean}
  */
 const verifySignature = (sigHex, signBytesHex, publicKeyHex) => {
-  const publicKey = Buffer.from(publicKeyHex, 'hex');
-  if (!ecc.isPoint(publicKey)) throw new Error('Invalid public key provided');
-
+  const pubKeyBuf = Buffer.from(publicKeyHex, 'hex');
   const msgHash = sha256(signBytesHex);
   const msgHashBuf = Buffer.from(msgHash, 'hex');
-  return ecc.verify(msgHashBuf, publicKey, Buffer.from(sigHex, 'hex'));
+  const sigBuf = Buffer.from(sigHex, 'hex');
+  return ecc.verify(msgHashBuf, sigBuf, pubKeyBuf);
 };
 
 // TODO @ggomma check compatibility with old panacea-js
@@ -309,9 +289,7 @@ export {
   checkAddress,
   encodeAddress,
   generatePrivateKey,
-  getPublicKeyPoint,
   getPublicKeyFromPrivateKey,
-  generatePubKey,
   getAddressFromPublicKey,
   getAddressFromPrivateKey,
   generateSignature,

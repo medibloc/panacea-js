@@ -6,7 +6,7 @@ import { PRIVKEY_LEN, PRIVKEY_MAX } from '../../config';
 const sample = {
   mnemonic: 'liar hope only nuclear ostrich element between virtual burger test section enemy future film shrug degree pear length husband kingdom candy shine code boring',
   privateKey: '760168b706263c24116818a9733a2fb812ba459260df956cb3b61e8d03c0cecb',
-  publicKey: '0496d48740da95824d7ba1cd0c0106fe04347a7a7196c716a8263bf63c2cdb70ce0a21369a1e19693ecfeb8d17e1eefca5bcceb711220fc74e4b8fa37f093fafa7',
+  publicKey: '0396d48740da95824d7ba1cd0c0106fe04347a7a7196c716a8263bf63c2cdb70ce',
   publicKeyHash: 'b2103dca16e97c520c9f99a5edd78f7ada0d768f',
   address: 'test1kggrmjska979yrylnxj7m4u00tdq6a50rrx0th',
   prefix: 'test',
@@ -83,20 +83,6 @@ describe('crypto', () => {
     });
   });
 
-  describe('generatePubKey', () => {
-    it('generates public key from private key', () => {
-      const pubKey = crypto.generatePubKey(sample.privateKey);
-      expect(pubKey.encode('hex')).to.be.eql(sample.publicKey);
-    });
-  });
-
-  describe('getPublicKeyPoint', () => {
-    it('generates public key point from public key', () => {
-      const pubKey = crypto.getPublicKeyPoint(sample.publicKey);
-      expect(pubKey.encode('hex')).to.be.eql(sample.publicKey);
-    });
-  });
-
   describe('getAddressFromPrivateKey', () => {
     it('generates address with hrp from private key', () => {
       const address = crypto.getAddressFromPrivateKey(sample.privateKey, sample.prefix);
@@ -148,7 +134,7 @@ describe('crypto', () => {
 
   describe('generateSignature', () => {
     it('generates signature', () => {
-      const sig = crypto.generateSignature(sample.message, sample.privateKey).toString('hex');
+      const sig = crypto.generateSignature(sample.message, sample.privateKey);
       expect(sig).to.be.eql(sample.signature);
     });
   });

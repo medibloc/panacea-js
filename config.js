@@ -13,3 +13,7 @@ export const CURVE = 'secp256k1';
  * TX
  */
 export const DENOM = 'umed';
+export const QUERY = {
+  DEFAULT_PAGE: 1,
+  DEFAULT_LIMIT: 20,
+};

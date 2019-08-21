@@ -32,7 +32,11 @@ class Client {
 
     return axios.get(this.serverUrl + url, { params: query })
       .then(({ data }) => data)
-      .catch(console.log)
+      .catch(({ response }) => ({
+        status: response.status,
+        statusText: response.statusText,
+        error: response.data,
+      }))
   }
 
   getNodeInfo() { return this.getRequest(APIS.nodeInfo); }

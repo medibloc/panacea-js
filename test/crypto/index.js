@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import * as bip39 from 'bip39';
 import * as crypto from '../../src/crypto';
 import { PRIVKEY_LEN, PRIVKEY_MAX } from '../../config';
+import { sha256 } from '../../src/utils';
 
 const sample = {
   mnemonic: 'liar hope only nuclear ostrich element between virtual burger test section enemy future film shrug degree pear length husband kingdom candy shine code boring',
@@ -135,6 +136,13 @@ describe('crypto', () => {
   describe('generateSignature', () => {
     it('generates signature', () => {
       const sig = crypto.generateSignature(sample.message, sample.privateKey);
+      expect(sig).to.be.eql(sample.signature);
+    });
+  });
+
+  describe('generateSignatureFromHash', () => {
+    it('generates signature', () => {
+      const sig = crypto.generateSignatureFromHash(sha256(sample.message), sample.privateKey);
       expect(sig).to.be.eql(sample.signature);
     });
   });

@@ -137,6 +137,19 @@ const generateSignature = (signBytesHex, privateKey) => {
 };
 
 /**
+ * Generates a signature (64 byte <r,s>) for a transaction based on given private key.
+ * @param {string} signHash - Unsigned transaction hash string.
+ * @param {string | Buffer} privateKey - The private key.
+ * @return {string} Signature. Does not include tx.
+ */
+const generateSignatureFromHash = (signHash, privateKey) => {
+  const msgHashBuf = Buffer.from(signHash, 'hex');
+  const privKeyBuf = Buffer.from(privateKey, 'hex');
+  const signature = ecc.sign(msgHashBuf, privKeyBuf); // enc ignored if buffer
+  return signature.signature.toString('hex');
+};
+
+/**
  * Verifies a signature (64 byte <r,s>) given the sign bytes and public key.
  * @param {string} sigHex - The signature hex string.
  * @param {string} signBytesHex - Unsigned transaction sign bytes hex string.
@@ -293,6 +306,7 @@ export {
   getAddressFromPublicKey,
   getAddressFromPrivateKey,
   generateSignature,
+  generateSignatureFromHash,
   verifySignature,
   generateKeyStore,
   getPrivateKeyFromKeyStore,

@@ -8,3 +8,8 @@ export const MNEMONIC_LEN = 256; // 256 bit entropy
 export const DECODED_ADDR_LEN = 20; // 20 byte
 export const HD_PATH = "44'/371'/0'/0/";
 export const CURVE = 'secp256k1';
+
+/**
+ * TX
+ */
+export const DENOM = 'umed';

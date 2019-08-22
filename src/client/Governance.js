@@ -8,6 +8,9 @@ class Governance extends Client {
     super(serverUrl);
   }
 
+  /**
+   * GET
+   * */
   getProposals(opts = { voter: '', depositor: '', status: '' }) {
     return this.getRequest(GOVERNANCE.proposals, null, opts);
   }
@@ -50,6 +53,21 @@ class Governance extends Client {
 
   getGovVoteParams() {
     return this.getRequest(GOVERNANCE.voteParams);
+  }
+
+  /**
+   * POST
+   * */
+  generateProposalTx(tx) {
+    return this.postRequest(GOVERNANCE.proposals, null, tx);
+  }
+
+  generateDepositToProposalTx(proposalId, tx) {
+    return this.postRequest(GOVERNANCE.proposalDeposit, [proposalId], tx);
+  }
+
+  generateVoteToProposalTx(proposalId, tx) {
+    return this.postRequest(GOVERNANCE.proposalVotes, [proposalId], tx);
   }
 }
 

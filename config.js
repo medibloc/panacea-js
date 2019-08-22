@@ -25,6 +25,7 @@ export const APIS = {
   ACCOUNT: {
     account: `/auth/accounts/${PARAM}`,
     balance: `/bank/balances/${PARAM}`,
+    transferTx: `/bank/accounts/${PARAM}/transfers`,
   },
   AOL: {
     topics: `/api/v1/aol/${PARAM}/topics`,
@@ -65,12 +66,13 @@ export const APIS = {
     validatorSigningInfo: `/slashing/validators/${PARAM}/signing_info`,
     validatorsSigningInfo: '/slashing/signing_infos',
     params: '/slashing/parameters',
+    unjail: `/slashing/validators/${PARAM}/unjail`,
   },
   STAKING: {
     delegator: `/staking/delegators/${PARAM}/delegations`,
     delegatorInfoFromValidator: `/staking/delegators/${PARAM}/delegations/${PARAM}`,
-    delegatorUnbondingInfo: `/staking/delegators/${PARAM}/unbonding_delegations`,
-    delegatorUnbondingInfoFromValidator: `/staking/delegators/${PARAM}/unbonding_delegations/${PARAM}`,
+    delegatorUnbonding: `/staking/delegators/${PARAM}/unbonding_delegations`,
+    delegatorUnbondingFromValidator: `/staking/delegators/${PARAM}/unbonding_delegations/${PARAM}`,
     redelegations: '/staking/redelegations',
     validatorsFromDelegator: `/staking/delegators/${PARAM}/validators`,
     validatorFromDelegator: `/staking/delegators/${PARAM}/validators/${PARAM}`,
@@ -81,6 +83,7 @@ export const APIS = {
     unbondingDelegatorsByValidator: `/staking/validators/${PARAM}/unbonding_delegations`,
     stakingPool: '/staking/pool',
     params: '/staking/parameters',
+    redelegation: `/staking/delegators/${PARAM}/redelegations`,
   },
   TENDERMINT: {
     nodeInfo: '/node_info',
@@ -91,6 +94,7 @@ export const APIS = {
     validatorSets: `/validatorsets/${PARAM}`,
     tx: `/txs/${PARAM}`,
     txs: '/txs',
+    encodeTx: '/txs/encode',
   },
   VERSION: {
     version: '/version',

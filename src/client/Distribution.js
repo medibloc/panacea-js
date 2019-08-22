@@ -8,6 +8,9 @@ class Distribution extends Client {
     super(serverUrl);
   }
 
+  /**
+   * GET
+   * */
   getDelegatorRewards(delegatorAddr) {
     return this.getRequest(DISTRIBUTION.delegatorReward, [delegatorAddr]);
   }
@@ -38,6 +41,25 @@ class Distribution extends Client {
 
   getDistributionParams() {
     return this.getRequest(DISTRIBUTION.params);
+  }
+
+  /**
+   * POST
+   * */
+  generateWithdrawRewardsTx(delegatorAddr, tx) {
+    return this.postRequest(DISTRIBUTION.delegatorReward, [delegatorAddr], tx);
+  }
+
+  generateWithdrawRewardTx(delegatorAddr, validatorAddr, tx) {
+    return this.postRequest(DISTRIBUTION.delegatorRewardByValidator, [delegatorAddr, validatorAddr], tx);
+  }
+
+  getnerateReplaceWithdrawAddrTx(delegatorAddr, tx) {
+    return this.postRequest(DISTRIBUTION.delegatorWithdrawAddress, [delegatorAddr], tx);
+  }
+
+  generateWithdrawValidatorRewardTx(validatorAddr, tx) {
+    return this.postRequest(DISTRIBUTION.validatorReward, [validatorAddr], tx);
   }
 }
 

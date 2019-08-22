@@ -8,6 +8,9 @@ class Tendermint extends Client {
     super(serverUrl);
   }
 
+  /**
+   * GET
+   * */
   getNodeInfo() {
     return this.getRequest(TENDERMINT.nodeInfo);
   }
@@ -38,6 +41,17 @@ class Tendermint extends Client {
 
   getTxs(opts = { tags: '', page: QUERY.DEFAULT_PAGE, limit: QUERY.DEFAULT_LIMIT }) {
     return this.getRequest(TENDERMINT.txs, null, { ...opts.tags, page: opts.page, limit: opts.limit });
+  }
+
+  /**
+   * POST
+   * */
+  broadcastTx(data) {
+    return this.postRequest(TENDERMINT.txs, null, data);
+  }
+
+  encodeTx(data) {
+    return this.postRequest(TENDERMINT.encodeTx, null, data);
   }
 }
 

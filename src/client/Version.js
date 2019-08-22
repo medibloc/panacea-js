@@ -8,6 +8,9 @@ class Version extends Client {
     super(serverUrl);
   }
 
+  /**
+   * GET
+   * */
   getVersion() {
     return this.getRequest(VERSION.version);
   }

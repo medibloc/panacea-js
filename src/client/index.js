@@ -1,3 +1,5 @@
+import BaseHandler from './Client';
+
 import Account from './Account';
 import AOL from './AOL';
 import Distribution from './Distribution';
@@ -9,8 +11,10 @@ import Tendermint from './Tendermint';
 import Version from './Version';
 
 
-class Client {
+class Client extends BaseHandler {
   constructor(serverUrl) {
+    super(serverUrl);
+
     this.Account = new Account(serverUrl);
     this.AOL = new AOL(serverUrl);
     this.Distribution = new Distribution(serverUrl);

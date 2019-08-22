@@ -9,6 +9,9 @@ class Staking extends Client {
     super(serverUrl);
   }
 
+  /**
+   * GET
+   * */
   getDelagatorInfo(delegatorAddr) {
     return this.getRequest(STAKING.delegator, [delegatorAddr]);
   }
@@ -18,11 +21,11 @@ class Staking extends Client {
   }
 
   getDelegatorUnbondingInfo(delegatorAddr) {
-    return this.getRequest(STAKING.delegatorUnbondingInfo, [delegatorAddr]);
+    return this.getRequest(STAKING.delegatorUnbonding, [delegatorAddr]);
   }
 
   getDelegatorUnbondingInfoFromValidator(delegatorAddr, validatorAddr) {
-    return this.getRequest(STAKING.delegatorUnbondingInfoFromValidator, [delegatorAddr, validatorAddr]);
+    return this.getRequest(STAKING.delegatorUnbondingFromValidator, [delegatorAddr, validatorAddr]);
   }
 
   getRedelegations() {
@@ -64,6 +67,21 @@ class Staking extends Client {
 
   getStakingParams() {
     return this.getRequest(STAKING.params);
+  }
+
+  /**
+   * POST
+   * */
+  generateDelegateTx(delegatorAddr, tx) {
+    return this.postRequest(STAKING.delegator, [delegatorAddr], tx);
+  }
+
+  generateUnbondingTx(delegatorAddr, tx) {
+    return this.postRequest(STAKING.delegatorUnbonding, [delegatorAddr], tx);
+  }
+
+  generateRedelegateTx(delegatorAddr, tx) {
+    return this.postRequest(STAKING.redelegation, [delegatorAddr], tx);
   }
 }
 

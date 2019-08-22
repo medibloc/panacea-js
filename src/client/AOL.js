@@ -8,6 +8,9 @@ class AOL extends Client {
     super(serverUrl);
   }
 
+  /**
+   * GET
+   * */
   getTopics(ownerAddr) {
     return this.getRequest(AOL_API.topics, [ownerAddr]);
   }

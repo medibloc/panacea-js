@@ -8,6 +8,9 @@ class Minting extends Client {
     super(serverUrl);
   }
 
+  /**
+   * GET
+   * */
   getMintParams() {
     return this.getRequest(MINTING.params);
   }

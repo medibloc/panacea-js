@@ -12,7 +12,7 @@ class Client {
     this.getRequest = this.getRequest.bind(this);
   }
 
-  getRequest(url, params = [], query = {}) {
+  #injectParams(url, params = []) { // # is private prefix
     // Inject params to the url
     if (!params) params = [];
     const paramsCount = (url.match(new RegExp(PARAM, 'g')) || []).length;
@@ -23,18 +23,34 @@ class Client {
       url = url.replace(PARAM, param);
     });
 
-    // Remove empty query
-    Object.keys(query).forEach((k) => {
-      if (!query[k]) delete query[k];
-    });
+    return url;
+  }
 
-    return axios.get(this.serverUrl + url, { params: query })
+  #handleResponse(promise) {
+    return promise
       .then(({ data }) => data)
       .catch(({ response }) => ({
         status: response.status,
         statusText: response.statusText,
         error: response.data,
       }))
+  }
+
+  getRequest(url, params = [], query = {}) {
+    const fullUrl = this.#injectParams(url, params);
+
+    // Remove empty query
+    Object.keys(query).forEach((k) => {
+      if (!query[k]) delete query[k];
+    });
+
+    return this.#handleResponse(axios.get(this.serverUrl + fullUrl, { params: query }))
+  }
+
+  postRequest(url, params = [], data = {}) {
+    const fullUrl = this.#injectParams(url, params);
+
+    return this.#handleResponse(axios.post(this.serverUrl + fullUrl, data))
   }
 }
 

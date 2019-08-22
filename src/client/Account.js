@@ -8,12 +8,22 @@ class Account extends Client {
     super(serverUrl);
   }
 
+  /**
+   * GET
+   * */
   getAccount(address) {
     return this.getRequest(ACCOUNT.account, [address]);
   }
 
   getBalance(address) {
     return this.getRequest(ACCOUNT.balance, [address]);
+  }
+
+  /**
+   * POST
+   * */
+  generateTransferTx(address, tx) {
+    return this.postRequest(ACCOUNT.transferTx, [address], tx);
   }
 }
 

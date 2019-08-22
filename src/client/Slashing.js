@@ -8,6 +8,9 @@ class Slashing extends Client {
     super(serverUrl);
   }
 
+  /**
+   * GET
+   * */
   getValidatorSigningInfo(validatorPubKey) {
     return this.getRequest(SLASHING.validatorSigningInfo, [validatorPubKey]);
   }
@@ -18,6 +21,13 @@ class Slashing extends Client {
 
   getSlashingParams() {
     return this.getRequest(SLASHING.params);
+  }
+
+  /**
+   * POST
+   * */
+  generateUnjailTx(validatorAddr, tx) {
+    return this.postRequest(SLASHING.unjail, [validatorAddr], tx);
   }
 }
 

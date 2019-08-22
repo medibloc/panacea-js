@@ -12,7 +12,7 @@ export const CURVE = 'secp256k1';
 /**
  * TX
  */
-export const DENOM = 'umed';
+export const BROADCAST_MODE = ['sync', 'async', 'block'];
 export const QUERY = {
   DEFAULT_PAGE: 1,
   DEFAULT_LIMIT: 20,
@@ -101,3 +101,23 @@ export const APIS = {
     nodeVersion: '/node_version',
   }
 };
+
+/**
+ * Message
+ * */
+export const MSG_TYPE = {
+  AOL: {
+    CREATE_TOPIC: 'aol/MsgCreateTopic',
+    ADD_WRITER: 'aol/MsgAddWriter',
+    ADD_RECORD: 'aol/MsgAddRecord',
+    DELETE_WRITER: 'aol/MsgDeleteWriter',
+  },
+  BASE: {
+    SEND: 'cosmos-sdk/MsgSend',
+  }
+};
+
+/**
+ * Coin
+ * */
+export const DEFAULT_DENOM = 'umed';

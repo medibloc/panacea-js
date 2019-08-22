@@ -37,6 +37,7 @@
     "elliptic": "^6.5.0",
     "is_js": "^0.9.0",
     "js-sha3": "^0.7.0",
+    "object-path": "^0.11.4",
     "secp256k1": "^3.5.0",
     "secure-random": "^1.1.2",
     "uuid": "^3.3.2"

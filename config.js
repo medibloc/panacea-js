@@ -135,3 +135,4 @@ export const MSG_TYPE = {
  * Coin
  * */
 export const DEFAULT_DENOM = 'umed';
+export const DEFAULT_GAS = '200000';

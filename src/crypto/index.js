@@ -223,7 +223,7 @@ const getPrivateKeyFromKeyStore = (keystore, password = '') => {
     throw new Error('No password given');
   }
 
-  const json = is.object(keystore) ? keystore : JSON.parse(keystore);
+  const json = is.json(keystore) ? keystore : JSON.parse(keystore);
   const { kdfparams, ciphertext } = json.crypto;
 
   if (kdfparams.prf !== 'hmac-sha256') {

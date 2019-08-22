@@ -1,9 +1,11 @@
+import is from 'is_js';
 import { sortJsonProperties } from '../utils/encoding';
 import { sha256 } from '../utils';
 import {
   generateSignatureFromHash,
   getPublicKeyFromPrivateKey
 } from '../crypto';
+import { BROADCAST_MODE } from '../../config';
 
 
 class Transaction {
@@ -12,13 +14,21 @@ class Transaction {
       throw new Error("chain id should not be null");
     }
 
+    let msg = data.msg ? [data.msg] : [];
+    if (is.array(data.msg)) msg = data.msg;
+
     this.sequence = data.sequence || 0;
-    this.account_number = data.accountNumber || 0;
+    this.account_number = data.accountNumber || '0';
     this.chain_id = data.chainId;
-    this.msgs = data.msg ? [data.msg] : [];
+    this.msgs = msg;
     this.memo = data.memo || "";
     this.fee = data.fee;
     this.signatures = data.signatures || [];
+  }
+
+  addMsgs(...msgs) {
+    // I hope you fully understand the importance of the message's sequence
+    this.msgs = [...this.msgs, ...msgs];
   }
 
   signingData() {
@@ -63,12 +73,19 @@ class Transaction {
     });
   }
 
-  convertToBroadcastTx() {
+  convertToBroadcastTx(mode = 'sync') {
+    if (!BROADCAST_MODE.includes(mode)) {
+      throw new Error(`Invalid broadcast mode : ${mode}`);
+    }
+
     const broadcastTx = {
-      msg: this.msgs,
-      fee: this.fee,
-      signatures: this.signatures,
-      memo: this.memo,
+      tx: {
+        msg: this.msgs,
+        fee: this.fee,
+        signatures: this.signatures,
+        memo: this.memo,
+      },
+      mode,
     };
     return broadcastTx;
   }

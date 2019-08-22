@@ -114,6 +114,20 @@ export const MSG_TYPE = {
   },
   BASE: {
     SEND: 'cosmos-sdk/MsgSend',
+  },
+  DISTR: {
+    WITHDRAW_DELEGATION_REWARD: 'cosmos-sdk/MsgWithdrawDelegationReward',
+    MODIFY_WITHDRAW_ADDR: 'cosmos-sdk/MsgModifyWithdrawAddress',
+  },
+  STAKING: {
+    CREATE_VALIDATOR: 'cosmos-sdk/MsgCreateValidator',
+    EDIT_VALIDATOR: 'cosmos-sdk/MsgEditValidator',
+    DELEGATE: 'cosmos-sdk/MsgDelegate',
+    REDELEGATE: 'cosmos-sdk/MsgBeginRedelegate',
+    UNDELEGATE: 'cosmos-sdk/MsgUndelegate',
+  },
+  SLASHING: {
+    UNJAIL: 'cosmos-sdk/MsgUnjail',
   }
 };
 

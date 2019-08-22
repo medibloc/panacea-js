@@ -17,13 +17,17 @@ class Transaction {
     let msg = data.msg ? [data.msg] : [];
     if (is.array(data.msg)) msg = data.msg;
 
-    this.sequence = data.sequence || 0;
-    this.account_number = data.accountNumber || '0';
+    this.sequence = `${data.sequence}` || '0';
+    this.account_number = `${data.accountNumber}` || '0';
     this.chain_id = data.chainId;
     this.msgs = msg;
     this.memo = data.memo || "";
     this.fee = data.fee;
     this.signatures = data.signatures || [];
+  }
+
+  increaseSequence() {
+    this.sequence = `${+this.sequence + 1}`;
   }
 
   addMsgs(...msgs) {

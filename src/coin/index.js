@@ -12,7 +12,7 @@ class Coin {
       checkParams(requiredParams, data);
 
       this.denom = data.denom || this.denom;
-      this.amount = data.amount;
+      this.amount = `${data.amount}`;
     } else if (is.number(+data)) {
       this.amount = `${data}`;
     } else {

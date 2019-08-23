@@ -39,4 +39,31 @@ export const MESSAGE = {
       amount: 100000,
     }],
   },
+  AOL: {
+    CREATE_TOPIC: {
+      topicName: 'test',
+      ownerAddress: ACCOUNT.address,
+      description: 'test description',
+    },
+    ADD_WRITER: {
+      topicName: 'test',
+      moniker: 'test writer',
+      description: 'test description',
+      writerAddress: ANOTHER_ACCOUNT.address,
+      ownerAddress: ACCOUNT.address,
+    },
+    ADD_RECORD: {
+      topicName: 'test',
+      key: 'test key',
+      value: 'test value',
+      writerAddress: ANOTHER_ACCOUNT.address,
+      ownerAddress: ACCOUNT.address,
+      feePayerAddress: ANOTHER_ACCOUNT.address,
+    },
+    DELETE_WRITER: {
+      topicName: 'test',
+      writerAddress: ANOTHER_ACCOUNT.address,
+      ownerAddress: ACCOUNT.address,
+    },
+  },
 };

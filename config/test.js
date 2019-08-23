@@ -1,4 +1,6 @@
-export const account = {
+export const DEFAULT_DENOM = 'umed';
+
+export const ACCOUNT = {
   mnemonic: 'dove verify fault digital wisdom number camera ' +
     'piano ethics sunset smooth defense silk myself person ' +
     'bar total venture custom mushroom until north poet knife',
@@ -6,7 +8,7 @@ export const account = {
   pubKey: '03021dfc4159a06eb9da06768bc3566cb42efd04edc3c4792cfd8a02c523d8eb2b',
   address: 'panacea1lcunvvf69undtva5ugfyu00nxvcunacptgar6t',
 };
-export const anotherAccount = {
+export const ANOTHER_ACCOUNT = {
   mnemonic: 'flavor famous expand drive asset misery bulk ' +
     'bronze awful layer thunder wild tiger myth melody space ' +
     'arrow river soul gym mule razor fluid soup',
@@ -15,7 +17,7 @@ export const anotherAccount = {
   address: 'panacea1tx2ltp7max4jkjy8m5aw575nkh6umlhzrag4ky',
 };
 
-export const simpleTx = {
+export const SIMPLE_TX = {
   chainId: 'test',
   fee: [{
     amount: [
@@ -26,4 +28,15 @@ export const simpleTx = {
     ],
     gas: 200000,
   }],
+};
+
+export const MESSAGE = {
+  BASE: {
+    fromAddress: ACCOUNT.address,
+    toAddress: ANOTHER_ACCOUNT.address,
+    amount: [{
+      denom: DEFAULT_DENOM,
+      amount: 100000,
+    }],
+  },
 };

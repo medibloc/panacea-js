@@ -20,7 +20,7 @@ import {
   DEFAULT_PREFIX, HD_PATH,
   MNEMONIC_LEN,
   PRIVKEY_LEN,
-  PRIVKEY_MAX
+  PRIVKEY_MAX,
 } from '../../config';
 
 

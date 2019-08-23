@@ -11,10 +11,9 @@ class Unjail {
     this.type = SLASHING.UNJAIL;
     this.value = {
       address: data.address,
-    }
+    };
   }
 }
 
-export {
-  Unjail,
-};
+// eslint-disable-next-line import/prefer-default-export
+export { Unjail };

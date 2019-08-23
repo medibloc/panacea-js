@@ -2,6 +2,28 @@ import axios from 'axios';
 import { PARAM } from '../../config';
 
 
+const injectParams = (url, params = []) => {
+  // Inject params to the url
+  if (!params) params = []; // eslint-disable-line no-param-reassign
+  const paramsCount = (url.match(new RegExp(PARAM, 'g')) || []).length;
+  if (paramsCount !== params.length) {
+    throw new Error(`This request requires ${paramsCount} parameters in ${url}, but you entered ${params.length}`);
+  }
+  params.forEach((param) => {
+    url = url.replace(PARAM, param); // eslint-disable-line no-param-reassign
+  });
+
+  return url;
+};
+
+const handleResponse = promise => promise
+  .then(({ data }) => data)
+  .catch(({ response }) => ({
+    status: response.status,
+    statusText: response.statusText,
+    error: response.data,
+  }));
+
 class Client {
   constructor(serverUrl) {
     if (!serverUrl) {
@@ -10,47 +32,24 @@ class Client {
 
     this.serverUrl = serverUrl;
     this.getRequest = this.getRequest.bind(this);
-  }
-
-  #injectParams(url, params = []) { // # is private prefix
-    // Inject params to the url
-    if (!params) params = [];
-    const paramsCount = (url.match(new RegExp(PARAM, 'g')) || []).length;
-    if (paramsCount !== params.length) {
-      throw new Error(`This request requires ${paramsCount} parameters in ${url}, but you entered ${params.length}`);
-    }
-    params.forEach((param) => {
-      url = url.replace(PARAM, param);
-    });
-
-    return url;
-  }
-
-  #handleResponse(promise) {
-    return promise
-      .then(({ data }) => data)
-      .catch(({ response }) => ({
-        status: response.status,
-        statusText: response.statusText,
-        error: response.data,
-      }))
+    this.postRequest = this.postRequest.bind(this);
   }
 
   getRequest(url, params = [], query = {}) {
-    const fullUrl = this.#injectParams(url, params);
+    const fullUrl = injectParams(url, params);
 
     // Remove empty query
     Object.keys(query).forEach((k) => {
-      if (!query[k]) delete query[k];
+      if (!query[k]) delete query[k]; // eslint-disable-line no-param-reassign
     });
 
-    return this.#handleResponse(axios.get(this.serverUrl + fullUrl, { params: query }))
+    return handleResponse(axios.get(this.serverUrl + fullUrl, { params: query }));
   }
 
   postRequest(url, params = [], data = {}) {
-    const fullUrl = this.#injectParams(url, params);
+    const fullUrl = injectParams(url, params);
 
-    return this.#handleResponse(axios.post(this.serverUrl + fullUrl, data))
+    return handleResponse(axios.post(this.serverUrl + fullUrl, data));
   }
 }
 

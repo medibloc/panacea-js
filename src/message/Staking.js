@@ -27,14 +27,15 @@ class CreateValidator {
         max_change_rate: data.commission.maxChangeRate, // "1.000000000000000000"
       },
       min_self_delegation: data.minSelfDelegation, // "1"
-      delegator_address: data.delegatorAddress, // TODO @ggomma check signer is identical with delegator address
+      // TODO @ggomma check signer is identical with delegator address
+      delegator_address: data.delegatorAddress,
       validator_address: data.validatorAddress,
       pubkey: data.pubkey,
       value: {
         denom: data.value.denom,
         amount: `${data.value.amount}`,
-      }
-    }
+      },
+    };
   }
 }
 
@@ -43,7 +44,7 @@ class EditValidator {
     const requiredParams = ['address'];
     checkParams(requiredParams, data);
 
-    const DO_NOT_MODIFY = "[do-not-modify]"; // defined in cosmose-sdk
+    const DO_NOT_MODIFY = '[do-not-modify]'; // defined in cosmose-sdk
 
     this.type = STAKING.EDIT_VALIDATOR;
 
@@ -62,7 +63,7 @@ class EditValidator {
       address: data.address,
       commission_rate: data.commissionRate || null,
       min_self_delegation: data.minSelfDelegation || null,
-    }
+    };
   }
 }
 
@@ -80,8 +81,8 @@ class Delegate {
       amount: {
         denom: data.amount.denom,
         amount: `${data.amount.amount}`,
-      }
-    }
+      },
+    };
   }
 }
 
@@ -100,8 +101,8 @@ class Redelegate {
       amount: {
         denom: data.amount.denom,
         amount: `${data.amount.amount}`,
-      }
-    }
+      },
+    };
   }
 }
 
@@ -119,8 +120,8 @@ class Undelegate {
       amount: {
         denom: data.amount.denom,
         amount: `${data.amount.amount}`,
-      }
-    }
+      },
+    };
   }
 }
 

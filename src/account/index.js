@@ -2,17 +2,18 @@ import is from 'is_js';
 import {
   getAddressFromPrivateKey,
   getAddressFromPublicKey, getPrivateKeyFromMnemonic,
-  getPublicKeyFromPrivateKey, validateMnemonic
+  getPublicKeyFromPrivateKey, validateMnemonic,
 } from '../crypto';
 import { DEFAULT_PREFIX } from '../../config';
 
 
 class Account {
   constructor(data) {
+    // eslint-disable-next-line no-param-reassign
     if (data.value) data = data.value; // In case that the data is from getAccount request
 
     this.sequence = +data.sequence || 0;
-    this.account_number = data.account_number || (data.accountNumber || "0");
+    this.account_number = data.account_number || (data.accountNumber || '0');
     this.coins = data.coins || [];
 
     this.privateKey = data.privateKey || null;

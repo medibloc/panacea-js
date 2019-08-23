@@ -99,7 +99,7 @@ export const APIS = {
   VERSION: {
     version: '/version',
     nodeVersion: '/node_version',
-  }
+  },
 };
 
 /**
@@ -128,7 +128,7 @@ export const MSG_TYPE = {
   },
   SLASHING: {
     UNJAIL: 'cosmos-sdk/MsgUnjail',
-  }
+  },
 };
 
 /**

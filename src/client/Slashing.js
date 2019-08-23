@@ -4,10 +4,6 @@ import { APIS, QUERY } from '../../config';
 const { SLASHING } = APIS;
 
 class Slashing extends Client {
-  constructor(serverUrl) {
-    super(serverUrl);
-  }
-
   /**
    * GET
    * */

@@ -33,6 +33,7 @@ class Fee {
       let found = false;
       this.amount.forEach((coin) => {
         if (coin.denom === parsedCoin.denom) {
+          // eslint-disable-next-line no-param-reassign
           coin.amount = `${parsedCoin.amount}`;
           found = true;
         }

@@ -4,10 +4,6 @@ import { APIS } from '../../config';
 const { VERSION } = APIS;
 
 class Version extends Client {
-  constructor(serverUrl) {
-    super(serverUrl);
-  }
-
   /**
    * GET
    * */

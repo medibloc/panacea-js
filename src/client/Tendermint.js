@@ -4,10 +4,6 @@ import { APIS, QUERY } from '../../config';
 const { TENDERMINT } = APIS;
 
 class Tendermint extends Client {
-  constructor(serverUrl) {
-    super(serverUrl);
-  }
-
   /**
    * GET
    * */
@@ -40,7 +36,10 @@ class Tendermint extends Client {
   }
 
   getTxs(opts = { tags: '', page: QUERY.DEFAULT_PAGE, limit: QUERY.DEFAULT_LIMIT }) {
-    return this.getRequest(TENDERMINT.txs, null, { ...opts.tags, page: opts.page, limit: opts.limit });
+    return this.getRequest(
+      TENDERMINT.txs,
+      null, { ...opts.tags, page: opts.page, limit: opts.limit },
+    );
   }
 
   /**

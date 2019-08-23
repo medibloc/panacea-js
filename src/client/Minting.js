@@ -4,10 +4,6 @@ import { APIS } from '../../config';
 const { MINTING } = APIS;
 
 class Minting extends Client {
-  constructor(serverUrl) {
-    super(serverUrl);
-  }
-
   /**
    * GET
    * */

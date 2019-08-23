@@ -10,9 +10,10 @@ class WithdrawReward {
 
     this.type = DISTR.WITHDRAW_DELEGATION_REWARD;
     this.value = {
-      delegator_address: data.delegatorAddress, // it can be an validator operator address to withdraw validator reward
+      // it can be an validator operator address to withdraw validator reward
+      delegator_address: data.delegatorAddress,
       validator_address: data.validatorAddress,
-    }
+    };
   }
 }
 
@@ -25,7 +26,7 @@ class ModifyWithdrawAddress {
     this.value = {
       delegator_address: data.delegatorAddress,
       withdraw_address: data.withdrawAddress,
-    }
+    };
   }
 }
 

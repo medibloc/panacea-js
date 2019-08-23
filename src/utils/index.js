@@ -1,3 +1,4 @@
+/* eslint-disable */
 import hexEncoding from 'crypto-js/enc-hex';
 import SHA3 from 'crypto-js/sha3';
 import SHA256 from 'crypto-js/sha256';
@@ -9,38 +10,38 @@ import is from 'is_js';
  * @returns {string} ASCII string
  */
 const ab2str = buf =>
-  String.fromCharCode.apply(null, new Uint8Array(buf))
+  String.fromCharCode.apply(null, new Uint8Array(buf));
 
 /**
  * @param {string} str - ASCII string
  * @returns {arrayBuffer}
  */
-const str2ab = str => {
-  if (typeof str !== "string") {
-    throw new Error("str2ab expects a string")
+const str2ab = (str) => {
+  if (typeof str !== 'string') {
+    throw new Error('str2ab expects a string');
   }
-  const result = new Uint8Array(str.length)
-  for (let i = 0, strLen = str.length; i < strLen; i++) {
-    result[i] = str.charCodeAt(i)
+  const result = new Uint8Array(str.length);
+  for (let i = 0, strLen = str.length; i < strLen; i += 1) {
+    result[i] = str.charCodeAt(i);
   }
-  return result
-}
+  return result;
+};
 
 /**
  * @param {string} str - HEX string
  * @returns {number[]}
  */
-const hexstring2ab = str => {
-  ensureHex(str)
-  if (!str.length) return new Uint8Array()
-  const iters = str.length / 2
-  const result = new Uint8Array(iters)
-  for (let i = 0; i < iters; i++) {
-    result[i] = parseInt(str.substring(0, 2), 16)
-    str = str.substring(2)
+const hexstring2ab = (str) => {
+  ensureHex(str); // eslint-disable-line no-use-before-define
+  if (!str.length) return new Uint8Array();
+  const iters = str.length / 2;
+  const result = new Uint8Array(iters);
+  for (let i = 0; i < iters; i += 1) {
+    result[i] = parseInt(str.substring(0, 2), 16);
+    str = str.substring(2); // eslint-disable-line no-param-reassign
   }
-  return result
-}
+  return result;
+};
 
 /**
  * @param {arrayBuffer} arr
@@ -65,26 +66,26 @@ const ab2hexstring = (arr) => {
  * @param {string} str - ASCII string
  * @returns {string} HEX string
  */
-const str2hexstring = str => ab2hexstring(str2ab(str))
+const str2hexstring = str => ab2hexstring(str2ab(str));
 
 /**
  * @param {string} hexstring - HEX string
  * @returns {string} ASCII string
  */
-const hexstring2str = hexstring => ab2str(hexstring2ab(hexstring))
+const hexstring2str = hexstring => ab2str(hexstring2ab(hexstring));
 
 /**
  * convert an integer to big endian hex and add leading zeros
  * @param {Number} num
  * @returns {string}
  */
-const int2hex = num => {
-  if (typeof num !== "number") {
-    throw new Error("int2hex expects a number")
+const int2hex = (num) => {
+  if (typeof num !== 'number') {
+    throw new Error('int2hex expects a number');
   }
-  let h = num.toString(16)
-  return h.length % 2 ? "0" + h : h
-}
+  const h = num.toString(16);
+  return h.length % 2 ? `0${h}` : h;
+};
 
 /**
  * Converts a number to a big endian hexstring of a suitable size, optionally little endian
@@ -94,16 +95,16 @@ const int2hex = num => {
  * @return {string}
  */
 const num2hexstring = (num, size = 1, littleEndian = false) => {
-  if (typeof num !== "number") throw new Error("num must be numeric")
-  if (num < 0) throw new RangeError("num is unsigned (>= 0)")
-  if (size % 1 !== 0) throw new Error("size must be a whole integer")
-  if (!Number.isSafeInteger(num)) throw new RangeError(`num (${num}) must be a safe integer`)
-  size = size * 2
-  let hexstring = num.toString(16)
-  hexstring = hexstring.length % size === 0 ? hexstring : ("0".repeat(size) + hexstring).substring(hexstring.length)
-  if (littleEndian) hexstring = reverseHex(hexstring)
-  return hexstring
-}
+  if (typeof num !== 'number') throw new Error('num must be numeric');
+  if (num < 0) throw new RangeError('num is unsigned (>= 0)');
+  if (size % 1 !== 0) throw new Error('size must be a whole integer');
+  if (!Number.isSafeInteger(num)) throw new RangeError(`num (${num}) must be a safe integer`);
+  size *= 2; // eslint-disable-line no-param-reassign
+  let hexstring = num.toString(16);
+  hexstring = hexstring.length % size === 0 ? hexstring : ('0'.repeat(size) + hexstring).substring(hexstring.length);
+  if (littleEndian) hexstring = reverseHex(hexstring); // eslint-disable-line no-use-before-define
+  return hexstring;
+};
 
 /**
  * Converts a number to a variable length Int. Used for array length header
@@ -112,18 +113,17 @@ const num2hexstring = (num, size = 1, littleEndian = false) => {
  */
 const num2VarInt = (num) => {
   if (num < 0xfd) {
-    return num2hexstring(num)
+    return num2hexstring(num);
   } else if (num <= 0xffff) {
     // uint16
-    return "fd" + num2hexstring(num, 2, true)
+    return `fd${num2hexstring(num, 2, true)}`;
   } else if (num <= 0xffffffff) {
     // uint32
-    return "fe" + num2hexstring(num, 4, true)
-  } else {
-    // uint64
-    return "ff" + num2hexstring(num, 8, true)
+    return `fe${num2hexstring(num, 4, true)}`;
   }
-}
+  // uint64
+  return `ff${num2hexstring(num, 8, true)}`;
+};
 
 /**
  * XORs two hexstrings
@@ -132,15 +132,16 @@ const num2VarInt = (num) => {
  * @returns {string} XOR output as a HEX string
  */
 const hexXor = (str1, str2) => {
-  ensureHex(str1)
-  ensureHex(str2)
-  if (str1.length !== str2.length) throw new Error("strings are disparate lengths")
-  const result = []
+  ensureHex(str1); // eslint-disable-line no-use-before-define
+  ensureHex(str2); // eslint-disable-line no-use-before-define
+  if (str1.length !== str2.length) throw new Error('strings are disparate lengths');
+  const result = [];
   for (let i = 0; i < str1.length; i += 2) {
-    result.push(parseInt(str1.substr(i, 2), 16) ^ parseInt(str2.substr(i, 2), 16))
+    // eslint-disable-next-line
+    result.push(parseInt(str1.substr(i, 2), 16) ^ parseInt(str2.substr(i, 2), 16));
   }
-  return ab2hexstring(result)
-}
+  return ab2hexstring(result);
+};
 
 /**
  * Reverses an array. Accepts arrayBuffer.

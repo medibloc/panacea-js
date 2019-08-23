@@ -3,7 +3,7 @@ import { sortJsonProperties } from '../utils/encoding';
 import { sha256 } from '../utils';
 import {
   generateSignatureFromHash,
-  getPublicKeyFromPrivateKey
+  getPublicKeyFromPrivateKey,
 } from '../crypto';
 import { BROADCAST_MODE } from '../../config';
 
@@ -11,17 +11,17 @@ import { BROADCAST_MODE } from '../../config';
 class Transaction {
   constructor(data) {
     if (!data.chainId) {
-      throw new Error("chain id should not be null");
+      throw new Error('chain id should not be null');
     }
 
     let msg = data.msg ? [data.msg] : [];
-    if (is.array(data.msg)) msg = data.msg;
+    if (is.array(data.msg)) ({ msg } = data);
 
     this.sequence = `${data.sequence}` || '0';
     this.account_number = `${data.accountNumber}` || '0';
     this.chain_id = data.chainId;
     this.msgs = msg;
-    this.memo = data.memo || "";
+    this.memo = data.memo || '';
     this.fee = data.fee;
     this.signatures = data.signatures || [];
   }
@@ -55,8 +55,8 @@ class Transaction {
   }
 
   sign(privateKey) {
-    if (!privateKey){
-      throw new Error("private key should not be null")
+    if (!privateKey) {
+      throw new Error('private key should not be null');
     }
 
     const hash = this.calculateHash();
@@ -70,7 +70,7 @@ class Transaction {
     const pubKeyBase64 = Buffer.from(pubKey, 'hex').toString('base64');
     this.signatures.push({
       pub_key: {
-        type: "tendermint/PubKeySecp256k1", // It only supports secp256k1 curve only
+        type: 'tendermint/PubKeySecp256k1', // It only supports secp256k1 curve only
         value: pubKeyBase64,
       },
       signature,

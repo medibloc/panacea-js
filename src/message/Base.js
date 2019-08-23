@@ -13,8 +13,8 @@ class Base {
       throw new Error('amount field should be an array');
     }
     data.amount.forEach((coin) => {
-      const requiredParams = ['denom', 'amount'];
-      checkParams(requiredParams, coin);
+      const requiredParamsInCoin = ['denom', 'amount'];
+      checkParams(requiredParamsInCoin, coin);
     });
 
     this.type = BASE.SEND;

@@ -4,10 +4,6 @@ import { APIS } from '../../config';
 const { ACCOUNT } = APIS;
 
 class Account extends Client {
-  constructor(serverUrl) {
-    super(serverUrl);
-  }
-
   /**
    * GET
    * */

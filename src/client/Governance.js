@@ -4,10 +4,6 @@ import { APIS } from '../../config';
 const { GOVERNANCE } = APIS;
 
 class Governance extends Client {
-  constructor(serverUrl) {
-    super(serverUrl);
-  }
-
   /**
    * GET
    * */

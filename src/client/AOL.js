@@ -4,10 +4,6 @@ import { APIS } from '../../config';
 const { AOL: AOL_API } = APIS;
 
 class AOL extends Client {
-  constructor(serverUrl) {
-    super(serverUrl);
-  }
-
   /**
    * GET
    * */

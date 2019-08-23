@@ -1,6 +1,7 @@
 import is from 'is_js';
 
-export function sortJsonProperties (jsonTx) {
+// eslint-disable-next-line import/prefer-default-export
+export const sortJsonProperties = (jsonTx) => {
   if (is.array(jsonTx)) {
     return jsonTx.map(sortJsonProperties);
   }
@@ -18,4 +19,4 @@ export function sortJsonProperties (jsonTx) {
       sorted[key] = sortJsonProperties(jsonTx[key]);
     });
   return sorted;
-}
+};

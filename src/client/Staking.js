@@ -5,10 +5,6 @@ const { STAKING } = APIS;
 const { CANDIDATES_STATES } = QUERY_LIST;
 
 class Staking extends Client {
-  constructor(serverUrl) {
-    super(serverUrl);
-  }
-
   /**
    * GET
    * */

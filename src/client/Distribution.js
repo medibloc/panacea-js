@@ -4,10 +4,6 @@ import { APIS } from '../../config';
 const { DISTRIBUTION } = APIS;
 
 class Distribution extends Client {
-  constructor(serverUrl) {
-    super(serverUrl);
-  }
-
   /**
    * GET
    * */
@@ -51,7 +47,10 @@ class Distribution extends Client {
   }
 
   generateWithdrawRewardTx(delegatorAddr, validatorAddr, tx) {
-    return this.postRequest(DISTRIBUTION.delegatorRewardByValidator, [delegatorAddr, validatorAddr], tx);
+    return this.postRequest(
+      DISTRIBUTION.delegatorRewardByValidator,
+      [delegatorAddr, validatorAddr], tx,
+    );
   }
 
   getnerateReplaceWithdrawAddrTx(delegatorAddr, tx) {

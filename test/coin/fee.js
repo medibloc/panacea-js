@@ -14,7 +14,7 @@ describe('fee', () => {
   describe('setGasLimit', () => {
     it('throws an error for invalid gas limit', () => {
       const fee = new Fee();
-      expect(() => fee.setGasLimit("invalid Gas Limit")).to.throw();
+      expect(() => fee.setGasLimit('invalid Gas Limit')).to.throw();
     });
 
     it('sets gas field', () => {

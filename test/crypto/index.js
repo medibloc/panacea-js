@@ -76,7 +76,7 @@ describe('crypto', () => {
     it('throws an error if entered private key value is invalid', () => {
       expect(() => crypto.getPublicKeyFromPrivateKey('')).to.throw();
       expect(() => crypto.getPublicKeyFromPrivateKey(sample.privateKey.slice(1))).to.throw();
-      expect(() => crypto.getPublicKeyFromPrivateKey('z' + sample.privateKey.slice(1))).to.throw();
+      expect(() => crypto.getPublicKeyFromPrivateKey(`z${sample.privateKey.slice(1)}`)).to.throw();
     });
     it('generates a valid public key', () => {
       const pubKey = crypto.getPublicKeyFromPrivateKey(sample.privateKey);
@@ -114,7 +114,7 @@ describe('crypto', () => {
   describe('checkAddress', () => {
     it('checks address', () => {
       expect(crypto.checkAddress(sample.address, sample.prefix)).to.be.true;
-      expect(crypto.checkAddress(sample.address, sample.prefix + 'wrong')).to.be.false;
+      expect(crypto.checkAddress(sample.address, `${sample.prefix}wrong`)).to.be.false;
       expect(crypto.checkAddress(sample.address.slice(0, -1), sample.prefix)).to.be.false;
     });
   });

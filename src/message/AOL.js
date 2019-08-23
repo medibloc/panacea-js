@@ -11,9 +11,9 @@ class CreateTopic {
     this.type = AOL.CREATE_TOPIC;
     this.value = {
       topic_name: data.topicName,
-      description: data.description || "",
+      description: data.description || '',
       owner_address: data.ownerAddress,
-    }
+    };
   }
 }
 
@@ -25,11 +25,11 @@ class AddWriter {
     this.type = AOL.ADD_WRITER;
     this.value = {
       topic_name: data.topicName,
-      moniker: data.moniker || "",
-      description: data.description || "",
+      moniker: data.moniker || '',
+      description: data.description || '',
       writer_address: data.writerAddress,
       owner_address: data.ownerAddress,
-    }
+    };
   }
 }
 
@@ -45,8 +45,8 @@ class AddRecord {
       value: Buffer.from(data.value).toString('base64'),
       writer_address: data.writerAddress,
       owner_address: data.ownerAddress,
-      fee_payer_address: data.feePayerAddress || "",
-    }
+      fee_payer_address: data.feePayerAddress || '',
+    };
   }
 }
 
@@ -60,7 +60,7 @@ class DeleteWriter {
       topic_name: data.topicName,
       writer_address: data.writerAddress,
       owner_address: data.ownerAddress,
-    }
+    };
   }
 }
 

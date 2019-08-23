@@ -16,14 +16,14 @@ class Coin {
   }
 
   static parseCoin(coin) {
-    const parsedCoin = coin.split(/([0-9\.]+)/).filter(Boolean);
+    const parsedCoin = coin.split(/([0-9.]+)/).filter(Boolean);
     if (parsedCoin.length !== 2) {
       throw new Error('Invalid coin argument. You need to put amount + denom format. ex) 100.00umed');
     }
     return {
       amount: `${parsedCoin[0]}`,
       denom: parsedCoin[1],
-    }
+    };
   }
 }
 

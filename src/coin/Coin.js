@@ -9,15 +9,13 @@ class Coin {
     if (is.number(+data)) {
       this.amount = `${data}`;
     } else if (is.string(data)) {
-      const parsedCoin = this.parseCoin(data);
+      const parsedCoin = Coin.parseCoin(data);
       this.denom = parsedCoin.denom;
       this.amount = parsedCoin.amount;
-    } else {
-      throw new Error('invalid initializing parameter');
     }
   }
 
-  parseCoin(coin) {
+  static parseCoin(coin) {
     const parsedCoin = coin.split(/([0-9\.]+)/).filter(Boolean);
     if (parsedCoin.length !== 2) {
       throw new Error('Invalid coin argument. You need to put amount + denom format. ex) 100.00umed');

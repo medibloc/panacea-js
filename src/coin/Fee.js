@@ -1,10 +1,8 @@
 import Coin from './Coin';
 import { DEFAULT_GAS } from '../../config';
 
-class Fee extends Coin {
+class Fee {
   constructor() {
-    super();
-
     this.amount = null;
     this.gas = DEFAULT_GAS;
   }
@@ -14,7 +12,7 @@ class Fee extends Coin {
   }
 
   setGasPrice(price) {
-    const parsedCoin = this.parseCoin(price);
+    const parsedCoin = Coin.parseCoin(price);
 
     // fee amount = gas price * gas limit
     parsedCoin.amount = parsedCoin.amount * this.gas;
@@ -22,7 +20,7 @@ class Fee extends Coin {
   }
 
   setFee(fee) {
-    const parsedCoin = this.parseCoin(fee);
+    const parsedCoin = Coin.parseCoin(fee);
     this.addCoin(parsedCoin);
   }
 

@@ -66,4 +66,14 @@ export const MESSAGE = {
       ownerAddress: ACCOUNT.address,
     },
   },
+  DISTR: {
+    WITHDRAW_REWARD: {
+      delegatorAddress: ACCOUNT.address,
+      validatorAddress: ANOTHER_ACCOUNT.address,
+    },
+    MODIFY_WITHDRAW_ADDR: {
+      delegatorAddress: ACCOUNT.address,
+      withdrawAddress: ANOTHER_ACCOUNT.address,
+    },
+  },
 };

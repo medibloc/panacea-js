@@ -22,13 +22,17 @@ class Transaction {
     this.chain_id = data.chainId;
     this.msgs = msg;
     this.memo = data.memo || '';
-    this.fee = data.fee;
+    this.fee = data.fee || null;
     this.signatures = data.signatures || [];
   }
 
   addMsgs(...msgs) {
     // I hope you fully understand the importance of the message's sequence
     this.msgs = [...this.msgs, ...msgs];
+  }
+
+  setFee(fee) {
+    this.fee = fee;
   }
 
   signingData() {

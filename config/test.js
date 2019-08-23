@@ -140,3 +140,25 @@ export const MESSAGE = {
     },
   },
 };
+
+export const TX = {
+  chainId: 'test',
+  sequence: 5,
+  accountNumber: 10,
+  memo: 'test memo',
+};
+export const SERIALIZED_TX = '7b226163636f756e745f6e' +
+  '756d626572223a223130222c22636861696e5f6964223a227' +
+  '4657374222c22666565223a6e756c6c2c226d656d6f223a22' +
+  '74657374206d656d6f222c226d736773223a5b5d2c2273657' +
+  '175656e6365223a2235227d';
+export const HASH = 'e0ab550aa69bb5faa840f2d09bcc47aa78e028ae7d695b6cdbd085e22a275c95';
+export const SIGNING_PRIVKEY = 'beb4ff264d05d37fe616d76c6c13d2ade29ab62ef548b72c15b6ea7f1f53402f';
+export const SIGNING_PUBKEY = '03021dfc4159a06eb9da06768bc3566cb42efd04edc3c4792cfd8a02c523d8eb2b';
+export const SIGNATURE = {
+  pub_key: {
+    type: 'tendermint/PubKeySecp256k1',
+    value: 'AwId/EFZoG652gZ2i8NWbLQu/QTtw8R5LP2KAsUj2Osr',
+  },
+  signature: 'cgL6yrH+lL13DuChcxOPTiAVMn1NsguUh7p3ZdEC9+k6CVHYhcorZ5ljp+aOoiBTrx4u5sVlTrxIX/QP2na/KA==',
+};

@@ -65,6 +65,14 @@ class Account {
     this.address = getAddressFromPublicKey(publicKey, DEFAULT_PREFIX);
   }
 
+  setAddress(address) {
+    if (this.address !== address) {
+      this.privateKey = null;
+      this.publicKey = null;
+      this.address = address;
+    }
+  }
+
   sign(tx) {
     tx.sign(this.privateKey);
     return tx;

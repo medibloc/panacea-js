@@ -8,7 +8,7 @@ import { DEFAULT_PREFIX } from '../../config';
 
 
 class Account {
-  constructor(data) {
+  constructor(data = {}) {
     // eslint-disable-next-line no-param-reassign
     if (data.value) data = data.value; // In case that the data is from getAccount request
 
@@ -26,8 +26,12 @@ class Account {
     if (this.publicKey) {
       this.address = getAddressFromPublicKey(this.publicKey, DEFAULT_PREFIX);
     } else {
-      this.address = data.address;
+      this.address = data.address || null;
     }
+  }
+
+  increaseSequence() {
+    this.sequence += 1;
   }
 
   setPrivateKey(privateKey) {

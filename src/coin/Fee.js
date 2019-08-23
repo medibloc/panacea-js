@@ -1,3 +1,4 @@
+import is from 'is_js';
 import Coin from './Coin';
 import { DEFAULT_GAS } from '../../config';
 
@@ -8,6 +9,9 @@ class Fee {
   }
 
   setGasLimit(gasLimit) {
+    if (!is.number(+gasLimit)) {
+      throw new Error('gas limit should be a number');
+    }
     this.gas = `${gasLimit}`;
   }
 

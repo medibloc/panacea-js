@@ -81,4 +81,62 @@ export const MESSAGE = {
       address: ACCOUNT.address,
     },
   },
+  STAKING: {
+    CREATE_VALIDATOR: {
+      description: {
+        moniker: 'test',
+        identity: '0123456789',
+        website: 'https://test.com',
+        details: 'test',
+      },
+      commission: {
+        rate: '0.5',
+        maxRate: '1.0',
+        maxChangeRate: '0.5',
+      },
+      minSelfDelegation: '1',
+      delegatorAddress: ACCOUNT.address,
+      validatorAddress: ANOTHER_ACCOUNT.address,
+      pubKey: ACCOUNT.pubKey,
+      value: {
+        denom: DEFAULT_DENOM,
+        amount: 10000,
+      },
+    },
+    EDIT_VALIDATOR: {
+      description: {
+        identity: 'test',
+        website: 'https://test.com',
+        details: 'test',
+      },
+      address: ACCOUNT.address,
+      commissionRate: '1.0',
+      minSelfDelegation: '1',
+    },
+    DELEGATE: {
+      delegatorAddress: ACCOUNT.address,
+      validatorAddress: ANOTHER_ACCOUNT.address,
+      amount: {
+        denom: DEFAULT_DENOM,
+        amount: 1000,
+      },
+    },
+    REDELEGATE: {
+      delegatorAddress: ACCOUNT.address,
+      validatorSrcAddress: ACCOUNT.address,
+      validatorDstAddress: ANOTHER_ACCOUNT.address,
+      amount: {
+        denom: DEFAULT_DENOM,
+        amount: 1000,
+      },
+    },
+    UNDELEGATE: {
+      delegatorAddress: ACCOUNT.address,
+      validatorAddress: ANOTHER_ACCOUNT.address,
+      amount: {
+        denom: DEFAULT_DENOM,
+        amount: 1000,
+      },
+    },
+  },
 };

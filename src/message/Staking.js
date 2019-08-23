@@ -6,7 +6,7 @@ const { STAKING } = MSG_TYPE;
 class CreateValidator {
   constructor(data) {
     const requiredParams = [
-      'description', 'commission', 'minSelfDelegation', 'delegatorAddress', 'validatorAddress', 'pubkey', 'value',
+      'description', 'commission', 'minSelfDelegation', 'delegatorAddress', 'validatorAddress', 'pubKey', 'value',
       'description.moniker',
       'commission.rate', 'commission.maxRate', 'commission.maxChangeRate',
       'value.denom', 'value.amount',
@@ -30,7 +30,7 @@ class CreateValidator {
       // TODO @ggomma check signer is identical with delegator address
       delegator_address: data.delegatorAddress,
       validator_address: data.validatorAddress,
-      pubkey: data.pubkey,
+      pubkey: data.pubKey,
       value: {
         denom: data.value.denom,
         amount: `${data.value.amount}`,

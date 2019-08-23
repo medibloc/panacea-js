@@ -45,8 +45,10 @@ describe('AOL message', () => {
 
       expect(msg.type).to.be.equal(config.MSG_TYPE.AOL.ADD_RECORD);
       expect(msg.value.topic_name).to.be.equal(test.MESSAGE.AOL.ADD_RECORD.topicName);
-      expect(msg.value.key).to.be.equal(test.MESSAGE.AOL.ADD_RECORD.key);
-      expect(msg.value.value).to.be.equal(test.MESSAGE.AOL.ADD_RECORD.value);
+      expect(msg.value.key).to.be
+        .equal(Buffer.from(test.MESSAGE.AOL.ADD_RECORD.key).toString('base64'));
+      expect(msg.value.value).to.be
+        .equal(Buffer.from(test.MESSAGE.AOL.ADD_RECORD.value).toString('base64'));
       expect(msg.value.writer_address).to.be.equal(test.MESSAGE.AOL.ADD_RECORD.writerAddress);
       expect(msg.value.owner_address).to.be.equal(test.MESSAGE.AOL.ADD_RECORD.ownerAddress);
       expect(msg.value.fee_payer_address).to.be.equal(test.MESSAGE.AOL.ADD_RECORD.feePayerAddress);

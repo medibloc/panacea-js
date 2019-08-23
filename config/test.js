@@ -1,3 +1,5 @@
+import { PARAM } from './default';
+
 export const DEFAULT_DENOM = 'umed';
 
 export const ACCOUNT = {
@@ -162,3 +164,6 @@ export const SIGNATURE = {
   },
   signature: 'cgL6yrH+lL13DuChcxOPTiAVMn1NsguUh7p3ZdEC9+k6CVHYhcorZ5ljp+aOoiBTrx4u5sVlTrxIX/QP2na/KA==',
 };
+
+export const TEST_PARAM_URL = `/test/${PARAM}/test/${PARAM}`;
+export const TEST_URL = 'http://999.999.999.999';

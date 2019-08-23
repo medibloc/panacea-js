@@ -18,11 +18,15 @@ const injectParams = (url, params = []) => {
 
 const handleResponse = promise => promise
   .then(({ data }) => data)
-  .catch(({ response }) => ({
-    status: response.status,
-    statusText: response.statusText,
-    error: response.data,
-  }));
+  .catch((res) => {
+    const { response } = res;
+    if (!response) return ({ error: res });
+    return ({
+      status: response.status,
+      statusText: response.statusText,
+      error: response.data,
+    });
+  });
 
 class Client {
   constructor(serverUrl) {

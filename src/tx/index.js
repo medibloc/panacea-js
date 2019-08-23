@@ -26,10 +26,6 @@ class Transaction {
     this.signatures = data.signatures || [];
   }
 
-  increaseSequence() {
-    this.sequence = `${+this.sequence + 1}`;
-  }
-
   addMsgs(...msgs) {
     // I hope you fully understand the importance of the message's sequence
     this.msgs = [...this.msgs, ...msgs];

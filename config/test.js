@@ -76,4 +76,9 @@ export const MESSAGE = {
       withdrawAddress: ANOTHER_ACCOUNT.address,
     },
   },
+  SLASHING: {
+    UNJAIL: {
+      address: ACCOUNT.address,
+    },
+  },
 };

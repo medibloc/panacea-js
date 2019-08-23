@@ -1,5 +1,5 @@
 import is from 'is_js';
-import { MSG_TYPE } from '../../config';
+import { MSG_TYPE } from '../../config/default';
 import { checkParams } from '../utils/validate';
 
 const { BASE } = MSG_TYPE;

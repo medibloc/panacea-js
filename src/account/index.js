@@ -4,7 +4,7 @@ import {
   getAddressFromPublicKey, getPrivateKeyFromMnemonic,
   getPublicKeyFromPrivateKey, validateMnemonic,
 } from '../crypto';
-import { DEFAULT_PREFIX } from '../../config';
+import { DEFAULT_PREFIX } from '../../config/default';
 
 
 class Account {
@@ -13,7 +13,8 @@ class Account {
     if (data.value) data = data.value; // In case that the data is from getAccount request
 
     this.sequence = +data.sequence || 0;
-    this.account_number = data.account_number || (data.accountNumber || '0');
+    this.account_number = data.account_number
+      || (data.accountNumber || 0);
     this.coins = data.coins || [];
 
     this.privateKey = data.privateKey || null;

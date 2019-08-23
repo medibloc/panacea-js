@@ -1,5 +1,5 @@
 import Client from './Client';
-import { APIS } from '../../config';
+import { APIS } from '../../config/default';
 
 const { ACCOUNT } = APIS;
 

@@ -1,5 +1,5 @@
 import is from 'is_js';
-import { DEFAULT_DENOM } from '../../config';
+import { DEFAULT_DENOM } from '../../config/default';
 
 class Coin {
   constructor(data) {

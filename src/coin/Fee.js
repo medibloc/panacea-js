@@ -1,6 +1,6 @@
 import is from 'is_js';
 import Coin from './Coin';
-import { DEFAULT_GAS } from '../../config';
+import { DEFAULT_GAS } from '../../config/default';
 
 class Fee {
   constructor() {

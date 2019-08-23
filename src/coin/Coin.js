@@ -21,7 +21,7 @@ class Coin {
       throw new Error('Invalid coin argument. You need to put amount + denom format. ex) 100.00umed');
     }
     return {
-      amount: parsedCoin[0],
+      amount: `${parsedCoin[0]}`,
       denom: parsedCoin[1],
     }
   }

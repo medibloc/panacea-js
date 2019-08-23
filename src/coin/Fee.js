@@ -19,7 +19,7 @@ class Fee {
     const parsedCoin = Coin.parseCoin(price);
 
     // fee amount = gas price * gas limit
-    parsedCoin.amount = parsedCoin.amount * this.gas;
+    parsedCoin.amount = `${parsedCoin.amount * this.gas}`;
     this.addCoin(parsedCoin);
   }
 
@@ -33,7 +33,7 @@ class Fee {
       let found = false;
       this.amount.forEach((coin) => {
         if (coin.denom === parsedCoin.denom) {
-          coin.amount = parsedCoin.amount;
+          coin.amount = `${parsedCoin.amount}`;
           found = true;
         }
       });

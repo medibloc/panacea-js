@@ -1,8 +1,8 @@
 {
-  "name": "panacea-js",
-  "version": "1.0.0",
+  "name": "@medibloc/panacea-js",
+  "version": "1.2.0",
   "description": "JavaScript library for MediBloc",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "babel": "babel src -d lib --copy-files",
     "browserify": "browserify ./lib/index.js -o ./dist/panaceajs.js -s panaceajs -t [babelify]",
@@ -15,8 +15,13 @@
     "uglify": "uglifyjs -nm -o ./dist/panaceajs.min.js ./dist/panaceajs.js"
   },
   "pre-commit": [
-    "lint"
+    "lint",
+    "test"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/medibloc/panacea-js.git"
+  },
   "keywords": [
     "medibloc",
     "javascript",
@@ -25,6 +30,10 @@
   ],
   "author": "MediBloc <dev@medibloc.org>",
   "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/medibloc/panacea-js/issues"
+  },
+  "homepage": "https://medibloc.org",
   "dependencies": {
     "axios": "^0.19.0",
     "bech32": "^1.1.3",

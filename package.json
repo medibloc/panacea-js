@@ -2,7 +2,7 @@
   "name": "@medibloc/panacea-js",
   "version": "1.2.0",
   "description": "JavaScript library for MediBloc",
-  "main": "lib/index.js",
+  "main": "dist/panaceajs.js",
   "scripts": {
     "babel": "babel src -d lib --copy-files",
     "browserify": "browserify ./lib/index.js -o ./dist/panaceajs.js -s panaceajs -t [babelify]",

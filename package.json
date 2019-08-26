@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "babel": "babel src -d lib --copy-files",
-    "browserify": "browserify ./lib/index.js -o ./dist/panaceajs.js -s panaceajs",
+    "browserify": "browserify ./lib/index.js -o ./dist/panaceajs.js -s panaceajs -t [babelify]",
     "build": "npm run clean && npm run babel && npm run browserify && npm run uglify",
     "clean": "npm run clean-dist && npm run clean-lib",
     "clean-dist": "rm -rf dist",
@@ -55,6 +55,7 @@
     "babel-eslint": "^10.0.2",
     "babel-plugin-add-module-exports": "^1.0.2",
     "babel-plugin-module-resolver": "^3.2.0",
+    "babelify": "^10.0.0",
     "chai": "^4.1.2",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",

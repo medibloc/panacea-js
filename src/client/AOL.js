@@ -4,6 +4,16 @@ import { APIS } from '../../config/default';
 const { AOL: AOL_API } = APIS;
 
 class AOL extends Client {
+  constructor(serverUrl) {
+    super(serverUrl);
+
+    this.getTopics = this.getTopics.bind(this);
+    this.getTopic = this.getTopic.bind(this);
+    this.getWriters = this.getWriters.bind(this);
+    this.getWriter = this.getWriter.bind(this);
+    this.getRecord = this.getRecord.bind(this);
+  }
+
   /**
    * GET
    * */

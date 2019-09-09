@@ -4,6 +4,25 @@ import { APIS } from '../../config/default';
 const { GOVERNANCE } = APIS;
 
 class Governance extends Client {
+  constructor(serverUrl) {
+    super(serverUrl);
+
+    this.getProposals = this.getProposals.bind(this);
+    this.getProposal = this.getProposal.bind(this);
+    this.getProposer = this.getProposer.bind(this);
+    this.getProposalDeposit = this.getProposalDeposit.bind(this);
+    this.getProposalDepositFromDepositor = this.getProposalDepositFromDepositor.bind(this);
+    this.getProposalVotes = this.getProposalVotes.bind(this);
+    this.getProposalVoteFromVoter = this.getProposalVoteFromVoter.bind(this);
+    this.getProposalTally = this.getProposalTally.bind(this);
+    this.getGovDepositParams = this.getGovDepositParams.bind(this);
+    this.getGovTallyParams = this.getGovTallyParams.bind(this);
+    this.getGovVoteParams = this.getGovVoteParams.bind(this);
+    this.generateProposalTx = this.generateProposalTx.bind(this);
+    this.generateDepositToProposalTx = this.generateDepositToProposalTx.bind(this);
+    this.generateVoteToProposalTx = this.generateVoteToProposalTx.bind(this);
+  }
+
   /**
    * GET
    * */

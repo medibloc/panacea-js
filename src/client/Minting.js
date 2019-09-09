@@ -4,6 +4,14 @@ import { APIS } from '../../config/default';
 const { MINTING } = APIS;
 
 class Minting extends Client {
+  constructor(serverUrl) {
+    super(serverUrl);
+
+    this.getMintParams = this.getMintParams.bind(this);
+    this.getInflation = this.getInflation.bind(this);
+    this.getAnnualProvisions = this.getAnnualProvisions.bind(this);
+  }
+
   /**
    * GET
    * */

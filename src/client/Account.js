@@ -4,6 +4,14 @@ import { APIS } from '../../config/default';
 const { ACCOUNT } = APIS;
 
 class Account extends Client {
+  constructor(serverUrl) {
+    super(serverUrl);
+
+    this.getAccount = this.getAccount.bind(this);
+    this.getBalance = this.getBalance.bind(this);
+    this.generateTransferTx = this.generateTransferTx.bind(this);
+  }
+
   /**
    * GET
    * */

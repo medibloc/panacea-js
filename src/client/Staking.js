@@ -5,6 +5,29 @@ const { STAKING } = APIS;
 const { CANDIDATES_STATES } = QUERY_LIST;
 
 class Staking extends Client {
+  constructor(serverUrl) {
+    super(serverUrl);
+
+    this.getDelagatorInfo = this.getDelagatorInfo.bind(this);
+    this.getDelegatorInfoFromValidator = this.getDelegatorInfoFromValidator.bind(this);
+    this.getDelegatorUnbondingInfo = this.getDelegatorUnbondingInfo.bind(this);
+    this.getDelegatorUnbondingInfoFromValidator =
+      this.getDelegatorUnbondingInfoFromValidator.bind(this);
+    this.getRedelegations = this.getRedelegations.bind(this);
+    this.getValidatorsFromDelegator = this.getValidatorsFromDelegator.bind(this);
+    this.getValidatorFromDelegator = this.getValidatorFromDelegator.bind(this);
+    this.getDelegatorStakingTxs = this.getDelegatorStakingTxs.bind(this);
+    this.getCandidates = this.getCandidates.bind(this);
+    this.getValidator = this.getValidator.bind(this);
+    this.getDelegatorsByValidator = this.getDelegatorsByValidator.bind(this);
+    this.getUnbondingDelegatorsByValidator = this.getUnbondingDelegatorsByValidator.bind(this);
+    this.getStakingPool = this.getStakingPool.bind(this);
+    this.getStakingParams = this.getStakingParams.bind(this);
+    this.generateDelegateTx = this.generateDelegateTx.bind(this);
+    this.generateUnbondingTx = this.generateUnbondingTx.bind(this);
+    this.generateRedelegateTx = this.generateRedelegateTx.bind(this);
+  }
+
   /**
    * GET
    * */

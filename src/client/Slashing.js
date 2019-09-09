@@ -4,6 +4,15 @@ import { APIS, QUERY } from '../../config/default';
 const { SLASHING } = APIS;
 
 class Slashing extends Client {
+  constructor(serverUrl) {
+    super(serverUrl);
+
+    this.getValidatorSigningInfo = this.getValidatorSigningInfo.bind(this);
+    this.getValidatorsSigningInfo = this.getValidatorsSigningInfo.bind(this);
+    this.getSlashingParams = this.getSlashingParams.bind(this);
+    this.generateUnjailTx = this.generateUnjailTx.bind(this);
+  }
+
   /**
    * GET
    * */

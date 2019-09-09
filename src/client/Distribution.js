@@ -4,6 +4,23 @@ import { APIS } from '../../config/default';
 const { DISTRIBUTION } = APIS;
 
 class Distribution extends Client {
+  constructor(serverUrl) {
+    super(serverUrl);
+
+    this.getDelegatorRewards = this.getDelegatorRewards.bind(this);
+    this.getDelegatorRewardFromValidator = this.getDelegatorRewardFromValidator.bind(this);
+    this.getDelegatorWithdrawAddress = this.getDelegatorWithdrawAddress.bind(this);
+    this.getValidatorDistributionInfo = this.getValidatorDistributionInfo.bind(this);
+    this.getValidatorOutstandingReward = this.getValidatorOutstandingReward.bind(this);
+    this.getValidatorReward = this.getValidatorReward.bind(this);
+    this.getCommunityPoolBalance = this.getCommunityPoolBalance.bind(this);
+    this.getDistributionParams = this.getDistributionParams.bind(this);
+    this.generateWithdrawRewardsTx = this.generateWithdrawRewardsTx.bind(this);
+    this.generateWithdrawRewardTx = this.generateWithdrawRewardTx.bind(this);
+    this.getnerateReplaceWithdrawAddrTx = this.getnerateReplaceWithdrawAddrTx.bind(this);
+    this.generateWithdrawValidatorRewardTx = this.generateWithdrawValidatorRewardTx.bind(this);
+  }
+
   /**
    * GET
    * */

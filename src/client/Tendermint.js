@@ -4,6 +4,21 @@ import { APIS, QUERY } from '../../config/default';
 const { TENDERMINT } = APIS;
 
 class Tendermint extends Client {
+  constructor(serverUrl) {
+    super(serverUrl);
+
+    this.getNodeInfo = this.getNodeInfo.bind(this);
+    this.getSyncStatus = this.getSyncStatus.bind(this);
+    this.getLatestBlock = this.getLatestBlock.bind(this);
+    this.getBlock = this.getBlock.bind(this);
+    this.getLatestValidatorSets = this.getLatestValidatorSets.bind(this);
+    this.getValidatorSets = this.getValidatorSets.bind(this);
+    this.getTx = this.getTx.bind(this);
+    this.getTxs = this.getTxs.bind(this);
+    this.broadcastTx = this.broadcastTx.bind(this);
+    this.encodeTx = this.encodeTx.bind(this);
+  }
+
   /**
    * GET
    * */

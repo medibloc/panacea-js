@@ -152,4 +152,14 @@ describe('ACCOUNT', () => {
       expect(account.sign(tx).signatures[0].signature).to.be.equal(signature);
     });
   });
+
+  describe('signTxHash', () => {
+    it('signs transactionHash with ACCOUNT\'s private key', () => {
+      const account = new Account({
+        privateKey: test.ACCOUNT.privKey,
+      });
+      const signature = account.signTxHash(test.HASH);
+      expect(signature).to.be.equal(test.SIGNATURE.signature);
+    });
+  });
 });

@@ -1,5 +1,6 @@
 import is from 'is_js';
 import {
+  generateSignatureFromHash,
   getAddressFromPrivateKey,
   getAddressFromPublicKey, getPrivateKeyFromMnemonic,
   getPublicKeyFromPrivateKey, validateMnemonic,
@@ -76,6 +77,12 @@ class Account {
   sign(tx) {
     tx.sign(this.privateKey);
     return tx;
+  }
+
+  signTxHash(txHash) {
+    const signatureHex = generateSignatureFromHash(txHash, this.privateKey);
+    const signatureBase64 = Buffer.from(signatureHex, 'hex').toString('base64');
+    return signatureBase64;
   }
 }
 

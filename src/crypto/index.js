@@ -21,7 +21,7 @@ import {
   MNEMONIC_LEN,
   PRIVKEY_LEN,
   PRIVKEY_MAX,
-} from '../../config/default';
+} from '../config/default';
 
 
 const ec = new EC(CURVE);

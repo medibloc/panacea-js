@@ -1,5 +1,5 @@
 import Client from './Client';
-import { APIS, QUERY, QUERY_LIST } from '../../config/default';
+import { APIS, QUERY, QUERY_LIST } from '../config/default';
 
 const { STAKING } = APIS;
 const { CANDIDATES_STATES } = QUERY_LIST;

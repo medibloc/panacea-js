@@ -1,4 +1,4 @@
-import { MSG_TYPE } from '../../config/default';
+import { MSG_TYPE } from '../config/default';
 import { checkParams } from '../utils/validate';
 
 const { DISTR } = MSG_TYPE;

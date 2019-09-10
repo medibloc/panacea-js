@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as bip39 from 'bip39';
 import * as crypto from '../../src/crypto';
-import { PRIVKEY_LEN, PRIVKEY_MAX } from '../../config/default';
+import { PRIVKEY_LEN, PRIVKEY_MAX } from '../../src/config/default';
 import { sha256 } from '../../src/utils';
 
 const sample = {

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import Account from '../../src/account';
 import Tx from '../../src/tx';
-import { test } from '../../config';
+import { test } from '../../src/config';
 
 describe('ACCOUNT', () => {
   describe('constructor', () => {

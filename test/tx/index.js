@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import config, { test } from '../../config';
+import config, { test } from '../../src/config';
 import Tx from '../../src/tx';
 import Msg from '../../src/message';
 import { Fee } from '../../src/coin';

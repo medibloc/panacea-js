@@ -1,5 +1,5 @@
 import Client from './Client';
-import { APIS } from '../../config/default';
+import { APIS } from '../config/default';
 
 const { AOL: AOL_API } = APIS;
 

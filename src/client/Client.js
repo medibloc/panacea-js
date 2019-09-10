@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PARAM } from '../../config/default';
+import { PARAM } from '../config/default';
 
 
 const injectParams = (url, params = []) => {

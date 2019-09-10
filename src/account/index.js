@@ -4,7 +4,7 @@ import {
   getAddressFromPublicKey, getPrivateKeyFromMnemonic,
   getPublicKeyFromPrivateKey, validateMnemonic,
 } from '../crypto';
-import { DEFAULT_PREFIX } from '../../config/default';
+import { DEFAULT_PREFIX } from '../config/default';
 
 
 class Account {

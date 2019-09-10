@@ -1,7 +1,7 @@
 import rewire from 'rewire';
 import { expect } from 'chai';
-import config, { test } from '../../config';
-import { PARAM } from '../../config/default';
+import config, { test } from '../../src/config';
+import { PARAM } from '../../src/config/default';
 import Client from '../../src/client';
 
 const privFnRewire = rewire('../../src/client/Client');

@@ -1,5 +1,5 @@
 import Client from './Client';
-import { APIS, QUERY } from '../../config/default';
+import { APIS, QUERY } from '../config/default';
 
 const { SLASHING } = APIS;
 

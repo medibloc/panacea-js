@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import config, { test } from '../../config';
+import config, { test } from '../../src/config';
 import { Slashing } from '../../src/message';
 
 describe('Slashing message', () => {

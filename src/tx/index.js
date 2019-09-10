@@ -5,7 +5,7 @@ import {
   generateSignatureFromHash,
   getPublicKeyFromPrivateKey,
 } from '../crypto';
-import { BROADCAST_MODE } from '../../config/default';
+import { BROADCAST_MODE } from '../config/default';
 
 
 class Transaction {

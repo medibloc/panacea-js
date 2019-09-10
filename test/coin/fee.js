@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { Fee } from '../../src/coin';
-import { DEFAULT_DENOM, DEFAULT_GAS } from '../../config/default';
+import { DEFAULT_DENOM, DEFAULT_GAS } from '../../src/config/default';
 
 describe('fee', () => {
   describe('constructor', () => {

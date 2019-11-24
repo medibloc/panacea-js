@@ -7,7 +7,6 @@ import { ec as EC } from 'elliptic';
 import is from 'is_js';
 import uuid from 'uuid';
 import ecc from 'secp256k1';
-import createHash from 'crypto';
 
 import {
   ab2hexstring, isHex,
@@ -269,8 +268,8 @@ const getPrivateKeyFromKeyStore = (keystore, password = '') => {
 const generateMnemonic = () => bip39.generateMnemonic(MNEMONIC_LEN);
 
 const entropyToMnemonic = (entropy) => {
-  const hashed = createHash('sha256').update(entropy).digest('hex');
-  bip39.entropyToMnemonic(hashed);
+  const hashed = browserifiedCrypto.createHash('sha256').update(entropy).digest('hex');
+  return bip39.entropyToMnemonic(hashed);
 };
 
 /**
@@ -304,7 +303,7 @@ const getPrivateKeyFromMnemonic = (mnemonic, derive = true, index = 0, password 
 
 const getSharedSecret = (publicKey, privateKey) => {
   const shared = ecc.ecdhUnsafe(publicKey, privateKey, true);
-  return createHash('md5').update(shared).digest('hex');
+  return browserifiedCrypto.createHash('md5').update(shared).digest('hex');
 };
 
 

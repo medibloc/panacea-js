@@ -267,6 +267,8 @@ const getPrivateKeyFromKeyStore = (keystore, password = '') => {
  */
 const generateMnemonic = () => bip39.generateMnemonic(MNEMONIC_LEN);
 
+const entropyToMnemonic = entropy => bip39.entropyToMnemonic(entropy);
+
 /**
  * Validates mnemonic phrase words.
  * @param {string} mnemonic the mnemonic phrase words
@@ -311,6 +313,7 @@ export {
   generateKeyStore,
   getPrivateKeyFromKeyStore,
   generateMnemonic,
+  entropyToMnemonic,
   validateMnemonic,
   getPrivateKeyFromMnemonic,
 };

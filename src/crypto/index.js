@@ -268,7 +268,10 @@ const getPrivateKeyFromKeyStore = (keystore, password = '') => {
  */
 const generateMnemonic = () => bip39.generateMnemonic(MNEMONIC_LEN);
 
-const entropyToMnemonic = entropy => bip39.entropyToMnemonic(entropy);
+const entropyToMnemonic = (entropy) => {
+  const hashed = createHash('sha256').update(entropy).digest('hex');
+  bip39.entropyToMnemonic(hashed);
+};
 
 /**
  * Validates mnemonic phrase words.

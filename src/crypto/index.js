@@ -7,6 +7,7 @@ import { ec as EC } from 'elliptic';
 import is from 'is_js';
 import uuid from 'uuid';
 import ecc from 'secp256k1';
+import createHash from 'crypto';
 
 import {
   ab2hexstring, isHex,
@@ -298,6 +299,11 @@ const getPrivateKeyFromMnemonic = (mnemonic, derive = true, index = 0, password 
   return seed.toString('hex');
 };
 
+const getSharedSecret = (publicKey, privateKey) => {
+  const shared = ecc.ecdhUnsafe(publicKey, privateKey, true);
+  return createHash('md5').update(shared).digest('hex');
+};
+
 
 export {
   decodeAddress,
@@ -316,4 +322,5 @@ export {
   entropyToMnemonic,
   validateMnemonic,
   getPrivateKeyFromMnemonic,
+  getSharedSecret,
 };

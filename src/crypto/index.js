@@ -267,6 +267,11 @@ const getPrivateKeyFromKeyStore = (keystore, password = '') => {
  */
 const generateMnemonic = () => bip39.generateMnemonic(MNEMONIC_LEN);
 
+const entropyToMnemonic = (entropy) => {
+  const hashed = browserifiedCrypto.createHash('sha256').update(entropy).digest('hex');
+  return bip39.entropyToMnemonic(hashed);
+};
+
 /**
  * Validates mnemonic phrase words.
  * @param {string} mnemonic the mnemonic phrase words
@@ -296,6 +301,11 @@ const getPrivateKeyFromMnemonic = (mnemonic, derive = true, index = 0, password 
   return seed.toString('hex');
 };
 
+const getSharedSecret = (publicKey, privateKey) => {
+  const shared = ecc.ecdhUnsafe(publicKey, privateKey, true);
+  return browserifiedCrypto.createHash('md5').update(shared).digest('hex');
+};
+
 
 export {
   decodeAddress,
@@ -311,6 +321,8 @@ export {
   generateKeyStore,
   getPrivateKeyFromKeyStore,
   generateMnemonic,
+  entropyToMnemonic,
   validateMnemonic,
   getPrivateKeyFromMnemonic,
+  getSharedSecret,
 };

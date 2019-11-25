@@ -4,6 +4,7 @@ import {
   getAddressFromPrivateKey,
   getAddressFromPublicKey, getPrivateKeyFromMnemonic,
   getPublicKeyFromPrivateKey, validateMnemonic,
+  entropyToMnemonic,
 } from '../crypto';
 import { DEFAULT_PREFIX } from '../config/default';
 
@@ -53,6 +54,11 @@ class Account {
 
     const privateKey = getPrivateKeyFromMnemonic(mnemonic);
     this.setPrivateKey(privateKey);
+  }
+
+  setPrivKeyFromEntropy(entropy) {
+    const mnemonic = entropyToMnemonic(entropy);
+    this.setPrivKeyFromMnemonic(mnemonic);
   }
 
   setPublicKey(publicKey) {

@@ -14,6 +14,7 @@
     "test": "mocha --recursive --require @babel/register --reporter spec",
     "uglify": "uglifyjs -nm -o ./dist/panaceajs.min.js ./dist/panaceajs.js"
   },
+  "types": "./types/index.d.ts",
   "pre-commit": [
     "lint",
     "test"

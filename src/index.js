@@ -5,6 +5,7 @@ import BaseMessage, * as Message from './message';
 import Tx from './tx';
 import * as crypto from './crypto';
 import utils from './utils';
+import encoding from './encoding';
 
 export default {
   Account,
@@ -16,4 +17,5 @@ export default {
   Tx,
   crypto,
   utils,
+  encoding,
 };

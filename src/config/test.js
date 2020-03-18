@@ -21,7 +21,7 @@ export const ANOTHER_ACCOUNT = {
 
 export const SIMPLE_TX = {
   chainId: 'test',
-  fee: [{
+  fee: {
     amount: [
       {
         denom: 'umed',
@@ -29,7 +29,7 @@ export const SIMPLE_TX = {
       },
     ],
     gas: 200000,
-  }],
+  },
 };
 
 export const MESSAGE = {

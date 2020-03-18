@@ -1,8 +1,8 @@
-import rewire from 'rewire';
+import rewire = require('rewire');
 import { expect } from 'chai';
 import config, { test } from '../../src/config';
 import { PARAM } from '../../src/config/default';
-import Client from '../../src/client';
+import { Client } from '../../';
 
 const privFnRewire = rewire('../../src/client/Client');
 const injectParams = privFnRewire.__get__('injectParams'); // eslint-disable-line no-underscore-dangle

@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "lib": [
+            "es6"
+        ],
+        "types": ["node"],
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictFunctionTypes": true,
+        "strictNullChecks": true,
+        "baseUrl": "./",
+        "noEmit": true,
+        "forceConsistentCasingInFileNames": true,
+        "allowJs": true,
+        "target": "es6",
+        "moduleResolution": "node"
+    },
+    "include": ["./**/*.ts"]
+}

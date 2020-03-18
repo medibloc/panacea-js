@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import Coin from '../../src/coin';
+import { Coin } from '../../';
 import { DEFAULT_DENOM } from '../../src/config/default';
 
 describe('coin', () => {
@@ -24,7 +24,6 @@ describe('coin', () => {
   describe('parseCoin', () => {
     it('throws error if argument is invalid', () => {
       expect(() => Coin.parseCoin(DEFAULT_DENOM)).to.throw();
-      expect(() => Coin.parseCoin(123456789)).to.throw();
     });
 
     it('generates object containing amount and denom fields', () => {

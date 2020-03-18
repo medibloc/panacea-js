@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Fee } from '../../src/coin';
+import { Fee } from '../../';
 import { DEFAULT_DENOM, DEFAULT_GAS } from '../../src/config/default';
 
 describe('fee', () => {
@@ -31,17 +31,17 @@ describe('fee', () => {
 
       fee.setGasPrice(gasPrice);
       expect(fee.amount).to.be.an('array').lengthOf(1);
-      expect(fee.amount[0].amount).to.be.eql(`${price * fee.gas}`);
-      expect(fee.amount[0].denom).to.be.eql(DEFAULT_DENOM);
+      expect(fee.amount![0].amount).to.be.eql(`${price * +fee.gas}`);
+      expect(fee.amount![0].denom).to.be.eql(DEFAULT_DENOM);
 
       const anotherDenom = 'test';
       const anotherGasPrice = `${price}${anotherDenom}`;
       fee.setGasPrice(anotherGasPrice);
-      expect(fee.amount).to.be.an('array').lengthOf(2);
-      expect(fee.amount[0].amount).to.be.eql(`${price * fee.gas}`);
-      expect(fee.amount[0].denom).to.be.eql(DEFAULT_DENOM);
-      expect(fee.amount[1].amount).to.be.eql(`${price * fee.gas}`);
-      expect(fee.amount[1].denom).to.be.eql(anotherDenom);
+      expect(fee.amount!).to.be.an('array').lengthOf(2);
+      expect(fee.amount![0].amount).to.be.eql(`${price * +fee.gas}`);
+      expect(fee.amount![0].denom).to.be.eql(DEFAULT_DENOM);
+      expect(fee.amount![1].amount).to.be.eql(`${price * +fee.gas}`);
+      expect(fee.amount![1].denom).to.be.eql(anotherDenom);
     });
   });
 
@@ -52,9 +52,9 @@ describe('fee', () => {
       const fee = new Fee();
       fee.setFee(coin);
 
-      expect(fee.amount).to.be.an('array').lengthOf(1);
-      expect(fee.amount[0].amount).to.be.eql(`${amount}`);
-      expect(fee.amount[0].denom).to.be.eql(DEFAULT_DENOM);
+      expect(fee.amount!).to.be.an('array').lengthOf(1);
+      expect(fee.amount![0].amount).to.be.eql(`${amount}`);
+      expect(fee.amount![0].denom).to.be.eql(DEFAULT_DENOM);
     });
   });
 });

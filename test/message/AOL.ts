@@ -1,13 +1,11 @@
 import { expect } from 'chai';
 import config, { test } from '../../src/config';
-import { AOL } from '../../src/message';
+import { Message } from '../../';
+
+const { AOL } = Message;
 
 describe('AOL message', () => {
   describe('CreateTopic', () => {
-    it('throws an error without required parameters', () => {
-      expect(() => new AOL.CreateTopic()).to.throw();
-    });
-
     it('generates default message object', () => {
       const msg = new AOL.CreateTopic(test.MESSAGE.AOL.CREATE_TOPIC);
 
@@ -19,10 +17,6 @@ describe('AOL message', () => {
   });
 
   describe('AddWriter', () => {
-    it('throws an error without required parameters', () => {
-      expect(() => new AOL.AddWriter()).to.throw();
-    });
-
     it('generates addWriter message object', () => {
       const msg = new AOL.AddWriter(test.MESSAGE.AOL.ADD_WRITER);
 
@@ -36,10 +30,6 @@ describe('AOL message', () => {
   });
 
   describe('AddRecord', () => {
-    it('throws an error without required parameters', () => {
-      expect(() => new AOL.AddRecord()).to.throw();
-    });
-
     it('generates addRecord message object', () => {
       const msg = new AOL.AddRecord(test.MESSAGE.AOL.ADD_RECORD);
 
@@ -56,10 +46,6 @@ describe('AOL message', () => {
   });
 
   describe('DeleteWriter', () => {
-    it('throws an error without required parameters', () => {
-      expect(() => new AOL.DeleteWriter()).to.throw();
-    });
-
     it('generates deleteWriter message object', () => {
       const msg = new AOL.DeleteWriter(test.MESSAGE.AOL.DELETE_WRITER);
 

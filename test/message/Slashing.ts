@@ -1,13 +1,11 @@
 import { expect } from 'chai';
 import config, { test } from '../../src/config';
-import { Slashing } from '../../src/message';
+import { Message } from '../../';
+
+const { Slashing } = Message;
 
 describe('Slashing message', () => {
   describe('Unjail', () => {
-    it('throws an error without required parameters', () => {
-      expect(() => new Slashing.Unjail()).to.throw();
-    });
-
     it('generates unjail message object', () => {
       const msg = new Slashing.Unjail(test.MESSAGE.SLASHING.UNJAIL);
 

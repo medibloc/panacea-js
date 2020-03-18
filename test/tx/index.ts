@@ -1,15 +1,9 @@
 import { expect } from 'chai';
 import config, { test } from '../../src/config';
-import Tx from '../../src/tx';
-import Msg from '../../src/message';
-import { Fee } from '../../src/coin';
+import { Tx, BaseMessage as Msg, Fee } from '../../';
 
 describe('Transaction', () => {
   describe('constructor', () => {
-    it('throws an error without chain id', () => {
-      expect(() => new Tx()).to.throw();
-    });
-
     it('generates default tx structure', () => {
       const tx = new Tx(test.TX);
 
@@ -59,8 +53,8 @@ describe('Transaction', () => {
       });
 
       expect(tx.fee).to.be.an('object');
-      expect(tx.fee.amount).to.be.an('array').lengthOf(1);
-      expect(+tx.fee.gas).to.be.a('number');
+      expect(tx.fee!.amount).to.be.an('array').lengthOf(1);
+      expect(+tx.fee!.gas).to.be.a('number');
     });
   });
 

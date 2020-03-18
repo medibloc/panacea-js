@@ -1,8 +1,9 @@
 import { expect } from 'chai';
 import * as bip39 from 'bip39';
-import * as crypto from '../../src/crypto';
 import { PRIVKEY_LEN, PRIVKEY_MAX } from '../../src/config/default';
-import { sha256 } from '../../src/utils';
+import { utils, crypto } from '../../';
+
+const { sha256 } = utils;
 
 const sample = {
   mnemonic: 'liar hope only nuclear ostrich element between virtual burger test section enemy future film shrug degree pear length husband kingdom candy shine code boring',

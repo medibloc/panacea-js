@@ -1,13 +1,9 @@
 import { expect } from 'chai';
 import config, { test } from '../../src/config';
-import Base from '../../src/message';
+import { BaseMessage as Base } from '../../';
 
 describe('Base message', () => {
   describe('constructor', () => {
-    it('throws an error without required parameters', () => {
-      expect(() => new Base()).to.throw();
-    });
-
     it('generates default message object', () => {
       const msg = new Base(test.MESSAGE.BASE);
 

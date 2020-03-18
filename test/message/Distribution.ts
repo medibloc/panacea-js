@@ -1,13 +1,11 @@
 import { expect } from 'chai';
 import config, { test } from '../../src/config';
-import { Distr } from '../../src/message';
+import { Message } from '../../';
+
+const { Distr } = Message;
 
 describe('Distribution message', () => {
   describe('WithdrawReward', () => {
-    it('throws an error without required parameters', () => {
-      expect(() => new Distr.WithdrawReward()).to.throw();
-    });
-
     it('generates withdrawReward message object', () => {
       const msg = new Distr.WithdrawReward(test.MESSAGE.DISTR.WITHDRAW_REWARD);
 
@@ -20,10 +18,6 @@ describe('Distribution message', () => {
   });
 
   describe('ModifyWithdrawAddress', () => {
-    it('throws an error without required parameters', () => {
-      expect(() => new Distr.ModifyWithdrawAddress()).to.throw();
-    });
-
     it('generates modifyWithdrawAddress message object', () => {
       const msg = new Distr.ModifyWithdrawAddress(test.MESSAGE.DISTR.MODIFY_WITHDRAW_ADDR);
 

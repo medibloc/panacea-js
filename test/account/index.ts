@@ -1,7 +1,8 @@
+import 'mocha';
 import { expect } from 'chai';
-import Account from '../../src/account';
-import Tx from '../../src/tx';
+import { Account, Tx } from '../../';
 import { test } from '../../src/config';
+
 
 describe('ACCOUNT', () => {
   describe('constructor', () => {

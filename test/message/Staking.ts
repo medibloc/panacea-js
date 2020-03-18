@@ -1,13 +1,11 @@
 import { expect } from 'chai';
 import config, { test } from '../../src/config';
-import { Staking } from '../../src/message';
+import { Message } from '../../';
+
+const { Staking } = Message;
 
 describe('Staking message', () => {
   describe('CreateValidator', () => {
-    it('throws an error without required parameters', () => {
-      expect(() => new Staking.CreateValidator()).to.throw();
-    });
-
     it('generates createValidator message object', () => {
       const msg = new Staking.CreateValidator(test.MESSAGE.STAKING.CREATE_VALIDATOR);
 
@@ -36,10 +34,6 @@ describe('Staking message', () => {
   });
 
   describe('EditValidator', () => {
-    it('throws an error without required parameters', () => {
-      expect(() => new Staking.EditValidator()).to.throw();
-    });
-
     it('generates editValidator message object', () => {
       const msg = new Staking.EditValidator(test.MESSAGE.STAKING.EDIT_VALIDATOR);
 
@@ -62,10 +56,6 @@ describe('Staking message', () => {
   });
 
   describe('Delegate', () => {
-    it('throws an error without required parameters', () => {
-      expect(() => new Staking.Delegate()).to.throw();
-    });
-
     it('generates delegate message object', () => {
       const msg = new Staking.Delegate(test.MESSAGE.STAKING.DELEGATE);
 
@@ -82,10 +72,6 @@ describe('Staking message', () => {
   });
 
   describe('Redelegate', () => {
-    it('throws an error without required parameters', () => {
-      expect(() => new Staking.Redelegate()).to.throw();
-    });
-
     it('generates redelegate message object', () => {
       const msg = new Staking.Redelegate(test.MESSAGE.STAKING.REDELEGATE);
 
@@ -104,10 +90,6 @@ describe('Staking message', () => {
   });
 
   describe('Undelegate', () => {
-    it('throws an error without required parameters', () => {
-      expect(() => new Staking.Undelegate()).to.throw();
-    });
-
     it('generates undelegate message object', () => {
       const msg = new Staking.Undelegate(test.MESSAGE.STAKING.UNDELEGATE);
 

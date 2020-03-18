@@ -1,7 +1,9 @@
 import { expect } from 'chai';
-import encode from '../../src/encoding/encode';
+import { encoding } from '../../';
 
-describe('encode', () => {
+const { decodeTx } = encoding;
+
+describe('decode', () => {
   const txData = 'swHwYl3uCin1rCMCCg1jZXJ0aWZpY2F0aW9uGhRpzQnhs67Ll6DGrwsgR4eo2nOtthIWChAKBHVtZWQSCDEwMDAwMDAwEMCaDBpqCibrWumHIQMhm0g3O7eef24yI6STg7q3Ii6gPI9gYs3uQNOua2V3+hJArUDhsKm5yAX4C9PsluBsWB10xZVpk7W2L2Pot+8ODIsoVLmdYnnng+Dxy8eji7angvtDPC7/8cqvQ9S5wUR+8Q==';
 
   const tx = {
@@ -39,8 +41,8 @@ describe('encode', () => {
     },
   };
 
-  it('encode tx to base64 string', () => {
-    const decodedTx = encode(tx);
-    expect(decodedTx).to.equal(txData);
+  it('decodes tx data to tx', () => {
+    const decodedTx = decodeTx(txData);
+    expect(decodedTx).to.eql(tx);
   });
 });

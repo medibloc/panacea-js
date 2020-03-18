@@ -12,11 +12,12 @@
         "typeRoots": [
             "../"
         ],
-        "types": [],
+        "types": ["node"],
         "noEmit": true,
         "forceConsistentCasingInFileNames": true
     },
     "files": [
         "index.d.ts",
+        "index.test-d.ts"
     ]
 }

@@ -1,6 +1,6 @@
 {
   "name": "@medibloc/panacea-js",
-  "version": "1.2.9",
+  "version": "1.2.10",
   "description": "JavaScript library for MediBloc",
   "main": "lib/index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "clean-dist": "rm -rf dist",
     "clean-lib": "rm -rf lib",
     "lint": "eslint .",
-    "test": "mocha --recursive --require @babel/register --reporter spec",
+    "test": "mocha --recursive -r ts-node/register -r @babel/register test/**/*.ts",
     "uglify": "uglifyjs -nm -o ./dist/panaceajs.min.js ./dist/panaceajs.js"
   },
   "types": "./types/index.d.ts",
@@ -53,13 +53,17 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
+    "@babel/cli": "^7.8.4",
     "@babel/core": "^7.5.5",
     "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
     "@babel/plugin-proposal-private-methods": "^7.4.4",
     "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
-    "@babel/register": "^7.5.5",
+    "@babel/register": "^7.8.6",
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.9.1",
+    "@types/rewire": "^2.5.28",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.2",
     "babel-plugin-add-module-exports": "^1.0.2",
@@ -76,6 +80,8 @@
     "rewire": "^4.0.1",
     "sinon": "^6.3.5",
     "sinon-chai": "^3.3.0",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.3",
     "uglify-es": "^3.3.9"
   }
 }

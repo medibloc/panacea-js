@@ -68,6 +68,26 @@ export const MESSAGE = {
       ownerAddress: ACCOUNT.address,
     },
   },
+  DID: {
+    CREATE_DID: {
+      did: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
+      document: '{"id":"did:panacea:testnet:LfBBguz7sBppPUrAsvTzd","publicKey":[{"id":"did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1","type":"Secp256k1VerificationKey2018","publicKeyBase58":"pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D"}],"authentication":["did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1"]}',
+      fromAddress: ACCOUNT.address,
+    },
+    UPDATE_DID: {
+      did: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
+      document: '{"id":"did:panacea:testnet:LfBBguz7sBppPUrAsvTzd","publicKey":[{"id":"did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key2","type":"Secp256k1VerificationKey2018","publicKeyBase58":"pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D"}],"authentication":["did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key2"]}',
+      sigKeyId: 'did:panacea:mainnet:DnreD8QqXAQaEW9DwC16Wh#key1',
+      signature: 'asdfkljaslkfdjdlsk',
+      fromAddress: ACCOUNT.address,
+    },
+    DELETE_DID: {
+      did: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
+      sigKeyId: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
+      signature: 'asdfkljaslkfdjdlsk',
+      fromAddress: ACCOUNT.address,
+    },
+  },
   DISTR: {
     WITHDRAW_REWARD: {
       delegatorAddress: ACCOUNT.address,

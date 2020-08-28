@@ -11,7 +11,7 @@ describe('DID message', () => {
 
       expect(msg.type).to.be.equal(config.MSG_TYPE.DID.CREATE_DID);
       expect(msg.value.did).to.be.equal(test.MESSAGE.DID.CREATE_DID.did);
-      expect(JSON.stringify(msg.value.document)).to.be.equal(test.MESSAGE.DID.CREATE_DID.document);
+      expect(msg.value.document).to.be.equal(test.MESSAGE.DID.CREATE_DID.document);
       expect(msg.value.from_address).to.be.equal(test.MESSAGE.DID.CREATE_DID.fromAddress);
     });
   });
@@ -22,7 +22,7 @@ describe('DID message', () => {
 
       expect(msg.type).to.be.equal(config.MSG_TYPE.DID.UPDATE_DID);
       expect(msg.value.did).to.be.equal(test.MESSAGE.DID.UPDATE_DID.did);
-      expect(JSON.stringify(msg.value.document)).to.be.equal(test.MESSAGE.DID.UPDATE_DID.document);
+      expect(msg.value.document).to.be.equal(test.MESSAGE.DID.UPDATE_DID.document);
       expect(msg.value.sig_key_id).to.be.equal(test.MESSAGE.DID.UPDATE_DID.sigKeyId);
       expect(msg.value.signature).to.be.equal(test.MESSAGE.DID.UPDATE_DID.signature);
       expect(msg.value.from_address).to.be.equal(test.MESSAGE.DID.UPDATE_DID.fromAddress);

@@ -47,7 +47,7 @@ async function createDID(account, keystore) {
   const res = await client.Tendermint.broadcastTx(tx.convertToBroadcastTx(txBroadcastMode));
   console.log(res);
 
-  account.increaseSequence(); // TODO: not sure if I have to call this manually
+  account.increaseSequence();
   return didDoc.id;
 }
 
@@ -86,7 +86,7 @@ async function updateDID(account, keystore, did, keyId, newDoc) {
   const res = await client.Tendermint.broadcastTx(tx.convertToBroadcastTx(txBroadcastMode));
   console.log(res);
 
-  account.increaseSequence(); // TODO: not sure if I have to call this manually
+  account.increaseSequence();
 }
 
 async function deleteDID(account, keystore, did, keyId) {
@@ -118,7 +118,7 @@ async function deleteDID(account, keystore, did, keyId) {
   const res = await client.Tendermint.broadcastTx(tx.convertToBroadcastTx(txBroadcastMode));
   console.log(res);
 
-  account.increaseSequence(); // TODO: not sure if I have to call this manually
+  account.increaseSequence();
 }
 
 async function main() {

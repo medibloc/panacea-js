@@ -57,7 +57,7 @@ export class Fee implements IFee {
   setGasPrice(price: string): void;
 }
 
-export type IMsg = BaseMessage | Message.AOL.AddRecord | Message.AOL.AddWriter | Message.AOL.CreateTopic | Message.AOL.DeleteWriter | Message.Distr.ModifyWithdrawAddress | Message.Distr.WithdrawReward | Message.Slashing.Unjail | Message.Staking.CreateValidator | Message.Staking.Delegate | Message.Staking.EditValidator | Message.Staking.Redelegate | Message.Staking.Undelegate
+export type IMsg = BaseMessage | Message.DID.CreateDID | Message.DID.UpdateDID | Message.DID.DeactivateDID | Message.AOL.AddRecord | Message.AOL.AddWriter | Message.AOL.CreateTopic | Message.AOL.DeleteWriter | Message.Distr.ModifyWithdrawAddress | Message.Distr.WithdrawReward | Message.Slashing.Unjail | Message.Staking.CreateValidator | Message.Staking.Delegate | Message.Staking.EditValidator | Message.Staking.Redelegate | Message.Staking.Undelegate
 
 interface ISignature {
   pub_key: {
@@ -157,6 +157,12 @@ export class AOLClient extends BaseClient {
   getRecord: (ownerAddr: string, topic: string, offset: string | number) => Promise<any>;
 }
 
+export class DIDClient extends BaseClient {
+  constructor(serverUrl: string);
+
+  getDID: (did: string) => Promise<any>;
+}
+
 export class DistributionClient extends BaseClient {
   constructor(serverUrl: string);
 
@@ -203,7 +209,7 @@ export class MintingClient extends BaseClient {
 
 export class SlashingClient extends BaseClient {
   constructor(serverUrl: string);
- 
+
   getValidatorSigningInfo: (validatorPubKey: string) => Promise<any>;
   getValidatorsSigningInfo: (opts: { page: string | number, limit: string | number }) => Promise<any>;
   getSlashingParams: () => Promise<any>;
@@ -257,6 +263,7 @@ export class VersionClient extends BaseClient {
 export class Client extends BaseClient {
   Account: AccountClient;
   AOL: AOLClient;
+  DID: DIDClient;
   Distribution: DistributionClient;
   Governance: GovernanceClient;
   Minting: MintingClient;
@@ -307,7 +314,7 @@ export namespace Message {
       })
     }
 
-    class AddWriter { 
+    class AddWriter {
       type: 'aol/MsgAddWriter';
       value: {
         topic_name: string;
@@ -357,6 +364,63 @@ export namespace Message {
     }
   }
 
+  namespace DID {
+    class CreateDID {
+      type: 'did/MsgCreateDID';
+      value: {
+        did: string;
+        document: string;
+        sig_key_id: string;
+        signature: string;
+        from_address: string;
+      }
+
+      constructor(data: {
+        did: string;
+        document: string;
+        sigKeyId: string;
+        signature: string;
+        fromAddress: string;
+      })
+    }
+
+    class UpdateDID {
+      type: 'did/MsgUpdateDID';
+      value: {
+        did: string;
+        document: string;
+        sig_key_id: string;
+        signature: string;
+        from_address: string;
+      }
+
+      constructor(data: {
+        did: string;
+        document: string;
+        sigKeyId: string;
+        signature: string;
+        fromAddress: string;
+      })
+    }
+
+    class DeactivateDID {
+      type: 'did/MsgDeactivateDID';
+      value: {
+        did: string;
+        sig_key_id: string;
+        signature: string;
+        from_address: string;
+      }
+
+      constructor(data: {
+        did: string;
+        sigKeyId: string;
+        signature: string;
+        fromAddress: string;
+      })
+    }
+  }
+
   namespace Distr {
     class ModifyWithdrawAddress {
       type: 'cosmos-sdk/MsgModifyWithdrawAddress';
@@ -364,20 +428,20 @@ export namespace Message {
         delegator_address: string;
         withdraw_address: string;
       }
-      
+
       constructor(data: {
         delegatorAddress: string;
         withdrawAddress: string;
       })
     }
-      
+
     class WithdrawReward {
       type: 'cosmos-sdk/MsgWithdrawDelegationReward';
       value: {
         delegator_address: string;
         validator_address: string;
       }
-      
+
       constructor(data: {
         delegatorAddress: string;
         validatorAddress: string;

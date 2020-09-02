@@ -2,6 +2,7 @@ import BaseHandler from './Client';
 
 import Account from './Account';
 import AOL from './AOL';
+import DID from './DID';
 import Distribution from './Distribution';
 import Governance from './Governance';
 import Minting from './Minting';
@@ -17,6 +18,7 @@ class Client extends BaseHandler {
 
     this.Account = new Account(serverUrl);
     this.AOL = new AOL(serverUrl);
+    this.DID = new DID(serverUrl);
     this.Distribution = new Distribution(serverUrl);
     this.Governance = new Governance(serverUrl);
     this.Minting = new Minting(serverUrl);

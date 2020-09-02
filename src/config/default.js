@@ -34,6 +34,9 @@ export const APIS = {
     writer: `/api/v1/aol/${PARAM}/topics/${PARAM}/acl/${PARAM}`,
     record: `/api/v1/aol/${PARAM}/topics/${PARAM}/records/${PARAM}`,
   },
+  DID: {
+    did: `/api/v1/did/${PARAM}`,
+  },
   DISTRIBUTION: {
     delegatorReward: `/distribution/delegators/${PARAM}/rewards`,
     delegatorRewardByValidator: `/distribution/delegators/${PARAM}/rewards/${PARAM}`,
@@ -111,6 +114,11 @@ export const MSG_TYPE = {
     ADD_WRITER: 'aol/MsgAddWriter',
     ADD_RECORD: 'aol/MsgAddRecord',
     DELETE_WRITER: 'aol/MsgDeleteWriter',
+  },
+  DID: {
+    CREATE_DID: 'did/MsgCreateDID',
+    UPDATE_DID: 'did/MsgUpdateDID',
+    DEACTIVATE_DID: 'did/MsgDeactivateDID',
   },
   BASE: {
     SEND: 'cosmos-sdk/MsgSend',

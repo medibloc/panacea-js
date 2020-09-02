@@ -41,6 +41,10 @@ describe('crypto', () => {
       const jsonStr = fs.readFileSync(`${__dirname}/testdata/keystore_legacy.json`).toString();
       expect(crypto.getPrivateKeyFromKeyStore(JSON.parse(jsonStr), 'testpassword')).to.be.eql('cb011405894895c814432f1556b52bb054720a9b2a6ffaf3792a45f911b50dff');
     });
+    it('get private key from the old legacy format which uses aes-256-ctr and sha1-256', () => {
+      const jsonStr = fs.readFileSync(`${__dirname}/testdata/keystore_old_legacy.json`).toString();
+      expect(crypto.getPrivateKeyFromKeyStore(JSON.parse(jsonStr), 'testpassword')).to.be.eql('83bf913f1ef05c242a60784eaaf90576aaf664ed9c834cff9018bbd8ba92cd66');
+    });
   });
 
   describe('generateMnemonic', () => {

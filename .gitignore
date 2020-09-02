@@ -2,8 +2,7 @@
 .DS_Store
 
 # Distribution folders
-dist/*.js
-dist/*.json
+dist
 lib
 
 # Dependency directories

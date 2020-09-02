@@ -209,7 +209,7 @@ const generateKeyStore = (privateKeyHex, password = '') => {
   }
 
   const cipherText = Buffer.concat([cipher.update(Buffer.from(privateKeyHex, 'hex')), cipher.final()]);
-  const bufferValue = Buffer.concat([derivedKey.slice(16, 32), Buffer.from(cipherText)]);
+  const bufferValue = Buffer.concat([derivedKey.slice(16, 32), cipherText]);
 
   return {
     version: 3,

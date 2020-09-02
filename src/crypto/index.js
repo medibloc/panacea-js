@@ -12,7 +12,7 @@ import {
   ab2hexstring, isHex,
   sha256,
   sha256ripemd160,
-  sha3,
+  sha3keccak,
 } from '../utils';
 import {
   CURVE,
@@ -164,6 +164,23 @@ const verifySignature = (sigHex, signBytesHex, publicKeyHex) => {
   return ecc.verify(msgHashBuf, sigBuf, pubKeyBuf);
 };
 
+/**
+ * Returns a key size of the given cipher algorithm.
+ * If the given cipher algorithm is not supported, it throws an error.
+ * @param {string} cipherAlgo The cipher algorithm
+ * @returns {number} The cipher key size in bytes (eg. 16, 32, ...)
+ */
+const getCipherKeySize = (cipherAlgo) => {
+  switch (cipherAlgo) {
+    case 'aes-128-ctr':
+      return 16;
+    case 'aes-256-ctr':
+      return 32;
+    default:
+      throw new Error(`Unsupported cipher algorithm: ${cipherAlgo}`);
+  }
+};
+
 // TODO @ggomma check compatibility with old panacea-js
 /**
  * Generates a keystore object(web3 secret storage format) given private key to store.
@@ -174,7 +191,7 @@ const verifySignature = (sigHex, signBytesHex, publicKeyHex) => {
 const generateKeyStore = (privateKeyHex, password = '') => {
   const salt = browserifiedCrypto.randomBytes(32);
   const iv = browserifiedCrypto.randomBytes(16);
-  const cipherAlg = 'aes-256-ctr';
+  const cipherAlg = 'aes-128-ctr';
 
   const kdf = 'pbkdf2';
   const kdfparams = {
@@ -185,16 +202,17 @@ const generateKeyStore = (privateKeyHex, password = '') => {
   };
 
   const derivedKey = browserifiedCrypto.pbkdf2Sync(Buffer.from(password), salt, kdfparams.c, kdfparams.dklen, 'sha256');
-  const cipher = browserifiedCrypto.createCipheriv(cipherAlg, derivedKey.slice(0, 32), iv);
+  const derivedKeyForCipher = derivedKey.slice(0, getCipherKeySize(cipherAlg));
+  const cipher = browserifiedCrypto.createCipheriv(cipherAlg, derivedKeyForCipher, iv);
   if (!cipher) {
     throw new Error('Unsupported cipher');
   }
 
   const cipherText = Buffer.concat([cipher.update(Buffer.from(privateKeyHex, 'hex')), cipher.final()]);
-  const bufferValue = Buffer.concat([derivedKey.slice(16, 32), Buffer.from(cipherText, 'hex')]);
+  const bufferValue = Buffer.concat([derivedKey.slice(16, 32), Buffer.from(cipherText)]);
 
   return {
-    version: 1,
+    version: 3,
     id: uuid.v4({
       random: browserifiedCrypto.randomBytes(16),
     }),
@@ -206,8 +224,8 @@ const generateKeyStore = (privateKeyHex, password = '') => {
       cipher: cipherAlg,
       kdf,
       kdfparams,
-      // mac must use sha3 according to web3 secret storage spec
-      mac: sha3(bufferValue.toString('hex')),
+      // mac must use sha3-keccak256 according to web3 secret storage spec
+      mac: sha3keccak(bufferValue.toString('hex'), 256),
     },
   };
 };
@@ -226,8 +244,15 @@ const getPrivateKeyFromKeyStore = (keystore, password = '') => {
   const json = is.json(keystore) ? keystore : JSON.parse(keystore);
   const { kdfparams, ciphertext } = json.crypto;
 
+  // `version !== 1` is only for the backward compatibility.
+  // Previously, the version had been defined as 1 (by mistake),
+  // even though we have followed the format of version 3.
+  if (json.version !== 3 && json.version !== 1) {
+    throw new Error(`Unsupported version: ${json.version}`);
+  }
+
   if (kdfparams.prf !== 'hmac-sha256') {
-    throw new Error('Unsupported parameters to PBKDF2');
+    throw new Error(`Unsupported parameters to PBKDF2 PRF: ${kdfparams.prf}`);
   }
 
   const derivedKey = browserifiedCrypto.pbkdf2Sync(
@@ -240,22 +265,26 @@ const getPrivateKeyFromKeyStore = (keystore, password = '') => {
   const ciphertextBuf = Buffer.from(ciphertext, 'hex');
   const bufferValue = Buffer.concat([derivedKey.slice(16, 32), ciphertextBuf]);
 
-  // try sha3 (new / ethereum keystore) mac first
-  const mac = sha3(bufferValue.toString('hex'));
+  // try sha3-keccak256 (new / ethereum keystore) mac first
+  const mac = sha3keccak(bufferValue.toString('hex'), 256);
   if (mac !== json.crypto.mac) {
-    // the legacy (sha256) mac is next to be checked.
-    // pre-testnet keystores used a sha256 digest for the mac.
-    // the sha256 mac was not compatible with ethereum keystores,
-    // so it was changed to sha3 for mainnet.
-    const macLegacy = sha256(bufferValue.toString('hex'));
+    // try again with the legacy format: sha3-keccak512
+    let macLegacy = sha3keccak(bufferValue.toString('hex'), 512);
     if (macLegacy !== json.crypto.mac) {
-      throw new Error('Keystore mac check failed (sha3 & sha256) - wrong password?');
+      // the other legacy (sha256) mac is next to be checked.
+      // pre-testnet keystores used a sha256 digest for the mac.
+      // the sha256 mac was not compatible with ethereum keystores,
+      // so it was changed to sha3 for mainnet.
+      macLegacy = sha256(bufferValue.toString('hex'));
+      if (macLegacy !== json.crypto.mac) {
+        throw new Error('Keystore mac check failed (sha3-keccak256 & sha3-keccak512 & sha256) - wrong password?');
+      }
     }
   }
 
   const decipher = browserifiedCrypto.createDecipheriv(
     json.crypto.cipher,
-    derivedKey.slice(0, 32),
+    derivedKey.slice(0, getCipherKeySize(json.crypto.cipher)),
     Buffer.from(json.crypto.cipherparams.iv, 'hex'),
   );
   const privateKeyBuf = Buffer.concat([decipher.update(ciphertextBuf), decipher.final()]);

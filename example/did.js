@@ -35,10 +35,13 @@ async function createDID(account, keystore) {
   const didPrivKey = panaceajs.crypto.getPrivateKeyFromKeyStore(keystore, didKeyPasswd);
   const didPubKey = panaceajs.crypto.getPublicKeyFromPrivateKey(didPrivKey);
   const didDoc = panaceajs.utils.did.generateDIDDocument('testnet', 'key1', didPubKey);
+  const sig = panaceajs.utils.did.sign(didDoc, panaceajs.Message.DID.InitialSequence, didPrivKey);
 
   const msg = new panaceajs.Message.DID.CreateDID({
     did: didDoc.id,
     document: didDoc,
+    sigKeyId: didDoc.publicKey[0].id,
+    signature: sig,
     fromAddress: account.address,
   });
   tx.addMsgs(msg);
@@ -89,7 +92,7 @@ async function updateDID(account, keystore, did, keyId, newDoc) {
   account.increaseSequence();
 }
 
-async function deleteDID(account, keystore, did, keyId) {
+async function deactivateDID(account, keystore, did, keyId) {
   console.log(account);
   const fee = new panaceajs.Fee();
   fee.setFee('1000000umed');
@@ -106,7 +109,7 @@ async function deleteDID(account, keystore, did, keyId) {
   const privKey = panaceajs.crypto.getPrivateKeyFromKeyStore(keystore, didKeyPasswd);
   const sig = panaceajs.utils.did.sign(did, curDidWithSeq.sequence, privKey);
 
-  const msg = new panaceajs.Message.DID.DeleteDID({
+  const msg = new panaceajs.Message.DID.DeactivateDID({
     did,
     sigKeyId: keyId,
     signature: sig,
@@ -122,22 +125,26 @@ async function deleteDID(account, keystore, did, keyId) {
 }
 
 async function main() {
-  const account = await getAccount();
-  const keystore = generateDIDKey();
+  try {
+    const account = await getAccount();
+    const keystore = generateDIDKey();
 
-  const did = await createDID(account, keystore);
+    const did = await createDID(account, keystore);
 
-  const doc = await getDID(did);
-  console.log(doc);
+    const doc = await getDID(did);
+    console.log(doc);
 
-  const keyId = doc.publicKey[0].id;
-  const newDoc = doc;
-  newDoc.authentication.push(keyId); // just for testing, push the same keyId again.
-  await updateDID(account, keystore, did, keyId, newDoc);
-  console.log(await getDID(did));
+    const keyId = doc.publicKey[0].id;
+    const newDoc = doc;
+    newDoc.authentication.push(keyId); // just for testing, push the same keyId again.
+    await updateDID(account, keystore, did, keyId, newDoc);
+    console.log(await getDID(did));
 
-  await deleteDID(account, keystore, did, keyId);
-  console.log(await getDID(did));
+    await deactivateDID(account, keystore, did, keyId);
+    console.log(await getDID(did));
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 main();

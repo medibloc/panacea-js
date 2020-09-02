@@ -57,7 +57,7 @@ export class Fee implements IFee {
   setGasPrice(price: string): void;
 }
 
-export type IMsg = BaseMessage | Message.DID.CreateDID | Message.DID.UpdateDID | Message.DID.DeleteDID | Message.AOL.AddRecord | Message.AOL.AddWriter | Message.AOL.CreateTopic | Message.AOL.DeleteWriter | Message.Distr.ModifyWithdrawAddress | Message.Distr.WithdrawReward | Message.Slashing.Unjail | Message.Staking.CreateValidator | Message.Staking.Delegate | Message.Staking.EditValidator | Message.Staking.Redelegate | Message.Staking.Undelegate
+export type IMsg = BaseMessage | Message.DID.CreateDID | Message.DID.UpdateDID | Message.DID.DeactivateDID | Message.AOL.AddRecord | Message.AOL.AddWriter | Message.AOL.CreateTopic | Message.AOL.DeleteWriter | Message.Distr.ModifyWithdrawAddress | Message.Distr.WithdrawReward | Message.Slashing.Unjail | Message.Staking.CreateValidator | Message.Staking.Delegate | Message.Staking.EditValidator | Message.Staking.Redelegate | Message.Staking.Undelegate
 
 interface ISignature {
   pub_key: {
@@ -370,12 +370,16 @@ export namespace Message {
       value: {
         did: string;
         document: string;
+        sig_key_id: string;
+        signature: string;
         from_address: string;
       }
 
       constructor(data: {
         did: string;
         document: string;
+        sigKeyId: string;
+        signature: string;
         fromAddress: string;
       })
     }
@@ -399,8 +403,8 @@ export namespace Message {
       })
     }
 
-    class DeleteDID {
-      type: 'did/MsgDeleteDID';
+    class DeactivateDID {
+      type: 'did/MsgDeactivateDID';
       value: {
         did: string;
         sig_key_id: string;

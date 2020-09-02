@@ -34,7 +34,7 @@ export const generateDIDDocument = (networkID, keyIDSuffix, pubKeyHex) => {
 export const sign = (data, seq, privKey) => {
   const jsonStr = JSON.stringify(sortJsonProperties({
     data,
-    sequence: seq,
+    sequence: seq.toString(),
   }));
   const hash = sha256(Buffer.from(jsonStr).toString('hex'));
   const sigHex = generateSignatureFromHash(hash, privKey);

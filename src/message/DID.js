@@ -5,13 +5,15 @@ const { DID } = MSG_TYPE;
 
 class CreateDID {
   constructor(data) {
-    const requiredParams = ['did', 'document', 'fromAddress'];
+    const requiredParams = ['did', 'document', 'sigKeyId', 'signature', 'fromAddress'];
     checkParams(requiredParams, data);
 
     this.type = DID.CREATE_DID;
     this.value = {
       did: data.did,
       document: data.document,
+      sig_key_id: data.sigKeyId,
+      signature: data.signature,
       from_address: data.fromAddress,
     };
   }
@@ -33,12 +35,12 @@ class UpdateDID {
   }
 }
 
-class DeleteDID {
+class DeactivateDID {
   constructor(data) {
     const requiredParams = ['did', 'sigKeyId', 'signature', 'fromAddress'];
     checkParams(requiredParams, data);
 
-    this.type = DID.DELETE_DID;
+    this.type = DID.DEACTIVATE_DID;
     this.value = {
       did: data.did,
       sig_key_id: data.sigKeyId,
@@ -64,10 +66,13 @@ class DIDPubKey {
   }
 }
 
+const InitialSequence = 0;
+
 export {
   CreateDID,
   UpdateDID,
-  DeleteDID,
+  DeactivateDID,
   DIDDocument,
   DIDPubKey,
+  InitialSequence,
 };

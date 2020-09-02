@@ -118,7 +118,7 @@ export const MSG_TYPE = {
   DID: {
     CREATE_DID: 'did/MsgCreateDID',
     UPDATE_DID: 'did/MsgUpdateDID',
-    DELETE_DID: 'did/MsgDeleteDID',
+    DEACTIVATE_DID: 'did/MsgDeactivateDID',
   },
   BASE: {
     SEND: 'cosmos-sdk/MsgSend',

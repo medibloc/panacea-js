@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import { expect } from 'chai';
 import * as bip39 from 'bip39';
 import { PRIVKEY_LEN, PRIVKEY_MAX } from '../../src/config/default';
@@ -26,10 +27,23 @@ describe('crypto', () => {
   });
 
   describe('getPrivateKeyFromKeyStore', () => {
-    it('generates private key from key store', () => {
+    it('get private key from key store', () => {
       const keyStore = crypto.generateKeyStore(sample.privateKey, 'password123');
       expect(() => crypto.getPrivateKeyFromKeyStore(keyStore, '')).to.throw();
       expect(crypto.getPrivateKeyFromKeyStore(keyStore, 'password123')).to.be.eql(sample.privateKey);
+    });
+    it('get private key from the Web3 Secret Storage standard format', () => {
+      // the standard test case is from https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition#test-vectors
+      const jsonStr = fs.readFileSync(`${__dirname}/testdata/keystore_web3.json`).toString();
+      expect(crypto.getPrivateKeyFromKeyStore(JSON.parse(jsonStr), 'testpassword')).to.be.eql('7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d');
+    });
+    it('get private key from the legacy format which uses aes-256-ctr and sha3-keccak512', () => {
+      const jsonStr = fs.readFileSync(`${__dirname}/testdata/keystore_legacy.json`).toString();
+      expect(crypto.getPrivateKeyFromKeyStore(JSON.parse(jsonStr), 'testpassword')).to.be.eql('cb011405894895c814432f1556b52bb054720a9b2a6ffaf3792a45f911b50dff');
+    });
+    it('get private key from the old legacy format which uses aes-256-ctr and sha1-256', () => {
+      const jsonStr = fs.readFileSync(`${__dirname}/testdata/keystore_old_legacy.json`).toString();
+      expect(crypto.getPrivateKeyFromKeyStore(JSON.parse(jsonStr), 'testpassword')).to.be.eql('83bf913f1ef05c242a60784eaaf90576aaf664ed9c834cff9018bbd8ba92cd66');
     });
   });
 

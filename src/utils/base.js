@@ -225,15 +225,16 @@ const sha256 = (hex) => {
 };
 
 /**
- * Computes a single SHA3 (Keccak) digest.
+ * Computes a single SHA3-Keccak digest.
  * @param {string} hex message to hash
+ * @param {number} outputLength output length in bits (224, 256, 384, or 512)
  * @returns {string} hash output
  */
-const sha3 = (hex) => {
-  if (!is.string(hex)) throw new Error('sha3 expects a hex string');
+const sha3keccak = (hex, outputLength) => {
+  if (!is.string(hex)) throw new Error('sha3keccak expects a hex string');
   if (hex.length % 2 !== 0) throw new Error(`invalid hex string length: ${hex}`);
   const hexEncoded = hexEncoding.parse(hex);
-  return SHA3(hexEncoded).toString();
+  return SHA3(hexEncoded, { outputLength: outputLength }).toString();
 };
 
 export {
@@ -253,5 +254,5 @@ export {
   ensureHex,
   sha256ripemd160,
   sha256,
-  sha3,
+  sha3keccak,
 }

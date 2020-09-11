@@ -369,7 +369,7 @@ export namespace Message {
       type: 'did/MsgCreateDID';
       value: {
         did: string;
-        document: string;
+        document: DIDDocument;
         sig_key_id: string;
         signature: string;
         from_address: string;
@@ -377,7 +377,7 @@ export namespace Message {
 
       constructor(data: {
         did: string;
-        document: string;
+        document: DIDDocument;
         sigKeyId: string;
         signature: string;
         fromAddress: string;
@@ -388,7 +388,7 @@ export namespace Message {
       type: 'did/MsgUpdateDID';
       value: {
         did: string;
-        document: string;
+        document: DIDDocument;
         sig_key_id: string;
         signature: string;
         from_address: string;
@@ -396,7 +396,7 @@ export namespace Message {
 
       constructor(data: {
         did: string;
-        document: string;
+        document: DIDDocument;
         sigKeyId: string;
         signature: string;
         fromAddress: string;
@@ -417,6 +417,30 @@ export namespace Message {
         sigKeyId: string;
         signature: string;
         fromAddress: string;
+      })
+    }
+
+    class DIDDocument {
+      id: string;
+      publicKey: DIDPubKey[];
+      authentication: string[];
+
+      constructor(data: {
+        id: string;
+        publicKey: DIDPubKey[];
+        authentication: string[];
+      })
+    }
+
+    class DIDPubKey {
+      id: string;
+      type: string;
+      publicKeyBase58: string;
+
+      constructor(data: {
+        id: string;
+        type: string;
+        publicKeyBase58: string;
       })
     }
   }

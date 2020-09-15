@@ -45,7 +45,7 @@ export class Client {
     this.postRequest = this.postRequest.bind(this);
   }
 
-  getRequest(urlPath: string, params: any[] = [], query: Record<string, any> = {}): any {
+  getRequest(urlPath: string, params: any[] = [], query: Record<string, any> = {}): Promise<any> {
     const fullUrl = injectParams(urlPath, params);
 
     // Remove empty query
@@ -58,7 +58,7 @@ export class Client {
     return axios.get(this.serverUrl + fullUrl, { params: query });
   }
 
-  postRequest(urlPath: string, params: any[] = [], data: any = {}): any {
+  postRequest(urlPath: string, params: any[] = [], data: any = {}): Promise<any> {
     const fullUrl = injectParams(urlPath, params);
 
     return axios.post(this.serverUrl + fullUrl, data);

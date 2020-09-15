@@ -14,10 +14,8 @@ import {Coin} from "../coin";
 import {plainToClass, Transform, Type} from "class-transformer";
 
 export class Account {
-  @Transform(v => v.toString(), { toPlainOnly: true })
   @Transform(v => Number(v), { toClassOnly: true })
   public account_number: number;
-  @Transform(v => v.toString(), { toPlainOnly: true })
   @Transform(v => Number(v), { toClassOnly: true })
   public sequence: number;
   @Type(() => Coin)

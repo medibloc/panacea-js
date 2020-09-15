@@ -9,8 +9,7 @@ const client = new Clients('http://127.0.0.1:1317');
 
 // Replace address and mnemonic with the real values, before running this example code.
 async function getAccount() {
-    const accountPlain = await client.Account.getAccount('panacea1d58s72gu0mjkw0lkgyvr0eqzz3mv74awfsjslz');
-    const account = Account.fromPlain(accountPlain.value);
+    const account = await client.Account.getAccount('panacea1d58s72gu0mjkw0lkgyvr0eqzz3mv74awfsjslz');
     account.setPrivKeyFromMnemonic('document public coconut mandate dawn agree satisfy family earth glimpse extend gas toddler pattern horror bar detect borrow bunker buddy harvest explain purpose fury');
     return account;
 }

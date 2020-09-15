@@ -1,6 +1,6 @@
-import { expect } from 'chai';
+import 'reflect-metadata';  // for class-transformer
 import config, { test } from '../../src/config';
-import { Message } from '../../';
+import { Message } from '../../src';
 
 const { Slashing } = Message;
 
@@ -9,9 +9,8 @@ describe('Slashing message', () => {
     it('generates unjail message object', () => {
       const msg = new Slashing.Unjail(test.MESSAGE.SLASHING.UNJAIL);
 
-      expect(msg.type).to.be.equal(config.MSG_TYPE.SLASHING.UNJAIL);
-      expect(msg.value.address).to.be
-        .equal(test.MESSAGE.SLASHING.UNJAIL.address);
+      expect(msg.type).toEqual(config.MSG_TYPE.SLASHING.UNJAIL);
+      expect(msg.value.address).toEqual(test.MESSAGE.SLASHING.UNJAIL.address);
     });
   });
 });

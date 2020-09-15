@@ -1,10 +1,11 @@
-import Client from './Client';
+import {Client} from './Client';
 import { APIS, QUERY } from '../config/default';
+import {Transaction} from '../tx';
 
 const { SLASHING } = APIS;
 
-class Slashing extends Client {
-  constructor(serverUrl) {
+export class Slashing extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getValidatorSigningInfo = this.getValidatorSigningInfo.bind(this);
@@ -16,24 +17,22 @@ class Slashing extends Client {
   /**
    * GET
    * */
-  getValidatorSigningInfo(validatorPubKey) {
+  getValidatorSigningInfo(validatorPubKey: string): any {
     return this.getRequest(SLASHING.validatorSigningInfo, [validatorPubKey]);
   }
 
-  getValidatorsSigningInfo(opts = { page: QUERY.DEFAULT_PAGE, limit: QUERY.DEFAULT_LIMIT }) {
-    return this.getRequest(SLASHING.validatorsSigningInfo, null, opts);
+  getValidatorsSigningInfo(opts = { page: QUERY.DEFAULT_PAGE, limit: QUERY.DEFAULT_LIMIT }): any {
+    return this.getRequest(SLASHING.validatorsSigningInfo, [], opts);
   }
 
-  getSlashingParams() {
+  getSlashingParams(): any {
     return this.getRequest(SLASHING.params);
   }
 
   /**
    * POST
    * */
-  generateUnjailTx(validatorAddr, tx) {
+  generateUnjailTx(validatorAddr: string, tx: Transaction): any {
     return this.postRequest(SLASHING.unjail, [validatorAddr], tx);
   }
 }
-
-export default Slashing;

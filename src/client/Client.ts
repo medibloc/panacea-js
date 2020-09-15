@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { PARAM } from '../config/default';
+const axios = require('axios');
 
 
-const injectParams = (url, params = []) => {
+const injectParams = (url: string, params: any[] = []): string => {
   // Inject params to the url
   if (!params) params = []; // eslint-disable-line no-param-reassign
   const paramsCount = (url.match(new RegExp(PARAM, 'g')) || []).length;
@@ -16,7 +16,8 @@ const injectParams = (url, params = []) => {
   return url;
 };
 
-const handleResponse = promise => promise
+//TODO: use a concrete type
+const handleResponse = (promise: Promise<any>) => promise
   .then(({ data }) => data)
   .catch((res) => {
     const { response } = res;
@@ -28,8 +29,10 @@ const handleResponse = promise => promise
     });
   });
 
-class Client {
-  constructor(serverUrl) {
+export class Client {
+  public serverUrl: string;
+
+  constructor(serverUrl: string) {
     if (!serverUrl) {
       throw new Error('Panacea chain server should not be null');
     }
@@ -39,22 +42,22 @@ class Client {
     this.postRequest = this.postRequest.bind(this);
   }
 
-  getRequest(url, params = [], query = {}) {
-    const fullUrl = injectParams(url, params);
+  getRequest(urlPath: string, params: any[] = [], query: Record<string, any> = {}): any {
+    const fullUrl = injectParams(urlPath, params);
 
     // Remove empty query
     Object.keys(query).forEach((k) => {
-      if (!query[k]) delete query[k]; // eslint-disable-line no-param-reassign
+      if (!query[k]) {
+        delete query[k];
+      }
     });
 
     return handleResponse(axios.get(this.serverUrl + fullUrl, { params: query }));
   }
 
-  postRequest(url, params = [], data = {}) {
-    const fullUrl = injectParams(url, params);
+  postRequest(urlPath: string, params: any[] = [], data: any = {}): any {
+    const fullUrl = injectParams(urlPath, params);
 
     return handleResponse(axios.post(this.serverUrl + fullUrl, data));
   }
 }
-
-export default Client;

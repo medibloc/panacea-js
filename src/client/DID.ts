@@ -1,10 +1,10 @@
-import Client from './Client';
+import {Client} from './Client';
 import { APIS } from '../config/default';
 
 const { DID: DID_API } = APIS;
 
-class DID extends Client {
-  constructor(serverUrl) {
+export class DID extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getDID = this.getDID.bind(this);
@@ -13,9 +13,7 @@ class DID extends Client {
   /**
    * GET
    * */
-  getDID(did) {
+  getDID(did: string): any {
     return this.getRequest(DID_API.did, [did]);
   }
 }
-
-export default DID;

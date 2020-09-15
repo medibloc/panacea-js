@@ -1,36 +1,14 @@
-import { MSG_TYPE } from '../config/default';
-import { checkParams } from '../utils/validate';
-
-const { DISTR } = MSG_TYPE;
-
-class WithdrawReward {
-  constructor(data) {
-    const requiredParams = ['delegatorAddress', 'delegatorAddress'];
-    checkParams(requiredParams, data);
-
-    this.type = DISTR.WITHDRAW_DELEGATION_REWARD;
-    this.value = {
-      // it can be an validator operator address to withdraw validator reward
-      delegator_address: data.delegatorAddress,
-      validator_address: data.validatorAddress,
-    };
-  }
+export class WithdrawReward {
+  constructor(
+    // it can be an validator operator address to withdraw validator reward
+    public delegator_address: string,
+    public validator_address: string,
+  ) {}
 }
 
-class ModifyWithdrawAddress {
-  constructor(data) {
-    const requiredParams = ['delegatorAddress', 'withdrawAddress'];
-    checkParams(requiredParams, data);
-
-    this.type = DISTR.MODIFY_WITHDRAW_ADDR;
-    this.value = {
-      delegator_address: data.delegatorAddress,
-      withdraw_address: data.withdrawAddress,
-    };
-  }
+export class ModifyWithdrawAddress {
+  constructor(
+    public delegator_address: string,
+    public withdraw_address: string,
+  ) {}
 }
-
-export {
-  WithdrawReward,
-  ModifyWithdrawAddress,
-};

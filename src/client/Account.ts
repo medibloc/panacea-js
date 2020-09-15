@@ -1,10 +1,11 @@
-import Client from './Client';
+import {Client} from './Client';
 import { APIS } from '../config/default';
+import {Transaction} from '../tx';
 
 const { ACCOUNT } = APIS;
 
-class Account extends Client {
-  constructor(serverUrl) {
+export class Account extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getAccount = this.getAccount.bind(this);
@@ -15,20 +16,18 @@ class Account extends Client {
   /**
    * GET
    * */
-  getAccount(address) {
+  getAccount(address: string): any {
     return this.getRequest(ACCOUNT.account, [address]);
   }
 
-  getBalance(address) {
+  getBalance(address: string): any {
     return this.getRequest(ACCOUNT.balance, [address]);
   }
 
   /**
    * POST
    * */
-  generateTransferTx(address, tx) {
+  generateTransferTx(address: string, tx: Transaction): any {
     return this.postRequest(ACCOUNT.transferTx, [address], tx);
   }
 }
-
-export default Account;

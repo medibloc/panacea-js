@@ -1,10 +1,11 @@
-import Client from './Client';
+import {Client} from './Client';
 import { APIS } from '../config/default';
+import {Transaction} from '../tx';
 
 const { GOVERNANCE } = APIS;
 
-class Governance extends Client {
-  constructor(serverUrl) {
+export class Governance extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getProposals = this.getProposals.bind(this);
@@ -26,64 +27,62 @@ class Governance extends Client {
   /**
    * GET
    * */
-  getProposals(opts = { voter: '', depositor: '', status: '' }) {
-    return this.getRequest(GOVERNANCE.proposals, null, opts);
+  getProposals(opts = { voter: '', depositor: '', status: '' }): any {
+    return this.getRequest(GOVERNANCE.proposals, [], opts);
   }
 
-  getProposal(proposalId) {
+  getProposal(proposalId: string): any {
     return this.getRequest(GOVERNANCE.proposal, [proposalId]);
   }
 
-  getProposer(proposalId) {
+  getProposer(proposalId: string): any {
     return this.getRequest(GOVERNANCE.proposer, [proposalId]);
   }
 
-  getProposalDeposit(proposalId) {
+  getProposalDeposit(proposalId: string): any {
     return this.getRequest(GOVERNANCE.proposalDeposit, [proposalId]);
   }
 
-  getProposalDepositFromDepositor(proposalId, depositorAddr) {
+  getProposalDepositFromDepositor(proposalId: string, depositorAddr: string): any {
     return this.getRequest(GOVERNANCE.proposalDepositFromDepositor, [proposalId, depositorAddr]);
   }
 
-  getProposalVotes(proposalId) {
+  getProposalVotes(proposalId: string): any {
     return this.getRequest(GOVERNANCE.proposalVotes, [proposalId]);
   }
 
-  getProposalVoteFromVoter(proposalId, voterAddr) {
+  getProposalVoteFromVoter(proposalId: string, voterAddr: string): any {
     return this.getRequest(GOVERNANCE.proposalVoteFromVoter, [proposalId, voterAddr]);
   }
 
-  getProposalTally(proposalId) {
+  getProposalTally(proposalId: string): any {
     return this.getRequest(GOVERNANCE.proposalTally, [proposalId]);
   }
 
-  getGovDepositParams() {
+  getGovDepositParams(): any {
     return this.getRequest(GOVERNANCE.depositParams);
   }
 
-  getGovTallyParams() {
+  getGovTallyParams(): any {
     return this.getRequest(GOVERNANCE.tallyParams);
   }
 
-  getGovVoteParams() {
+  getGovVoteParams(): any {
     return this.getRequest(GOVERNANCE.voteParams);
   }
 
   /**
    * POST
    * */
-  generateProposalTx(tx) {
-    return this.postRequest(GOVERNANCE.proposals, null, tx);
+  generateProposalTx(tx: Transaction): any {
+    return this.postRequest(GOVERNANCE.proposals, [], tx);
   }
 
-  generateDepositToProposalTx(proposalId, tx) {
+  generateDepositToProposalTx(proposalId: string, tx: Transaction): any {
     return this.postRequest(GOVERNANCE.proposalDeposit, [proposalId], tx);
   }
 
-  generateVoteToProposalTx(proposalId, tx) {
+  generateVoteToProposalTx(proposalId: string, tx: Transaction): any {
     return this.postRequest(GOVERNANCE.proposalVotes, [proposalId], tx);
   }
 }
-
-export default Governance;

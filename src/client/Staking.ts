@@ -1,11 +1,12 @@
-import Client from './Client';
+import {Client} from './Client';
 import { APIS, QUERY, QUERY_LIST } from '../config/default';
+import {Transaction} from '../tx';
 
 const { STAKING } = APIS;
 const { CANDIDATES_STATES } = QUERY_LIST;
 
-class Staking extends Client {
-  constructor(serverUrl) {
+export class Staking extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getDelagatorInfo = this.getDelagatorInfo.bind(this);
@@ -31,77 +32,75 @@ class Staking extends Client {
   /**
    * GET
    * */
-  getDelagatorInfo(delegatorAddr) {
+  getDelagatorInfo(delegatorAddr: string): any {
     return this.getRequest(STAKING.delegator, [delegatorAddr]);
   }
 
-  getDelegatorInfoFromValidator(delegatorAddr, validatorAddr) {
+  getDelegatorInfoFromValidator(delegatorAddr: string, validatorAddr: string): any {
     return this.getRequest(STAKING.delegatorInfoFromValidator, [delegatorAddr, validatorAddr]);
   }
 
-  getDelegatorUnbondingInfo(delegatorAddr) {
+  getDelegatorUnbondingInfo(delegatorAddr: string): any {
     return this.getRequest(STAKING.delegatorUnbonding, [delegatorAddr]);
   }
 
-  getDelegatorUnbondingInfoFromValidator(delegatorAddr, validatorAddr) {
+  getDelegatorUnbondingInfoFromValidator(delegatorAddr: string, validatorAddr: string): any {
     return this.getRequest(STAKING.delegatorUnbondingFromValidator, [delegatorAddr, validatorAddr]);
   }
 
-  getRedelegations() {
+  getRedelegations(): any {
     return this.getRequest(STAKING.redelegations);
   }
 
-  getValidatorsFromDelegator(delegatorAddr) {
+  getValidatorsFromDelegator(delegatorAddr: string): any {
     return this.getRequest(STAKING.validatorsFromDelegator, [delegatorAddr]);
   }
 
-  getValidatorFromDelegator(delegatorAddr, validatorAddr) {
+  getValidatorFromDelegator(delegatorAddr: string, validatorAddr: string): any {
     return this.getRequest(STAKING.validatorFromDelegator, [delegatorAddr, validatorAddr]);
   }
 
-  getDelegatorStakingTxs(delegatorAddr) {
+  getDelegatorStakingTxs(delegatorAddr: string): any {
     return this.getRequest(STAKING.delegatorTxs, [delegatorAddr]);
   }
 
-  getCandidates(opts = { status: '', page: QUERY.DEFAULT_PAGE, limit: QUERY.DEFAULT_LIMIT }) {
+  getCandidates(opts = { status: '', page: QUERY.DEFAULT_PAGE, limit: QUERY.DEFAULT_LIMIT }): any {
     if (!CANDIDATES_STATES.includes(opts.status)) throw new Error(`invalid validator status : ${opts.status}`);
-    return this.getRequest(STAKING.candidates, null, opts);
+    return this.getRequest(STAKING.candidates, [], opts);
   }
 
-  getValidator(validatorAddr) {
+  getValidator(validatorAddr: string): any {
     return this.getRequest(STAKING.validator, [validatorAddr]);
   }
 
-  getDelegatorsByValidator(validatorAddr) {
+  getDelegatorsByValidator(validatorAddr: string): any {
     return this.getRequest(STAKING.delegatorsByValidator, [validatorAddr]);
   }
 
-  getUnbondingDelegatorsByValidator(validatorAddr) {
+  getUnbondingDelegatorsByValidator(validatorAddr: string): any {
     return this.getRequest(STAKING.unbondingDelegatorsByValidator, [validatorAddr]);
   }
 
-  getStakingPool() {
+  getStakingPool(): any {
     return this.getRequest(STAKING.stakingPool);
   }
 
-  getStakingParams() {
+  getStakingParams(): any {
     return this.getRequest(STAKING.params);
   }
 
   /**
    * POST
    * */
-  generateDelegateTx(delegatorAddr, tx) {
+  generateDelegateTx(delegatorAddr: string, tx: Transaction): any {
     return this.postRequest(STAKING.delegator, [delegatorAddr], tx);
   }
 
-  generateUnbondingTx(delegatorAddr, tx) {
+  generateUnbondingTx(delegatorAddr: string, tx: Transaction): any {
     return this.postRequest(STAKING.delegatorUnbonding, [delegatorAddr], tx);
   }
 
-  generateRedelegateTx(delegatorAddr, tx) {
+  generateRedelegateTx(delegatorAddr: string, tx: Transaction): any {
     return this.postRequest(STAKING.redelegation, [delegatorAddr], tx);
   }
 }
-
-export default Staking;

@@ -1,10 +1,12 @@
-import Client from './Client';
+import {Client} from './Client';
 import { APIS, QUERY } from '../config/default';
+import {BroadcastTx} from "../tx";
+import {classToPlain} from "class-transformer";
 
 const { TENDERMINT } = APIS;
 
-class Tendermint extends Client {
-  constructor(serverUrl) {
+export class Tendermint extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getNodeInfo = this.getNodeInfo.bind(this);
@@ -22,51 +24,46 @@ class Tendermint extends Client {
   /**
    * GET
    * */
-  getNodeInfo() {
+  getNodeInfo(): any {
     return this.getRequest(TENDERMINT.nodeInfo);
   }
 
-  getSyncStatus() {
+  getSyncStatus(): any {
     return this.getRequest(TENDERMINT.syncStatus);
   }
 
-  getLatestBlock() {
+  getLatestBlock(): any {
     return this.getRequest(TENDERMINT.latestBlock);
   }
 
-  getBlock(height) {
+  getBlock(height: number): any {
     return this.getRequest(TENDERMINT.block, [height]);
   }
 
-  getLatestValidatorSets() {
+  getLatestValidatorSets(): any {
     return this.getRequest(TENDERMINT.latestValidatorSets);
   }
 
-  getValidatorSets(height) {
+  getValidatorSets(height: number): any {
     return this.getRequest(TENDERMINT.validatorSets, [height]);
   }
 
-  getTx(hash) {
+  getTx(hash: string): any {
     return this.getRequest(TENDERMINT.tx, [hash]);
   }
 
-  getTxs(opts = { tags: '', page: QUERY.DEFAULT_PAGE, limit: QUERY.DEFAULT_LIMIT }) {
-    return this.getRequest(
-      TENDERMINT.txs,
-      null, { ...opts.tags, page: opts.page, limit: opts.limit },
-    );
+  getTxs(opts = { tags: '', page: QUERY.DEFAULT_PAGE, limit: QUERY.DEFAULT_LIMIT }): any {
+    return this.getRequest(TENDERMINT.txs, [], opts);
   }
 
   /**
    * POST
    * */
-  broadcastTx(data) {
-    return this.postRequest(TENDERMINT.txs, null, data);
+  broadcastTx(tx: BroadcastTx): any {
+    return this.postRequest(TENDERMINT.txs, [], classToPlain(tx));
   }
 
-  encodeTx(data) {
-    return this.postRequest(TENDERMINT.encodeTx, null, data);
+  encodeTx(data: any): any {
+    return this.postRequest(TENDERMINT.encodeTx, [], data);
   }
 }
-
-export default Tendermint;

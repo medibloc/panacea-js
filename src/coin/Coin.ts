@@ -1,30 +1,21 @@
-import is from 'is_js';
 import { DEFAULT_DENOM } from '../config/default';
+import { Transform } from "class-transformer";
 
-class Coin {
-  constructor(data) {
-    this.denom = DEFAULT_DENOM;
-    this.amount = '0';
+export class Coin {
+  public denom: string;
+  @Transform(v => v.toString())
+  public amount: number;
 
-    if (is.number(+data)) {
-      this.amount = `${data}`;
-    } else if (is.string(data)) {
-      const parsedCoin = Coin.parseCoin(data);
-      this.denom = parsedCoin.denom;
-      this.amount = parsedCoin.amount;
-    }
+  constructor(denom: string = DEFAULT_DENOM, amount: number) {
+    this.denom = denom;
+    this.amount = amount;
   }
 
-  static parseCoin(coin) {
+  static parseCoin(coin: string): Coin {
     const parsedCoin = coin.split(/([0-9.]+)/).filter(Boolean);
     if (parsedCoin.length !== 2) {
       throw new Error('Invalid coin argument. You need to put amount + denom format. ex) 100.00umed');
     }
-    return {
-      amount: `${parsedCoin[0]}`,
-      denom: parsedCoin[1],
-    };
+    return new Coin(parsedCoin[1], Number(parsedCoin[0]));
   }
 }
-
-export default Coin;

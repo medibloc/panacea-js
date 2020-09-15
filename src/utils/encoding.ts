@@ -1,21 +1,23 @@
-import is from 'is_js';
-
-// eslint-disable-next-line import/prefer-default-export
-export const sortJsonProperties = (jsonTx) => {
-  if (is.array(jsonTx)) {
+export const sortJsonProperties = (jsonTx: any): any => {
+  if (Array.isArray(jsonTx)) {
     return jsonTx.map(sortJsonProperties);
   }
 
   // string or number
-  if (!is.json(jsonTx)) {
+  if (typeof jsonTx !== `object`) {
+    if (typeof jsonTx === `number`) {
+      return jsonTx.toString()
+    }
     return jsonTx;
   }
 
-  const sorted = {};
+  const sorted: any = {};
   Object.keys(jsonTx)
     .sort()
     .forEach((key) => {
-      // if (!jsonTx[key]) return;
+      if (jsonTx[key] == undefined || jsonTx[key] === null) {
+        return;
+      }
       sorted[key] = sortJsonProperties(jsonTx[key]);
     });
   return sorted;

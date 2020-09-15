@@ -1,44 +1,50 @@
-import is from 'is_js';
 import {
+  entropyToMnemonic,
   generateSignatureFromHash,
   getAddressFromPrivateKey,
-  getAddressFromPublicKey, getPrivateKeyFromMnemonic,
-  getPublicKeyFromPrivateKey, validateMnemonic,
-  entropyToMnemonic,
+  getAddressFromPublicKey,
+  getPrivateKeyFromMnemonic,
+  getPublicKeyFromPrivateKey,
+  validateMnemonic,
 } from '../crypto';
-import { DEFAULT_PREFIX } from '../config/default';
+import {DEFAULT_PREFIX} from '../config/default';
+import {base} from '../utils';
+import {Transaction} from '../tx';
+import {Coin} from "../coin";
+import {plainToClass, Transform, Type} from "class-transformer";
 
+export class Account {
+  @Transform(v => v.toString(), { toPlainOnly: true })
+  @Transform(v => Number(v), { toClassOnly: true })
+  public account_number: number;
+  @Transform(v => v.toString(), { toPlainOnly: true })
+  @Transform(v => Number(v), { toClassOnly: true })
+  public sequence: number;
+  @Type(() => Coin)
+  public coins: Coin[];
+  public privateKey: string;
+  public publicKey: string;
+  public address: string;
 
-class Account {
-  constructor(data = {}) {
-    // eslint-disable-next-line no-param-reassign
-    if (data.value) data = data.value; // In case that the data is from getAccount request
-
-    this.sequence = +data.sequence || 0;
-    this.account_number = data.account_number
-      || (data.accountNumber || 0);
-    this.coins = data.coins || [];
-
-    this.privateKey = data.privateKey || null;
-    if (data.privateKey) {
-      this.publicKey = getPublicKeyFromPrivateKey(data.privateKey);
-    } else {
-      this.publicKey = data.publicKey || null;
-    }
-
-    if (this.publicKey) {
-      this.address = getAddressFromPublicKey(this.publicKey, DEFAULT_PREFIX);
-    } else {
-      this.address = data.address || null;
-    }
+  constructor(account_number = 0, sequence = 0, coins: Coin[] = [], privateKey = '', publicKey = '', address = '') {
+    this.account_number = account_number;
+    this.sequence = sequence;
+    this.coins = coins;
+    this.privateKey = privateKey;
+    this.publicKey = this.privateKey ? getPublicKeyFromPrivateKey(this.privateKey) : publicKey;
+    this.address = this.publicKey ? getAddressFromPublicKey(this.publicKey, DEFAULT_PREFIX) : address;
   }
 
-  increaseSequence() {
+  static fromPlain(plain: Record<string, any>): Account {
+    return plainToClass(Account, plain);
+  }
+
+  increaseSequence(): void {
     this.sequence += 1;
   }
 
-  setPrivateKey(privateKey) {
-    if (!is.hexadecimal(privateKey)) {
+  setPrivateKey(privateKey: string): void {
+    if (!base.isHex(privateKey)) {
       throw new Error('private key should be hexadecimal');
     }
 
@@ -47,49 +53,46 @@ class Account {
     this.address = getAddressFromPrivateKey(privateKey, DEFAULT_PREFIX);
   }
 
-  setPrivKeyFromMnemonic(mnemonic) {
+  setPrivKeyFromMnemonic(mnemonic: string): void {
     if (!validateMnemonic(mnemonic)) {
       throw new Error('invalid mnemonic');
     }
 
-    const privateKey = getPrivateKeyFromMnemonic(mnemonic);
-    this.setPrivateKey(privateKey);
+    this.setPrivateKey(getPrivateKeyFromMnemonic(mnemonic));
   }
 
-  setPrivKeyFromEntropy(entropy) {
-    const mnemonic = entropyToMnemonic(entropy);
-    this.setPrivKeyFromMnemonic(mnemonic);
+  setPrivKeyFromEntropy(entropy: string): void {
+    this.setPrivKeyFromMnemonic(entropyToMnemonic(entropy));
   }
 
-  setPublicKey(publicKey) {
-    if (!is.hexadecimal(publicKey)) {
+  setPublicKey(publicKey: string): void {
+    if (!base.isHex(publicKey)) {
       throw new Error('public key should be hexadecimal');
     }
 
-    if (this.publicKey === publicKey) return;
-    this.privateKey = null;
+    if (this.publicKey === publicKey) {
+      return;
+    }
+    this.privateKey = '';
     this.publicKey = publicKey;
     this.address = getAddressFromPublicKey(publicKey, DEFAULT_PREFIX);
   }
 
-  setAddress(address) {
+  setAddress(address: string): void {
     if (this.address !== address) {
-      this.privateKey = null;
-      this.publicKey = null;
+      this.privateKey = '';
+      this.publicKey = '';
       this.address = address;
     }
   }
 
-  sign(tx) {
+  sign(tx: Transaction): Transaction {
     tx.sign(this.privateKey);
     return tx;
   }
 
-  signTxHash(txHash) {
+  signTxHash(txHash: string): string {
     const signatureHex = generateSignatureFromHash(txHash, this.privateKey);
-    const signatureBase64 = Buffer.from(signatureHex, 'hex').toString('base64');
-    return signatureBase64;
+    return Buffer.from(signatureHex, 'hex').toString('base64');
   }
 }
-
-export default Account;

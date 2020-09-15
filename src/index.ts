@@ -1,21 +1,19 @@
-import Account from './account';
-import Client from './client';
-import Coin, { Fee } from './coin';
-import BaseMessage, * as Message from './message';
-import Tx from './tx';
+import 'reflect-metadata';
+import {Account} from './account';
+import {Clients} from './client';
+import { Coin, Fee } from './coin';
+import * as Message from './message';
+import {Transaction as Tx} from './tx';
 import * as crypto from './crypto';
-import utils from './utils';
-import encoding from './encoding';
+import * as utils from './utils';
 
-export default {
+export {
   Account,
-  Client,
+  Clients,
   Coin,
   Fee,
-  BaseMessage,
   Message,
   Tx,
   crypto,
   utils,
-  encoding,
 };

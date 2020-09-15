@@ -1,29 +1,15 @@
-import is from 'is_js';
-import { MSG_TYPE } from '../config/default';
-import { checkParams } from '../utils/validate';
+import {Type} from "class-transformer";
+import {Coin} from "../coin";
 
-const { BASE } = MSG_TYPE;
+export class Base {
+  public from_address: string;
+  public to_address: string;
+  @Type(() => Coin)
+  public amount: Coin[];
 
-class Base {
-  constructor(data) {
-    const requiredParams = ['fromAddress', 'toAddress', 'amount'];
-    checkParams(requiredParams, data);
-
-    if (!is.array(data.amount)) {
-      throw new Error('amount field should be an array');
-    }
-    data.amount.forEach((coin) => {
-      const requiredParamsInCoin = ['denom', 'amount'];
-      checkParams(requiredParamsInCoin, coin);
-    });
-
-    this.type = BASE.SEND;
-    this.value = {
-      from_address: data.fromAddress,
-      to_address: data.toAddress,
-      amount: data.amount,
-    };
+  constructor(from_address: string, to_address: string, amount: Coin[]) {
+    this.from_address = from_address;
+    this.to_address = to_address;
+    this.amount = amount;
   }
 }
-
-export default Base;

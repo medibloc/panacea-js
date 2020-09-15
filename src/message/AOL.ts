@@ -1,72 +1,43 @@
-import { MSG_TYPE } from '../config/default';
-import { checkParams } from '../utils/validate';
+export class CreateTopic {
+  constructor(
+    public topic_name: string,
+    public description: string = '',
+    public owner_address: string,
+  ) {}
+}
 
-const { AOL } = MSG_TYPE;
+export class AddWriter {
+  constructor(
+    public topic_name: string,
+    public moniker: string = '',
+    public description: string = '',
+    public writer_address: string,
+    public owner_address: string,
+  ) {}
+}
 
-class CreateTopic {
-  constructor(data) {
-    const requiredParams = ['topicName', 'ownerAddress'];
-    checkParams(requiredParams, data);
+export class AddRecord {
+  public topic_name: string;
+  public key: string;
+  public value: string;
+  public writer_address: string;
+  public owner_address: string;
+  public fee_payer_address: string;
 
-    this.type = AOL.CREATE_TOPIC;
-    this.value = {
-      topic_name: data.topicName,
-      description: data.description || '',
-      owner_address: data.ownerAddress,
-    };
+  constructor(topic_name: string, key: ArrayBuffer, value: ArrayBuffer, writer_address: string, owner_address: string, fee_payer_address = '') {
+    this.topic_name = topic_name;
+    this.key = Buffer.from(key).toString('base64');
+    this.value = Buffer.from(value).toString('base64');
+    this.writer_address = writer_address;
+    this.owner_address = owner_address;
+    this.fee_payer_address = fee_payer_address;
   }
 }
 
-class AddWriter {
-  constructor(data) {
-    const requiredParams = ['topicName', 'writerAddress', 'ownerAddress'];
-    checkParams(requiredParams, data);
-
-    this.type = AOL.ADD_WRITER;
-    this.value = {
-      topic_name: data.topicName,
-      moniker: data.moniker || '',
-      description: data.description || '',
-      writer_address: data.writerAddress,
-      owner_address: data.ownerAddress,
-    };
-  }
+export class DeleteWriter {
+  constructor(
+    public topic_name: string,
+    public writer_address: string,
+    public owner_address: string,
+  ) {}
 }
-
-class AddRecord {
-  constructor(data) {
-    const requiredParams = ['topicName', 'key', 'value', 'writerAddress', 'ownerAddress'];
-    checkParams(requiredParams, data);
-
-    this.type = AOL.ADD_RECORD;
-    this.value = {
-      topic_name: data.topicName,
-      key: Buffer.from(data.key).toString('base64'),
-      value: Buffer.from(data.value).toString('base64'),
-      writer_address: data.writerAddress,
-      owner_address: data.ownerAddress,
-      fee_payer_address: data.feePayerAddress || '',
-    };
-  }
-}
-
-class DeleteWriter {
-  constructor(data) {
-    const requiredParams = ['topicName', 'writerAddress', 'ownerAddress'];
-    checkParams(requiredParams, data);
-
-    this.type = AOL.DELETE_WRITER;
-    this.value = {
-      topic_name: data.topicName,
-      writer_address: data.writerAddress,
-      owner_address: data.ownerAddress,
-    };
-  }
-}
-
-export {
-  CreateTopic,
-  AddWriter,
-  AddRecord,
-  DeleteWriter,
-};

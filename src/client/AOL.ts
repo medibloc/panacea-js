@@ -1,10 +1,10 @@
-import Client from './Client';
+import {Client} from './Client';
 import { APIS } from '../config/default';
 
 const { AOL: AOL_API } = APIS;
 
-class AOL extends Client {
-  constructor(serverUrl) {
+export class AOL extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getTopics = this.getTopics.bind(this);
@@ -17,25 +17,23 @@ class AOL extends Client {
   /**
    * GET
    * */
-  getTopics(ownerAddr) {
+  getTopics(ownerAddr: string): any {
     return this.getRequest(AOL_API.topics, [ownerAddr]);
   }
 
-  getTopic(ownerAddr, topic) {
+  getTopic(ownerAddr: string, topic: string): any {
     return this.getRequest(AOL_API.topic, [ownerAddr, topic]);
   }
 
-  getWriters(ownerAddr, topic) {
+  getWriters(ownerAddr: string, topic: string): any {
     return this.getRequest(AOL_API.writers, [ownerAddr, topic]);
   }
 
-  getWriter(ownerAddr, topic, writerAddr) {
+  getWriter(ownerAddr: string, topic: string, writerAddr: string): any {
     return this.getRequest(AOL_API.writer, [ownerAddr, topic, writerAddr]);
   }
 
-  getRecord(ownerAddr, topic, offset) {
+  getRecord(ownerAddr: string, topic: string, offset: string): any {
     return this.getRequest(AOL_API.record, [ownerAddr, topic, offset]);
   }
 }
-
-export default AOL;

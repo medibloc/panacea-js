@@ -1,78 +1,68 @@
-import { MSG_TYPE } from '../config/default';
-import { checkParams } from '../utils/validate';
+import {Type} from "class-transformer";
 
-const { DID } = MSG_TYPE;
+export class CreateDID {
+  public did: string;
+  @Type(() => DIDDocument)
+  public document: DIDDocument;
+  public sig_key_id: string;
+  public signature: string;
+  public from_address: string;
 
-class CreateDID {
-  constructor(data) {
-    const requiredParams = ['did', 'document', 'sigKeyId', 'signature', 'fromAddress'];
-    checkParams(requiredParams, data);
-
-    this.type = DID.CREATE_DID;
-    this.value = {
-      did: data.did,
-      document: data.document,
-      sig_key_id: data.sigKeyId,
-      signature: data.signature,
-      from_address: data.fromAddress,
-    };
+  constructor(did: string, document: DIDDocument, sig_key_id: string, signature: string, from_address: string) {
+    this.did = did;
+    this.document = document;
+    this.sig_key_id = sig_key_id;
+    this.signature = signature;
+    this.from_address = from_address;
   }
 }
 
-class UpdateDID {
-  constructor(data) {
-    const requiredParams = ['did', 'document', 'sigKeyId', 'signature', 'fromAddress'];
-    checkParams(requiredParams, data);
+export class UpdateDID {
+  public did: string;
+  @Type(() => DIDDocument)
+  public document: DIDDocument;
+  public sig_key_id: string;
+  public signature: string;
+  public from_address: string;
 
-    this.type = DID.UPDATE_DID;
-    this.value = {
-      did: data.did,
-      document: data.document,
-      sig_key_id: data.sigKeyId,
-      signature: data.signature,
-      from_address: data.fromAddress,
-    };
+  constructor(did: string, document: DIDDocument, sig_key_id: string, signature: string, from_address: string) {
+    this.did = did;
+    this.document = document;
+    this.sig_key_id = sig_key_id;
+    this.signature = signature;
+    this.from_address = from_address;
   }
 }
 
-class DeactivateDID {
-  constructor(data) {
-    const requiredParams = ['did', 'sigKeyId', 'signature', 'fromAddress'];
-    checkParams(requiredParams, data);
+export class DeactivateDID {
+  constructor(
+    public did: string,
+    public sig_key_id: string,
+    public signature: string,
+    public from_address: string,
+  ) {}
+}
 
-    this.type = DID.DEACTIVATE_DID;
-    this.value = {
-      did: data.did,
-      sig_key_id: data.sigKeyId,
-      signature: data.signature,
-      from_address: data.fromAddress,
-    };
+export class DIDDocument {
+  public id: string;
+  @Type(() => DIDPubKey)
+  public publicKey: DIDPubKey[];
+  public authentication: string[];
+
+  constructor(id: string, publicKey: DIDPubKey[], authentication: string[]) {
+    this.id = id;
+    this.publicKey = publicKey;
+    this.authentication = authentication;
   }
 }
 
-class DIDDocument {
-  constructor(data) {
-    this.id = data.id;
-    this.publicKey = data.publicKey;
-    this.authentication = data.authentication;
+export class DIDPubKey {
+  constructor(
+    public id: string,
+    public type: string,
+    public publicKeyBase58: string,
+  ) {
   }
 }
 
-class DIDPubKey {
-  constructor(data) {
-    this.id = data.id;
-    this.type = data.type;
-    this.publicKeyBase58 = data.publicKeyBase58;
-  }
-}
-
-const InitialSequence = 0;
-
-export {
-  CreateDID,
-  UpdateDID,
-  DeactivateDID,
-  DIDDocument,
-  DIDPubKey,
-  InitialSequence,
-};
+export const InitialSequence = 0;

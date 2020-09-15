@@ -1,10 +1,10 @@
-import Client from './Client';
+import {Client} from './Client';
 import { APIS } from '../config/default';
 
 const { VERSION } = APIS;
 
-class Version extends Client {
-  constructor(serverUrl) {
+export class Version extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getVersion = this.getVersion.bind(this);
@@ -14,13 +14,11 @@ class Version extends Client {
   /**
    * GET
    * */
-  getVersion() {
+  getVersion(): any {
     return this.getRequest(VERSION.version);
   }
 
-  getNodeVersion() {
+  getNodeVersion(): any {
     return this.getRequest(VERSION.nodeVersion);
   }
 }
-
-export default Version;

@@ -1,134 +1,117 @@
-import { MSG_TYPE } from '../config/default';
-import { checkParams } from '../utils/validate';
+import {Type} from "class-transformer";
+import {Coin} from "../coin";
 
-const { STAKING } = MSG_TYPE;
+export class CreateValidator {
+  @Type(() => Description)
+  public description: Description;
+  @Type(() => Commission)
+  public commission: Commission;
+  public min_self_delegation: string; // "1"
+  // TODO @ggomma check signer is identical with delegator address
+  public delegator_address: string;
+  public validator_address: string;
+  public pubkey: string;
+  @Type(() => Coin)
+  public value: Coin;
 
-class CreateValidator {
-  constructor(data) {
-    const requiredParams = [
-      'description', 'commission', 'minSelfDelegation', 'delegatorAddress', 'validatorAddress', 'pubKey', 'value',
-      'description.moniker',
-      'commission.rate', 'commission.maxRate', 'commission.maxChangeRate',
-      'value.denom', 'value.amount',
-    ];
-    checkParams(requiredParams, data);
-
-    this.type = STAKING.CREATE_VALIDATOR;
-    this.value = {
-      description: {
-        moniker: data.description.moniker,
-        identity: data.description.identity || '',
-        website: data.description.website || '',
-        details: data.description.details || '',
-      },
-      commission: {
-        rate: data.commission.rate, // "1.000000000000000000"
-        max_rate: data.commission.maxRate, // "1.000000000000000000"
-        max_change_rate: data.commission.maxChangeRate, // "1.000000000000000000"
-      },
-      min_self_delegation: data.minSelfDelegation, // "1"
-      // TODO @ggomma check signer is identical with delegator address
-      delegator_address: data.delegatorAddress,
-      validator_address: data.validatorAddress,
-      pubkey: data.pubKey,
-      value: {
-        denom: data.value.denom,
-        amount: `${data.value.amount}`,
-      },
-    };
+  constructor(description: Description, commission: Commission, min_self_delegation: string, delegator_address: string, validator_address: string, pubkey: string, value: Coin) {
+    this.description = description;
+    this.commission = commission;
+    this.min_self_delegation = min_self_delegation;
+    this.delegator_address = delegator_address;
+    this.validator_address = validator_address;
+    this.pubkey = pubkey;
+    this.value = value;
   }
 }
 
-class EditValidator {
-  constructor(data) {
-    const requiredParams = ['address'];
-    checkParams(requiredParams, data);
+export class EditValidator {
+  @Type(() => Description)
+  public description: Description;
+  public address: string;
+  public commission_rate: string;
+  public min_self_delegation: string;
 
-    const DO_NOT_MODIFY = '[do-not-modify]'; // defined in cosmose-sdk
-
-    this.type = STAKING.EDIT_VALIDATOR;
-
-    const description = {
-      moniker: DO_NOT_MODIFY,
-      identity: DO_NOT_MODIFY,
-      website: DO_NOT_MODIFY,
-      details: DO_NOT_MODIFY,
-    };
-    Object.keys(data.description).forEach((k) => {
-      if (data.description[k]) description[k] = data.description[k];
-    });
-
-    this.value = {
-      description,
-      address: data.address,
-      commission_rate: data.commissionRate || null,
-      min_self_delegation: data.minSelfDelegation || null,
-    };
+  constructor(description: Description, address: string, commission_rate = '', min_self_delegation = '') {
+    this.description = description;
+    this.description.setDoNotModify();
+    this.address = address;
+    this.commission_rate = commission_rate;
+    this.min_self_delegation = min_self_delegation;
   }
 }
 
-class Delegate {
-  constructor(data) {
-    const requiredParams = [
-      'delegatorAddress', 'validatorAddress', 'amount', 'amount.denom', 'amount.amount',
-    ];
-    checkParams(requiredParams, data);
+export class Delegate {
+  public delegator_address: string;
+  public validator_address: string;
+  @Type(() => Coin)
+  public amount: Coin;
 
-    this.type = STAKING.DELEGATE;
-    this.value = {
-      delegator_address: data.delegatorAddress,
-      validator_address: data.validatorAddress,
-      amount: {
-        denom: data.amount.denom,
-        amount: `${data.amount.amount}`,
-      },
-    };
+  constructor(delegator_address: string, validator_address: string, amount: Coin) {
+    this.delegator_address = delegator_address;
+    this.validator_address = validator_address;
+    this.amount = amount;
   }
 }
 
-class Redelegate {
-  constructor(data) {
-    const requiredParams = [
-      'delegatorAddress', 'validatorSrcAddress', 'validatorDstAddress', 'amount.denom', 'amount.amount',
-    ];
-    checkParams(requiredParams, data);
+export class Redelegate {
+  public delegator_address: string;
+  public validator_src_address: string;
+  public validator_dst_address: string;
+  @Type(() => Coin)
+  public amount: Coin;
 
-    this.type = STAKING.REDELEGATE;
-    this.value = {
-      delegator_address: data.delegatorAddress,
-      validator_src_address: data.validatorSrcAddress,
-      validator_dst_address: data.validatorDstAddress,
-      amount: {
-        denom: data.amount.denom,
-        amount: `${data.amount.amount}`,
-      },
-    };
+  constructor(delegator_address: string, validator_src_address: string, validator_dst_address: string, amount: Coin) {
+    this.delegator_address = delegator_address;
+    this.validator_src_address = validator_src_address;
+    this.validator_dst_address = validator_dst_address;
+    this.amount = amount;
   }
 }
 
-class Undelegate {
-  constructor(data) {
-    const requiredParams = [
-      'delegatorAddress', 'validatorAddress', 'amount.denom', 'amount.amount',
-    ];
-    checkParams(requiredParams, data);
+export class Undelegate {
+  public delegator_address: string;
+  public validator_address: string;
+  @Type(() => Coin)
+  public amount: Coin;
 
-    this.type = STAKING.UNDELEGATE;
-    this.value = {
-      delegator_address: data.delegatorAddress,
-      validator_address: data.validatorAddress,
-      amount: {
-        denom: data.amount.denom,
-        amount: `${data.amount.amount}`,
-      },
-    };
+  constructor(delegator_address: string, validator_address: string, amount: Coin) {
+    this.delegator_address = delegator_address;
+    this.validator_address = validator_address;
+    this.amount = amount;
   }
 }
 
-export {
-  CreateValidator,
-  EditValidator,
-  Delegate,
-  Redelegate,
-  Undelegate,
-};
+const DO_NOT_MODIFY = '[do-not-modify]'; // defined in cosmose-sdk
+
+export class Description {
+  constructor(
+    public moniker: string,
+    public identity: string = '',
+    public website: string = '',
+    public details: string = '',
+  ) {}
+
+  setDoNotModify(): void {
+    if (!this.moniker) {
+      this.moniker = DO_NOT_MODIFY;
+    }
+    if (!this.identity) {
+      this.identity = DO_NOT_MODIFY;
+    }
+    if (!this.website) {
+      this.website = DO_NOT_MODIFY;
+    }
+    if (!this.details) {
+      this.details = DO_NOT_MODIFY;
+    }
+  }
+}
+
+export class Commission {
+  constructor(
+    public rate: string, // "1.000000000000000000"
+    public max_rate: string, // "1.000000000000000000"
+    public max_change_rate: string, // "1.000000000000000000"
+  ) {}
+}

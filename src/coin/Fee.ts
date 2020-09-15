@@ -1,40 +1,41 @@
-import is from 'is_js';
-import Coin from './Coin';
+import {Coin} from './Coin';
 import { DEFAULT_GAS } from '../config/default';
+import {Transform, Type} from "class-transformer";
 
-class Fee {
-  constructor() {
-    this.amount = null;
-    this.gas = DEFAULT_GAS;
+export class Fee {
+  @Type(() => Coin)
+  public amount: Coin[];
+  @Transform(v => v.toString())
+  public gas: number;
+
+  constructor(amount: Coin[] = [], gas: number = DEFAULT_GAS) {
+    this.amount = amount;
+    this.gas = gas;
   }
 
-  setGasLimit(gasLimit) {
-    if (!is.number(+gasLimit)) {
-      throw new Error('gas limit should be a number');
-    }
-    this.gas = `${gasLimit}`;
+  setGasLimit(gasLimit: number): void {
+    this.gas = gasLimit;
   }
 
-  setGasPrice(price) {
+  setGasPrice(price: string): void {
     const parsedCoin = Coin.parseCoin(price);
 
     // fee amount = gas price * gas limit
-    parsedCoin.amount = `${parsedCoin.amount * this.gas}`;
+    parsedCoin.amount *= this.gas;
     this.addCoin(parsedCoin);
   }
 
-  setFee(fee) {
+  setFee(fee: string): void {
     const parsedCoin = Coin.parseCoin(fee);
     this.addCoin(parsedCoin);
   }
 
-  addCoin(parsedCoin) {
+  addCoin(parsedCoin: Coin): void {
     if (this.amount) {
       let found = false;
       this.amount.forEach((coin) => {
         if (coin.denom === parsedCoin.denom) {
-          // eslint-disable-next-line no-param-reassign
-          coin.amount = `${parsedCoin.amount}`;
+          coin.amount = parsedCoin.amount;
           found = true;
         }
       });
@@ -46,5 +47,3 @@ class Fee {
     }
   }
 }
-
-export default Fee;

@@ -1,19 +1,29 @@
-import BaseHandler from './Client';
+import {Client} from './Client';
+import {Account} from './Account';
+import {AOL} from './AOL';
+import {DID} from './DID';
+import {Distribution} from './Distribution';
+import {Governance} from './Governance';
+import {Minting} from './Minting';
+import {Slashing} from './Slashing';
+import {Staking} from './Staking';
+import {Tendermint} from './Tendermint';
+import {Version} from './Version';
 
-import Account from './Account';
-import AOL from './AOL';
-import DID from './DID';
-import Distribution from './Distribution';
-import Governance from './Governance';
-import Minting from './Minting';
-import Slashing from './Slashing';
-import Staking from './Staking';
-import Tendermint from './Tendermint';
-import Version from './Version';
 
+export class Clients extends Client {
+  public Account: Account;
+  public AOL: AOL;
+  public DID: DID;
+  public Distribution: Distribution;
+  public Governance: Governance;
+  public Minting: Minting;
+  public Slashing: Slashing;
+  public Staking: Staking;
+  public Tendermint: Tendermint;
+  public Version: Version;
 
-class Client extends BaseHandler {
-  constructor(serverUrl) {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.Account = new Account(serverUrl);
@@ -28,5 +38,3 @@ class Client extends BaseHandler {
     this.Version = new Version(serverUrl);
   }
 }
-
-export default Client;

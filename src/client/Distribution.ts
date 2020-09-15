@@ -1,10 +1,11 @@
-import Client from './Client';
+import {Client} from './Client';
 import { APIS } from '../config/default';
+import {Transaction} from '../tx';
 
 const { DISTRIBUTION } = APIS;
 
-class Distribution extends Client {
-  constructor(serverUrl) {
+export class Distribution extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getDelegatorRewards = this.getDelegatorRewards.bind(this);
@@ -24,59 +25,57 @@ class Distribution extends Client {
   /**
    * GET
    * */
-  getDelegatorRewards(delegatorAddr) {
+  getDelegatorRewards(delegatorAddr: string): any {
     return this.getRequest(DISTRIBUTION.delegatorReward, [delegatorAddr]);
   }
 
-  getDelegatorRewardFromValidator(delegatorAddr, validatorAddr) {
+  getDelegatorRewardFromValidator(delegatorAddr: string, validatorAddr: string): any {
     return this.getRequest(DISTRIBUTION.delegatorRewardByValidator, [delegatorAddr, validatorAddr]);
   }
 
-  getDelegatorWithdrawAddress(delegatorAddr) {
+  getDelegatorWithdrawAddress(delegatorAddr: string): any {
     return this.getRequest(DISTRIBUTION.delegatorWithdrawAddress, [delegatorAddr]);
   }
 
-  getValidatorDistributionInfo(validatorAddr) {
+  getValidatorDistributionInfo(validatorAddr: string): any {
     return this.getRequest(DISTRIBUTION.validatorDistributionInfo, [validatorAddr]);
   }
 
-  getValidatorOutstandingReward(validatorAddr) {
+  getValidatorOutstandingReward(validatorAddr: string): any {
     return this.getRequest(DISTRIBUTION.validatorOutstandingRewards, [validatorAddr]);
   }
 
-  getValidatorReward(validatorAddr) {
+  getValidatorReward(validatorAddr: string): any {
     return this.getRequest(DISTRIBUTION.validatorReward, [validatorAddr]);
   }
 
-  getCommunityPoolBalance() {
+  getCommunityPoolBalance(): any {
     return this.getRequest(DISTRIBUTION.communityPool);
   }
 
-  getDistributionParams() {
+  getDistributionParams(): any {
     return this.getRequest(DISTRIBUTION.params);
   }
 
   /**
    * POST
    * */
-  generateWithdrawRewardsTx(delegatorAddr, tx) {
+  generateWithdrawRewardsTx(delegatorAddr: string, tx: Transaction): any {
     return this.postRequest(DISTRIBUTION.delegatorReward, [delegatorAddr], tx);
   }
 
-  generateWithdrawRewardTx(delegatorAddr, validatorAddr, tx) {
+  generateWithdrawRewardTx(delegatorAddr: string, validatorAddr: string, tx: Transaction): any {
     return this.postRequest(
       DISTRIBUTION.delegatorRewardByValidator,
       [delegatorAddr, validatorAddr], tx,
     );
   }
 
-  getnerateReplaceWithdrawAddrTx(delegatorAddr, tx) {
+  getnerateReplaceWithdrawAddrTx(delegatorAddr: string, tx: Transaction): any {
     return this.postRequest(DISTRIBUTION.delegatorWithdrawAddress, [delegatorAddr], tx);
   }
 
-  generateWithdrawValidatorRewardTx(validatorAddr, tx) {
+  generateWithdrawValidatorRewardTx(validatorAddr: string, tx: Transaction): any {
     return this.postRequest(DISTRIBUTION.validatorReward, [validatorAddr], tx);
   }
 }
-
-export default Distribution;

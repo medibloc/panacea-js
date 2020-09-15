@@ -1,4 +1,3 @@
-import { DIDDocument, DIDPubKey } from '../message/DID';
 import { sortJsonProperties } from './encoding';
 import { generateSignatureFromHash } from '../crypto';
 import { sha256 } from './base';
@@ -18,17 +17,19 @@ export const generateDIDDocument = (networkID, keyIDSuffix, pubKeyHex) => {
   const pubKeyBuf = Buffer.from(pubKeyHex, 'hex');
 
   const did = generateDID(networkID, pubKeyBuf);
-  const didPubKey = new DIDPubKey({
+  const didPubKey = {
     id: `${did}#${keyIDSuffix}`,
     type: keyType,
+    controller: did,
     publicKeyBase58: bs58.encode(pubKeyBuf),
-  });
+  };
 
-  return new DIDDocument({
+  return {
+    '@context': 'https://www.w3.org/ns/did/v1',
     id: did,
-    publicKey: [didPubKey],
+    verificationMethod: [didPubKey],
     authentication: [didPubKey.id],
-  });
+  };
 };
 
 export const sign = (data, seq, privKey) => {

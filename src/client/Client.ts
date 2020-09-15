@@ -1,4 +1,5 @@
 import { PARAM } from '../config/default';
+import {AxiosResponse} from "axios";
 const axios = require('axios');
 
 
@@ -17,17 +18,19 @@ const injectParams = (url: string, params: any[] = []): string => {
 };
 
 //TODO: use a concrete type
-const handleResponse = (promise: Promise<any>) => promise
-  .then(({ data }) => data)
-  .catch((res) => {
-    const { response } = res;
-    if (!response) return ({ error: res });
-    return ({
-      status: response.status,
-      statusText: response.statusText,
-      error: response.data,
+axios.interceptors.response.use((response: AxiosResponse) => {
+  return response.data;
+}, (error: any) => {
+  if (!error.response) {
+    return Promise.reject({ error: error });
+  } else {
+    return Promise.reject({
+      status: error.response.status,
+      statusText: error.response.statusText,
+      error: error.response.data,
     });
-  });
+  }
+});
 
 export class Client {
   public serverUrl: string;
@@ -52,12 +55,12 @@ export class Client {
       }
     });
 
-    return handleResponse(axios.get(this.serverUrl + fullUrl, { params: query }));
+    return axios.get(this.serverUrl + fullUrl, { params: query });
   }
 
   postRequest(urlPath: string, params: any[] = [], data: any = {}): any {
     const fullUrl = injectParams(urlPath, params);
 
-    return handleResponse(axios.post(this.serverUrl + fullUrl, data));
+    return axios.post(this.serverUrl + fullUrl, data);
   }
 }

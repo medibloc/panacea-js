@@ -25,7 +25,6 @@ export const generateDIDDocument = (networkID, keyIDSuffix, pubKeyHex) => {
   });
 
   return new DIDDocument({
-    context: 'https://www.w3.org/ns/did/v1',
     id: did,
     publicKey: [didPubKey],
     authentication: [didPubKey.id],

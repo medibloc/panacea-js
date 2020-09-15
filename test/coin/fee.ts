@@ -1,27 +1,21 @@
-import { expect } from 'chai';
-import { Fee } from '../../';
+import { Fee } from '../../src';
 import { DEFAULT_DENOM, DEFAULT_GAS } from '../../src/config/default';
 
 describe('fee', () => {
   describe('constructor', () => {
     it('generates default fee object', () => {
       const fee = new Fee();
-      expect(fee.amount).to.be.eql(null);
-      expect(fee.gas).to.be.eql(DEFAULT_GAS);
+      expect(fee.amount).toEqual(null);
+      expect(fee.gas).toEqual(DEFAULT_GAS);
     });
   });
 
   describe('setGasLimit', () => {
-    it('throws an error for invalid gas limit', () => {
-      const fee = new Fee();
-      expect(() => fee.setGasLimit('invalid Gas Limit')).to.throw();
-    });
-
     it('sets gas field', () => {
       const fee = new Fee();
       const gasLimit = 123456789;
       fee.setGasLimit(gasLimit);
-      expect(fee.gas).to.be.eql(`${gasLimit}`);
+      expect(fee.gas).toEqual(`${gasLimit}`);
     });
 
     it('sets gas price', () => {
@@ -30,18 +24,20 @@ describe('fee', () => {
       const fee = new Fee();
 
       fee.setGasPrice(gasPrice);
-      expect(fee.amount).to.be.an('array').lengthOf(1);
-      expect(fee.amount![0].amount).to.be.eql(`${price * +fee.gas}`);
-      expect(fee.amount![0].denom).to.be.eql(DEFAULT_DENOM);
+      expect(Array.isArray(fee.amount)).toBe(true);
+      expect(fee.amount).toHaveLength(1);
+      expect(fee.amount![0].amount).toEqual(`${price * +fee.gas}`);
+      expect(fee.amount![0].denom).toEqual(DEFAULT_DENOM);
 
       const anotherDenom = 'test';
       const anotherGasPrice = `${price}${anotherDenom}`;
       fee.setGasPrice(anotherGasPrice);
-      expect(fee.amount!).to.be.an('array').lengthOf(2);
-      expect(fee.amount![0].amount).to.be.eql(`${price * +fee.gas}`);
-      expect(fee.amount![0].denom).to.be.eql(DEFAULT_DENOM);
-      expect(fee.amount![1].amount).to.be.eql(`${price * +fee.gas}`);
-      expect(fee.amount![1].denom).to.be.eql(anotherDenom);
+      expect(Array.isArray(fee.amount!)).toBe(true);
+      expect(fee.amount!).toHaveLength(2);
+      expect(fee.amount![0].amount).toEqual(`${price * +fee.gas}`);
+      expect(fee.amount![0].denom).toEqual(DEFAULT_DENOM);
+      expect(fee.amount![1].amount).toEqual(`${price * +fee.gas}`);
+      expect(fee.amount![1].denom).toEqual(anotherDenom);
     });
   });
 
@@ -52,9 +48,10 @@ describe('fee', () => {
       const fee = new Fee();
       fee.setFee(coin);
 
-      expect(fee.amount!).to.be.an('array').lengthOf(1);
-      expect(fee.amount![0].amount).to.be.eql(`${amount}`);
-      expect(fee.amount![0].denom).to.be.eql(DEFAULT_DENOM);
+      expect(Array.isArray(fee.amount!)).toBe(true);
+      expect(fee.amount!).toHaveLength(1);
+      expect(fee.amount![0].amount).toEqual(`${amount}`);
+      expect(fee.amount![0].denom).toEqual(DEFAULT_DENOM);
     });
   });
 });

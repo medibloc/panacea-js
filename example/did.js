@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/extensions
-import panaceajs from '../lib/index.js';
+import panaceajs from '../dist/src/index.js';
 
 const txBroadcastMode = 'block';
 const chainId = 'testing';

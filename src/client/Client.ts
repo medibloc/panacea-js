@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import { PARAM } from '../config/default';
 
 
@@ -17,20 +17,19 @@ const injectParams = (url: string, params: any[] = []) => {
   return url;
 };
 
-//TODO @youngjoon-lee: this function can be switched to the Axios Response Interceptor
-//TODO @youngjoon-lee: use a proper type for Promise
-const handleResponse = (promise: Promise<any>) => promise
-  .then(({ data }) => data)
-  .catch((res) => {
-    //TODO @youngjoon-lee: use Promise.reject, instead of returning a plain (unknown) Error object.
-    const { response } = res;
-    if (!response) return ({ error: res });
-    return ({
-      status: response.status,
-      statusText: response.statusText,
-      error: response.data,
+axios.interceptors.response.use((response: AxiosResponse) => {
+  return response.data;
+}, (error: any) => {
+  if (!error.response) {
+    return Promise.reject({ error: error });
+  } else {
+    return Promise.reject({
+      status: error.response.status,
+      statusText: error.response.statusText,
+      error: error.response.data,
     });
-  });
+  }
+});
 
 export default class Client {
   public readonly serverUrl: string;
@@ -46,7 +45,7 @@ export default class Client {
   }
 
   //TODO @youngjoon-lee: make params/query type-safe
-  getRequest(url: string, params: any[] = [], query: Record<string, any> = {}) {
+  getRequest(url: string, params: any[] = [], query: Record<string, any> = {}): Promise<any> {
     const fullUrl = injectParams(url, params);
 
     // Remove empty query
@@ -54,13 +53,13 @@ export default class Client {
       if (!query[k]) delete query[k]; // eslint-disable-line no-param-reassign
     });
 
-    return handleResponse(axios.get(this.serverUrl + fullUrl, { params: query }));
+    return axios.get(this.serverUrl + fullUrl, { params: query });
   }
 
   //TODO @youngjoon-lee: make params/data type-safe
-  postRequest(url: string, params: any[] = [], data: Record<string, any> = {}) {
+  postRequest(url: string, params: any[] = [], data: Record<string, any> = {}): Promise<any> {
     const fullUrl = injectParams(url, params);
 
-    return handleResponse(axios.post(this.serverUrl + fullUrl, data));
+    return axios.post(this.serverUrl + fullUrl, data);
   }
 }

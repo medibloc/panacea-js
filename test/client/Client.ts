@@ -35,26 +35,36 @@ describe('client', () => {
       const testParams = ['abc', 'def'];
       const testQuery = { test1: 'abc', test2: 'def' };
       const client = new Client(test.TEST_URL);
-      return client.getRequest(test.TEST_PARAM_URL, testParams, testQuery)
-        .then(({ error }) => {
-          expect(error.config.url).toEqual(`${test.TEST_URL}${injectParams(test.TEST_PARAM_URL, testParams)}`);
-          expect(error.config.method).toEqual('get');
-          expect(error.config.params).toEqual(testQuery);
-        });
+      expect(client.getRequest(test.TEST_PARAM_URL, testParams, testQuery)).rejects.toMatchObject(
+        {
+          error: {
+            config: {
+              url: `${test.TEST_URL}${injectParams(test.TEST_PARAM_URL, testParams)}`,
+              method: 'get',
+              params: testQuery,
+            }
+          }
+        }
+      );
     });
   });
 
   describe('postRequest', () => {
     it('sends post request', () => {
       const testParams = ['abc', 'def'];
-      const testData = { test1: 'abc', test2: 'def' };
+      const testData = {test1: 'abc', test2: 'def'};
       const client = new Client(test.TEST_URL);
-      return client.postRequest(test.TEST_PARAM_URL, testParams, testData)
-        .then(({ error }) => {
-          expect(error.config.url).toEqual(`${test.TEST_URL}${injectParams(test.TEST_PARAM_URL, testParams)}`);
-          expect(error.config.method).toEqual('post');
-          expect(error.config.data).toEqual(JSON.stringify(testData));
-        });
+      expect(client.postRequest(test.TEST_PARAM_URL, testParams, testData)).rejects.toMatchObject(
+        {
+          error: {
+            config: {
+              url: `${test.TEST_URL}${injectParams(test.TEST_PARAM_URL, testParams)}`,
+              method: 'post',
+              data: JSON.stringify(testData),
+            }
+          }
+        }
+      );
     });
   });
 });

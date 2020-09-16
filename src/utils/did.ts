@@ -1,4 +1,4 @@
-import { DIDDocument, DIDPubKey, DIDSignable } from '../message/DID';
+import {DIDDocument, DIDVerificationMethod, DIDSignable, DIDAuthentication} from '../message/DID';
 import { sortJsonProperties } from './encoding';
 import { generateSignatureFromHash } from '../crypto';
 import { sha256 } from './base';
@@ -17,10 +17,12 @@ function generateDID(networkID: string, pubKeyBuf: Buffer) {
 export const generateDIDDocument = (networkID: string, keyIDSuffix: string, pubKeyHex: string): DIDDocument => {
   const pubKeyBuf = Buffer.from(pubKeyHex, 'hex');
 
+  const contexts = ['https://www.w3.org/ns/did/v1'];
   const did = generateDID(networkID, pubKeyBuf);
-  const didPubKey = new DIDPubKey(`${did}#${keyIDSuffix}`, keyType, bs58.encode(pubKeyBuf));
+  const didPubKey = new DIDVerificationMethod(`${did}#${keyIDSuffix}`, keyType, did, bs58.encode(pubKeyBuf));
+  const auth = new DIDAuthentication(didPubKey.id)
 
-  return new DIDDocument(did, [didPubKey], [didPubKey.id]);
+  return new DIDDocument(contexts, did, [didPubKey], [auth]);
 };
 
 export const sign = (data: any, seq: number, privKey: string): string => {

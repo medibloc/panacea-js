@@ -34,6 +34,7 @@
   },
   "homepage": "https://medibloc.org",
   "dependencies": {
+    "@medibloc/amino-js": "^1.2.0",
     "axios": "^0.20.0",
     "bech32": "^1.1.4",
     "bip32": "^2.0.5",

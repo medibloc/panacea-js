@@ -12,9 +12,8 @@ export default class Fee {
     this.gas = DEFAULT_GAS;
   }
 
-  //TODO @youngjoon-lee: accept a number, not a string
-  setGasLimit(gasLimit: string): void {
-    if (!is.number(+gasLimit)) {
+  setGasLimit(gasLimit: number): void {
+    if (!is.number(+gasLimit)) { //TODO @youngjoon-lee: don't need to use is_js, I guess
       throw new Error('gas limit should be a number');
     }
     this.gas = `${gasLimit}`;

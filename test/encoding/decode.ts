@@ -1,5 +1,4 @@
-import { expect } from 'chai';
-import { encoding } from '../../';
+import { encoding } from '../../src';
 
 const { decodeTx } = encoding;
 
@@ -43,6 +42,6 @@ describe('decode', () => {
 
   it('decodes tx data to tx', () => {
     const decodedTx = decodeTx(txData);
-    expect(decodedTx).to.eql(tx);
+    expect(decodedTx).toEqual(tx);
   });
 });

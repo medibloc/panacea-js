@@ -1,10 +1,9 @@
 import rewire = require('rewire');
-import { expect } from 'chai';
 import config, { test } from '../../src/config';
 import { PARAM } from '../../src/config/default';
-import { Client } from '../../';
+import { Client } from '../../src';
 
-const privFnRewire = rewire('../../src/client/Client');
+const privFnRewire = rewire('../../dist/src/client/Client');
 const injectParams = privFnRewire.__get__('injectParams'); // eslint-disable-line no-underscore-dangle
 
 describe('client', () => {
@@ -16,9 +15,9 @@ describe('client', () => {
         const params = Array(i).fill('test');
         const fn = () => injectParams(test.TEST_PARAM_URL, params);
         if (i === count) {
-          expect(fn).not.to.throw();
+          expect(fn).not.toThrow();
         } else {
-          expect(fn).to.throw();
+          expect(fn).toThrow();
         }
       }
     });
@@ -27,7 +26,7 @@ describe('client', () => {
       const params = ['abc', 'def'];
       const preUrl = `/test/${config.PARAM}/test/${config.PARAM}`;
       const targetUrl = '/test/abc/test/def';
-      expect(injectParams(preUrl, params)).to.be.equal(targetUrl);
+      expect(injectParams(preUrl, params)).toEqual(targetUrl);
     });
   });
 
@@ -38,9 +37,9 @@ describe('client', () => {
       const client = new Client(test.TEST_URL);
       return client.getRequest(test.TEST_PARAM_URL, testParams, testQuery)
         .then(({ error }) => {
-          expect(error.config.url).to.be.equal(`${test.TEST_URL}${injectParams(test.TEST_PARAM_URL, testParams)}`);
-          expect(error.config.method).to.be.equal('get');
-          expect(error.config.params).to.be.eql(testQuery);
+          expect(error.config.url).toEqual(`${test.TEST_URL}${injectParams(test.TEST_PARAM_URL, testParams)}`);
+          expect(error.config.method).toEqual('get');
+          expect(error.config.params).toEqual(testQuery);
         });
     });
   });
@@ -52,9 +51,9 @@ describe('client', () => {
       const client = new Client(test.TEST_URL);
       return client.postRequest(test.TEST_PARAM_URL, testParams, testData)
         .then(({ error }) => {
-          expect(error.config.url).to.be.equal(`${test.TEST_URL}${injectParams(test.TEST_PARAM_URL, testParams)}`);
-          expect(error.config.method).to.be.equal('post');
-          expect(error.config.data).to.be.eql(JSON.stringify(testData));
+          expect(error.config.url).toEqual(`${test.TEST_URL}${injectParams(test.TEST_PARAM_URL, testParams)}`);
+          expect(error.config.method).toEqual('post');
+          expect(error.config.data).toEqual(JSON.stringify(testData));
         });
     });
   });

@@ -1,8 +1,7 @@
 import * as fs from 'fs';
-import { expect } from 'chai';
 import * as bip39 from 'bip39';
 import { PRIVKEY_LEN, PRIVKEY_MAX } from '../../src/config/default';
-import { utils, crypto } from '../../';
+import { utils, crypto } from '../../src';
 
 const { sha256 } = utils;
 
@@ -22,28 +21,28 @@ describe('crypto', () => {
   describe('generateKeyStore', () => {
     it('generates json format key', () => {
       const keyStore = crypto.generateKeyStore(sample.privateKey, 'password123');
-      expect(keyStore).to.be.an('object');
+      expect(typeof keyStore).toBe('object');
     });
   });
 
   describe('getPrivateKeyFromKeyStore', () => {
     it('get private key from key store', () => {
       const keyStore = crypto.generateKeyStore(sample.privateKey, 'password123');
-      expect(() => crypto.getPrivateKeyFromKeyStore(keyStore, '')).to.throw();
-      expect(crypto.getPrivateKeyFromKeyStore(keyStore, 'password123')).to.be.eql(sample.privateKey);
+      expect(() => crypto.getPrivateKeyFromKeyStore(keyStore, '')).toThrow();
+      expect(crypto.getPrivateKeyFromKeyStore(keyStore, 'password123')).toEqual(sample.privateKey);
     });
     it('get private key from the Web3 Secret Storage standard format', () => {
       // the standard test case is from https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition#test-vectors
       const jsonStr = fs.readFileSync(`${__dirname}/testdata/keystore_web3.json`).toString();
-      expect(crypto.getPrivateKeyFromKeyStore(JSON.parse(jsonStr), 'testpassword')).to.be.eql('7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d');
+      expect(crypto.getPrivateKeyFromKeyStore(JSON.parse(jsonStr), 'testpassword')).toEqual('7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d');
     });
     it('get private key from the legacy format which uses aes-256-ctr and sha3-keccak512', () => {
       const jsonStr = fs.readFileSync(`${__dirname}/testdata/keystore_legacy.json`).toString();
-      expect(crypto.getPrivateKeyFromKeyStore(JSON.parse(jsonStr), 'testpassword')).to.be.eql('cb011405894895c814432f1556b52bb054720a9b2a6ffaf3792a45f911b50dff');
+      expect(crypto.getPrivateKeyFromKeyStore(JSON.parse(jsonStr), 'testpassword')).toEqual('cb011405894895c814432f1556b52bb054720a9b2a6ffaf3792a45f911b50dff');
     });
     it('get private key from the old legacy format which uses aes-256-ctr and sha1-256', () => {
       const jsonStr = fs.readFileSync(`${__dirname}/testdata/keystore_old_legacy.json`).toString();
-      expect(crypto.getPrivateKeyFromKeyStore(JSON.parse(jsonStr), 'testpassword')).to.be.eql('83bf913f1ef05c242a60784eaaf90576aaf664ed9c834cff9018bbd8ba92cd66');
+      expect(crypto.getPrivateKeyFromKeyStore(JSON.parse(jsonStr), 'testpassword')).toEqual('83bf913f1ef05c242a60784eaaf90576aaf664ed9c834cff9018bbd8ba92cd66');
     });
   });
 
@@ -51,8 +50,8 @@ describe('crypto', () => {
     it('generates a valid mnemonic words', () => {
       const mnemonic = crypto.generateMnemonic();
       const mnemonicWords = mnemonic.split(' ');
-      expect(mnemonicWords).to.be.lengthOf(24);
-      expect(bip39.validateMnemonic(mnemonic)).to.be.true;
+      expect(mnemonicWords).toHaveLength(24);
+      expect(bip39.validateMnemonic(mnemonic)).toBe(true);
     });
   });
 
@@ -60,42 +59,42 @@ describe('crypto', () => {
     it('validates mnemonic', () => {
       const invalidLengthMnemonicWords = sample.mnemonic.split(' ').slice(0, -1);
       const invalidLengthMnemonic = invalidLengthMnemonicWords.join(' ');
-      expect(crypto.validateMnemonic(invalidLengthMnemonic)).to.be.false;
+      expect(crypto.validateMnemonic(invalidLengthMnemonic)).toBe(false);
 
       const invalidWordMnemonicWords = sample.mnemonic.split(' ').slice(0, -1);
       invalidWordMnemonicWords.push('medibloc');
       const invalidWordMnemonic = invalidWordMnemonicWords.join(' ');
-      expect(crypto.validateMnemonic(invalidWordMnemonic)).to.be.false;
+      expect(crypto.validateMnemonic(invalidWordMnemonic)).toBe(false);
 
-      expect(crypto.validateMnemonic(sample.mnemonic)).to.be.true;
+      expect(crypto.validateMnemonic(sample.mnemonic)).toBe(true);
     });
   });
 
   describe('getPrivateKeyFromMnemonic', () => {
     it('generates private key from mnemonic', () => {
       const privKey = crypto.getPrivateKeyFromMnemonic(sample.mnemonic);
-      expect(privKey).to.be.eql(sample.privateKey);
+      expect(privKey).toEqual(sample.privateKey);
     });
   });
 
   describe('generatePrivateKey', () => {
     it('generates a valid private key', () => {
       const privKey = crypto.generatePrivateKey();
-      expect(privKey).to.have.lengthOf(2 * PRIVKEY_LEN);
-      expect(parseInt(privKey, 16)).to.be.below(parseInt(PRIVKEY_MAX, 16));
-      expect(parseInt(privKey, 16)).to.be.above(0);
+      expect(privKey).toHaveLength(2 * PRIVKEY_LEN);
+      expect(parseInt(privKey, 16)).toBeLessThan(parseInt(PRIVKEY_MAX, 16));
+      expect(parseInt(privKey, 16)).toBeGreaterThan(0);
     });
   });
 
   describe('getAddressFromPrivateKey', () => {
     it('throws an error if entered private key value is invalid', () => {
-      expect(() => crypto.getPublicKeyFromPrivateKey('')).to.throw();
-      expect(() => crypto.getPublicKeyFromPrivateKey(sample.privateKey.slice(1))).to.throw();
-      expect(() => crypto.getPublicKeyFromPrivateKey(`z${sample.privateKey.slice(1)}`)).to.throw();
+      expect(() => crypto.getPublicKeyFromPrivateKey('')).toThrow();
+      expect(() => crypto.getPublicKeyFromPrivateKey(sample.privateKey.slice(1))).toThrow();
+      expect(() => crypto.getPublicKeyFromPrivateKey(`z${sample.privateKey.slice(1)}`)).toThrow();
     });
     it('generates a valid public key', () => {
       const pubKey = crypto.getPublicKeyFromPrivateKey(sample.privateKey);
-      expect(pubKey).to.be.eql(sample.publicKey);
+      expect(pubKey).toEqual(sample.publicKey);
     });
   });
 
@@ -105,7 +104,7 @@ describe('crypto', () => {
       const checkSum = address.slice(-6);
       const hrp = address.slice(0, sample.prefix.length + 1);
       const hashPart = address.slice(sample.prefix.length + 1, -6);
-      expect(hrp).to.be.eql(`${sample.prefix}1`);
+      expect(hrp).toEqual(`${sample.prefix}1`);
 
       const diffPrefix = sample.prefix + sample.prefix;
       const diffHrpAddress = crypto.getAddressFromPrivateKey(sample.privateKey, diffPrefix);
@@ -113,62 +112,62 @@ describe('crypto', () => {
       const diffHrp = diffHrpAddress.slice(0, diffPrefix.length + 1);
       const diffHashPart = diffHrpAddress.slice(diffPrefix.length + 1, -6);
 
-      expect(diffCheckSum).not.to.be.equal(checkSum);
-      expect(diffHrp).not.to.be.eql(`${sample.prefix}1`);
-      expect(diffHashPart).to.be.eql(hashPart);
+      expect(diffCheckSum).not.toEqual(checkSum);
+      expect(diffHrp).not.toEqual(`${sample.prefix}1`);
+      expect(diffHashPart).toEqual(hashPart);
     });
   });
 
   describe('getAddressFromPublicKey', () => {
     it('generates address with hrp from public key', () => {
       const address = crypto.getAddressFromPublicKey(sample.publicKey, sample.prefix);
-      expect(address).to.be.equal(sample.address);
+      expect(address).toEqual(sample.address);
     });
   });
 
   describe('checkAddress', () => {
     it('checks address', () => {
-      expect(crypto.checkAddress(sample.address, sample.prefix)).to.be.true;
-      expect(crypto.checkAddress(sample.address, `${sample.prefix}wrong`)).to.be.false;
-      expect(crypto.checkAddress(sample.address.slice(0, -1), sample.prefix)).to.be.false;
+      expect(crypto.checkAddress(sample.address, sample.prefix)).toBe(true);
+      expect(crypto.checkAddress(sample.address, `${sample.prefix}wrong`)).toBe(false);
+      expect(crypto.checkAddress(sample.address.slice(0, -1), sample.prefix)).toBe(false);
     });
   });
 
   describe('encodeAddress', () => {
     it('encodes public key to bech32 format', () => {
       const address = crypto.encodeAddress(sample.publicKeyHash, sample.prefix);
-      expect(address).to.be.eql(sample.address);
+      expect(address).toEqual(sample.address);
     });
   });
 
   describe('decodeAddress', () => {
     it('decodes an address from bech32 format', () => {
       const pubKeyHash = crypto.decodeAddress(sample.address).toString('hex');
-      expect(pubKeyHash).to.be.eql(sample.publicKeyHash);
+      expect(pubKeyHash).toEqual(sample.publicKeyHash);
     });
   });
 
   describe('generateSignature', () => {
     it('generates signature', () => {
       const sig = crypto.generateSignature(sample.message, sample.privateKey);
-      expect(sig).to.be.eql(sample.signature);
+      expect(sig).toEqual(sample.signature);
     });
   });
 
   describe('generateSignatureFromHash', () => {
     it('generates signature', () => {
       const sig = crypto.generateSignatureFromHash(sha256(sample.message), sample.privateKey);
-      expect(sig).to.be.eql(sample.signature);
+      expect(sig).toEqual(sample.signature);
     });
   });
 
   describe('verifySignature', () => {
     it('verifies signature', () => {
       const result = crypto.verifySignature(sample.signature, sample.message, sample.publicKey);
-      expect(result).to.be.true;
+      expect(result).toBe(true);
 
       const invalidResult = crypto.verifySignature(sample.signature, '123456789abc', sample.publicKey);
-      expect(invalidResult).to.be.false;
+      expect(invalidResult).toBe(false);
     });
   });
 });

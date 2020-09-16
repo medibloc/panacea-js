@@ -46,6 +46,7 @@
     "is_js": "^0.9.0",
     "object-path": "^0.11.4",
     "reflect-metadata": "^0.1.13",
+    "rewire": "^5.0.0",
     "secp256k1": "^4.0.2",
     "secure-random": "^1.1.2",
     "uuid": "^8.3.0"
@@ -56,6 +57,7 @@
     "@types/elliptic": "^6.4.12",
     "@types/jest": "^26.0.13",
     "@types/node": "^14.10.1",
+    "@types/rewire": "^2.5.28",
     "@types/secp256k1": "^4.0.1",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.1.0",

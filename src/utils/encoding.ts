@@ -32,14 +32,3 @@ export const sortJsonProperties = (jsonTx: any): any => {
   return sorted;
 };
 
-/**
- * Applies the transformFn to all elements in the array.
- * This makes the @Transform annotation shorter (of the class-transformer).
- *
- * @param arr An array
- * @param transformFn A transformation function
- * @return The array transformed
- */
-export const mapTransform = (arr: any[], transformFn: (v: any) => any): any[] => {
-  return arr.map(v => transformFn(v));
-};

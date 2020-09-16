@@ -5,7 +5,7 @@ import * as did from './did';
 
 export default {
   ...base,
-  ...encoding,
+  encoding,
   validate,
   did,
 };

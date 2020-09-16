@@ -1,7 +1,6 @@
 import { MSG_TYPE } from '../config/default';
 import { checkParams } from '../utils/validate';
 import {classToPlain, Expose, plainToClass, Transform, Type} from 'class-transformer';
-import {mapTransform} from "../utils/encoding";
 const is = require('is_js');
 
 const { DID } = MSG_TYPE;
@@ -99,8 +98,8 @@ export class DIDDocument {
 
   @Expose()
   // NOTE: @Transform shouldn't be used along with @Type, if you want '{excludeExtraneousValues: true}'.
-  @Transform(l => mapTransform(l, DIDAuthentication.fromPlain), {toClassOnly: true})
-  @Transform(l => mapTransform(l, DIDAuthentication.toPlain), {toPlainOnly: true})
+  @Transform(l => l.map(DIDAuthentication.fromPlain), {toClassOnly: true})
+  @Transform(l => l.map(DIDAuthentication.toPlain), {toPlainOnly: true})
   public authentication: DIDAuthentication[];
 
   constructor(contexts: string[], id: string, verificationMethod: DIDVerificationMethod[], authentication: DIDAuthentication[]) {

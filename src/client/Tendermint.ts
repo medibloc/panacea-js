@@ -3,8 +3,8 @@ import { APIS, QUERY } from '../config/default';
 
 const { TENDERMINT } = APIS;
 
-class Tendermint extends Client {
-  constructor(serverUrl) {
+export default class Tendermint extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getNodeInfo = this.getNodeInfo.bind(this);
@@ -22,35 +22,43 @@ class Tendermint extends Client {
   /**
    * GET
    * */
-  getNodeInfo() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getNodeInfo(): Promise<any> {
     return this.getRequest(TENDERMINT.nodeInfo);
   }
 
-  getSyncStatus() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getSyncStatus(): Promise<any> {
     return this.getRequest(TENDERMINT.syncStatus);
   }
 
-  getLatestBlock() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getLatestBlock(): Promise<any> {
     return this.getRequest(TENDERMINT.latestBlock);
   }
 
-  getBlock(height) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getBlock(height: number): Promise<any> {
     return this.getRequest(TENDERMINT.block, [height]);
   }
 
-  getLatestValidatorSets() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getLatestValidatorSets(): Promise<any> {
     return this.getRequest(TENDERMINT.latestValidatorSets);
   }
 
-  getValidatorSets(height) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getValidatorSets(height: number): Promise<any> {
     return this.getRequest(TENDERMINT.validatorSets, [height]);
   }
 
-  getTx(hash) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getTx(hash: string): Promise<any> {
     return this.getRequest(TENDERMINT.tx, [hash]);
   }
 
-  getTxs(opts = { tags: '', page: QUERY.DEFAULT_PAGE, limit: QUERY.DEFAULT_LIMIT }) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getTxs(opts = { tags: {}, page: QUERY.DEFAULT_PAGE, limit: QUERY.DEFAULT_LIMIT }): Promise<any> {
     return this.getRequest(
       TENDERMINT.txs,
       null, { ...opts.tags, page: opts.page, limit: opts.limit },
@@ -60,13 +68,15 @@ class Tendermint extends Client {
   /**
    * POST
    * */
-  broadcastTx(data) {
+  //TODO @youngjoon-lee: use a proper type for data
+  //TODO @youngjoon-lee: use a proper type for Promise
+  broadcastTx(data: any): Promise<any> {
     return this.postRequest(TENDERMINT.txs, null, data);
   }
 
-  encodeTx(data) {
+  //TODO @youngjoon-lee: use a proper type for data
+  //TODO @youngjoon-lee: use a proper type for Promise
+  encodeTx(data: any): Promise<any> {
     return this.postRequest(TENDERMINT.encodeTx, null, data);
   }
 }
-
-export default Tendermint;

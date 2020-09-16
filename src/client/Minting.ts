@@ -3,8 +3,8 @@ import { APIS } from '../config/default';
 
 const { MINTING } = APIS;
 
-class Minting extends Client {
-  constructor(serverUrl) {
+export default class Minting extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getMintParams = this.getMintParams.bind(this);
@@ -15,17 +15,18 @@ class Minting extends Client {
   /**
    * GET
    * */
-  getMintParams() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getMintParams(): Promise<any> {
     return this.getRequest(MINTING.params);
   }
 
-  getInflation() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getInflation(): Promise<any> {
     return this.getRequest(MINTING.inflation);
   }
 
-  getAnnualProvisions() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getAnnualProvisions(): Promise<any> {
     return this.getRequest(MINTING.annualProvisions);
   }
 }
-
-export default Minting;

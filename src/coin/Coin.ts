@@ -1,8 +1,12 @@
-import is from 'is_js';
+const is = require('is_js');
 import { DEFAULT_DENOM } from '../config/default';
 
-class Coin {
-  constructor(data) {
+export default class Coin {
+  public denom: string;
+  public amount: string; //TODO @youngjoon-lee: to be number
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: any) {
     this.denom = DEFAULT_DENOM;
     this.amount = '0';
 
@@ -15,16 +19,14 @@ class Coin {
     }
   }
 
-  static parseCoin(coin) {
+  static parseCoin(coin: string): Coin {
     const parsedCoin = coin.split(/([0-9.]+)/).filter(Boolean);
     if (parsedCoin.length !== 2) {
       throw new Error('Invalid coin argument. You need to put amount + denom format. ex) 100.00umed');
     }
-    return {
+    return new Coin({
       amount: `${parsedCoin[0]}`,
       denom: parsedCoin[1],
-    };
+    });
   }
 }
-
-export default Coin;

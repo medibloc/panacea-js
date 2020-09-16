@@ -3,8 +3,8 @@ import { APIS } from '../config/default';
 
 const { ACCOUNT } = APIS;
 
-class Account extends Client {
-  constructor(serverUrl) {
+export default class Account extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getAccount = this.getAccount.bind(this);
@@ -15,20 +15,22 @@ class Account extends Client {
   /**
    * GET
    * */
-  getAccount(address) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getAccount(address: string): Promise<any> {
     return this.getRequest(ACCOUNT.account, [address]);
   }
 
-  getBalance(address) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getBalance(address: string): Promise<any> {
     return this.getRequest(ACCOUNT.balance, [address]);
   }
 
   /**
    * POST
    * */
-  generateTransferTx(address, tx) {
+  //TODO @youngjoon-lee: use a proper type for tx (I don't know yet)
+  //TODO @youngjoon-lee: use a proper type for Promise
+  generateTransferTx(address: string, tx: any): Promise<any> {
     return this.postRequest(ACCOUNT.transferTx, [address], tx);
   }
 }
-
-export default Account;

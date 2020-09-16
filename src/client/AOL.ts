@@ -3,8 +3,8 @@ import { APIS } from '../config/default';
 
 const { AOL: AOL_API } = APIS;
 
-class AOL extends Client {
-  constructor(serverUrl) {
+export default class AOL extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getTopics = this.getTopics.bind(this);
@@ -17,25 +17,28 @@ class AOL extends Client {
   /**
    * GET
    * */
-  getTopics(ownerAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getTopics(ownerAddr: string): Promise<any> {
     return this.getRequest(AOL_API.topics, [ownerAddr]);
   }
 
-  getTopic(ownerAddr, topic) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getTopic(ownerAddr: string, topic: string): Promise<any> {
     return this.getRequest(AOL_API.topic, [ownerAddr, topic]);
   }
 
-  getWriters(ownerAddr, topic) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getWriters(ownerAddr: string, topic: string): Promise<any> {
     return this.getRequest(AOL_API.writers, [ownerAddr, topic]);
   }
 
-  getWriter(ownerAddr, topic, writerAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getWriter(ownerAddr: string, topic: string, writerAddr: string): Promise<any> {
     return this.getRequest(AOL_API.writer, [ownerAddr, topic, writerAddr]);
   }
 
-  getRecord(ownerAddr, topic, offset) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getRecord(ownerAddr: string, topic: string, offset: string): Promise<any> {
     return this.getRequest(AOL_API.record, [ownerAddr, topic, offset]);
   }
 }
-
-export default AOL;

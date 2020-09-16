@@ -3,8 +3,12 @@ import { checkParams } from '../utils/validate';
 
 const { DISTR } = MSG_TYPE;
 
-class WithdrawReward {
-  constructor(data) {
+export class WithdrawReward {
+  public readonly type: string;
+  public readonly value: Record<string, any>; //TODO @youngjoon-lee: to be type-safe
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     const requiredParams = ['delegatorAddress', 'delegatorAddress'];
     checkParams(requiredParams, data);
 
@@ -17,8 +21,12 @@ class WithdrawReward {
   }
 }
 
-class ModifyWithdrawAddress {
-  constructor(data) {
+export class ModifyWithdrawAddress {
+  public readonly type: string;
+  public readonly value: Record<string, any>; //TODO @youngjoon-lee: to be type-safe
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     const requiredParams = ['delegatorAddress', 'withdrawAddress'];
     checkParams(requiredParams, data);
 
@@ -29,8 +37,3 @@ class ModifyWithdrawAddress {
     };
   }
 }
-
-export {
-  WithdrawReward,
-  ModifyWithdrawAddress,
-};

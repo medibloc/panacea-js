@@ -3,8 +3,12 @@ import { checkParams } from '../utils/validate';
 
 const { AOL } = MSG_TYPE;
 
-class CreateTopic {
-  constructor(data) {
+export class CreateTopic {
+  public readonly type: string;
+  public readonly value: Record<string, any>; //TODO @youngjoon-lee: to be type-safe
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     const requiredParams = ['topicName', 'ownerAddress'];
     checkParams(requiredParams, data);
 
@@ -17,8 +21,12 @@ class CreateTopic {
   }
 }
 
-class AddWriter {
-  constructor(data) {
+export class AddWriter {
+  public readonly type: string;
+  public readonly value: Record<string, any>; //TODO @youngjoon-lee: to be type-safe
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     const requiredParams = ['topicName', 'writerAddress', 'ownerAddress'];
     checkParams(requiredParams, data);
 
@@ -33,8 +41,12 @@ class AddWriter {
   }
 }
 
-class AddRecord {
-  constructor(data) {
+export class AddRecord {
+  public readonly type: string;
+  public readonly value: Record<string, any>; //TODO @youngjoon-lee: to be type-safe
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     const requiredParams = ['topicName', 'key', 'value', 'writerAddress', 'ownerAddress'];
     checkParams(requiredParams, data);
 
@@ -50,8 +62,12 @@ class AddRecord {
   }
 }
 
-class DeleteWriter {
-  constructor(data) {
+export class DeleteWriter {
+  public readonly type: string;
+  public readonly value: Record<string, any>; //TODO @youngjoon-lee: to be type-safe
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     const requiredParams = ['topicName', 'writerAddress', 'ownerAddress'];
     checkParams(requiredParams, data);
 
@@ -63,10 +79,3 @@ class DeleteWriter {
     };
   }
 }
-
-export {
-  CreateTopic,
-  AddWriter,
-  AddRecord,
-  DeleteWriter,
-};

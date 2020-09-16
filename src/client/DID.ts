@@ -3,8 +3,8 @@ import { APIS } from '../config/default';
 
 const { DID: DID_API } = APIS;
 
-class DID extends Client {
-  constructor(serverUrl) {
+export default class DID extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getDID = this.getDID.bind(this);
@@ -13,9 +13,8 @@ class DID extends Client {
   /**
    * GET
    * */
-  getDID(did) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getDID(did: string): Promise<any> {
     return this.getRequest(DID_API.did, [did]);
   }
 }
-
-export default DID;

@@ -3,8 +3,8 @@ import { APIS } from '../config/default';
 
 const { GOVERNANCE } = APIS;
 
-class Governance extends Client {
-  constructor(serverUrl) {
+export default class Governance extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getProposals = this.getProposals.bind(this);
@@ -26,64 +26,79 @@ class Governance extends Client {
   /**
    * GET
    * */
-  getProposals(opts = { voter: '', depositor: '', status: '' }) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getProposals(opts = { voter: '', depositor: '', status: '' }): Promise<any> {
     return this.getRequest(GOVERNANCE.proposals, null, opts);
   }
 
-  getProposal(proposalId) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getProposal(proposalId: string): Promise<any> {
     return this.getRequest(GOVERNANCE.proposal, [proposalId]);
   }
 
-  getProposer(proposalId) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getProposer(proposalId: string): Promise<any> {
     return this.getRequest(GOVERNANCE.proposer, [proposalId]);
   }
 
-  getProposalDeposit(proposalId) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getProposalDeposit(proposalId: string): Promise<any> {
     return this.getRequest(GOVERNANCE.proposalDeposit, [proposalId]);
   }
 
-  getProposalDepositFromDepositor(proposalId, depositorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getProposalDepositFromDepositor(proposalId: string, depositorAddr: string): Promise<any> {
     return this.getRequest(GOVERNANCE.proposalDepositFromDepositor, [proposalId, depositorAddr]);
   }
 
-  getProposalVotes(proposalId) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getProposalVotes(proposalId: string): Promise<any> {
     return this.getRequest(GOVERNANCE.proposalVotes, [proposalId]);
   }
 
-  getProposalVoteFromVoter(proposalId, voterAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getProposalVoteFromVoter(proposalId: string, voterAddr: string): Promise<any> {
     return this.getRequest(GOVERNANCE.proposalVoteFromVoter, [proposalId, voterAddr]);
   }
 
-  getProposalTally(proposalId) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getProposalTally(proposalId: string): Promise<any> {
     return this.getRequest(GOVERNANCE.proposalTally, [proposalId]);
   }
 
-  getGovDepositParams() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getGovDepositParams(): Promise<any> {
     return this.getRequest(GOVERNANCE.depositParams);
   }
 
-  getGovTallyParams() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getGovTallyParams(): Promise<any> {
     return this.getRequest(GOVERNANCE.tallyParams);
   }
 
-  getGovVoteParams() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getGovVoteParams(): Promise<any> {
     return this.getRequest(GOVERNANCE.voteParams);
   }
 
   /**
    * POST
    * */
-  generateProposalTx(tx) {
+  //TODO @youngjoon-lee: use a proper type for tx (I don't know yet)
+  //TODO @youngjoon-lee: use a proper type for Promise
+  generateProposalTx(tx: any): Promise<any> {
     return this.postRequest(GOVERNANCE.proposals, null, tx);
   }
 
-  generateDepositToProposalTx(proposalId, tx) {
+  //TODO @youngjoon-lee: use a proper type for tx (I don't know yet)
+  //TODO @youngjoon-lee: use a proper type for Promise
+  generateDepositToProposalTx(proposalId: string, tx: any): Promise<any> {
     return this.postRequest(GOVERNANCE.proposalDeposit, [proposalId], tx);
   }
 
-  generateVoteToProposalTx(proposalId, tx) {
+  //TODO @youngjoon-lee: use a proper type for tx (I don't know yet)
+  //TODO @youngjoon-lee: use a proper type for Promise
+  generateVoteToProposalTx(proposalId: string, tx: any): Promise<any> {
     return this.postRequest(GOVERNANCE.proposalVotes, [proposalId], tx);
   }
 }
-
-export default Governance;

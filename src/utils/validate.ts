@@ -1,7 +1,7 @@
-import objectPath from 'object-path';
+const objectPath = require('object-path');
 
-// eslint-disable-next-line import/prefer-default-export
-export const checkParams = (requiredParams = [], data = {}) => {
+// TODO @youngjoon-lee: to be deleted, after making all classes type-safe
+export const checkParams = (requiredParams: string[] = [], data: Record<string, any> = {}): boolean => {
   requiredParams.forEach((param) => {
     if (!objectPath.has(data, param)) throw new Error(`'${param}' field is required`);
   });

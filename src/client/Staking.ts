@@ -4,8 +4,8 @@ import { APIS, QUERY, QUERY_LIST } from '../config/default';
 const { STAKING } = APIS;
 const { CANDIDATES_STATES } = QUERY_LIST;
 
-class Staking extends Client {
-  constructor(serverUrl) {
+export default class Staking extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getDelagatorInfo = this.getDelagatorInfo.bind(this);
@@ -31,77 +31,95 @@ class Staking extends Client {
   /**
    * GET
    * */
-  getDelagatorInfo(delegatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getDelagatorInfo(delegatorAddr: string): Promise<any> {
     return this.getRequest(STAKING.delegator, [delegatorAddr]);
   }
 
-  getDelegatorInfoFromValidator(delegatorAddr, validatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getDelegatorInfoFromValidator(delegatorAddr: string, validatorAddr: string): Promise<any> {
     return this.getRequest(STAKING.delegatorInfoFromValidator, [delegatorAddr, validatorAddr]);
   }
 
-  getDelegatorUnbondingInfo(delegatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getDelegatorUnbondingInfo(delegatorAddr: string): Promise<any> {
     return this.getRequest(STAKING.delegatorUnbonding, [delegatorAddr]);
   }
 
-  getDelegatorUnbondingInfoFromValidator(delegatorAddr, validatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getDelegatorUnbondingInfoFromValidator(delegatorAddr: string, validatorAddr: string): Promise<any> {
     return this.getRequest(STAKING.delegatorUnbondingFromValidator, [delegatorAddr, validatorAddr]);
   }
 
-  getRedelegations() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getRedelegations(): Promise<any> {
     return this.getRequest(STAKING.redelegations);
   }
 
-  getValidatorsFromDelegator(delegatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getValidatorsFromDelegator(delegatorAddr: string): Promise<any> {
     return this.getRequest(STAKING.validatorsFromDelegator, [delegatorAddr]);
   }
 
-  getValidatorFromDelegator(delegatorAddr, validatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getValidatorFromDelegator(delegatorAddr: string, validatorAddr: string): Promise<any> {
     return this.getRequest(STAKING.validatorFromDelegator, [delegatorAddr, validatorAddr]);
   }
 
-  getDelegatorStakingTxs(delegatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getDelegatorStakingTxs(delegatorAddr: string): Promise<any> {
     return this.getRequest(STAKING.delegatorTxs, [delegatorAddr]);
   }
 
-  getCandidates(opts = { status: '', page: QUERY.DEFAULT_PAGE, limit: QUERY.DEFAULT_LIMIT }) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getCandidates(opts = { status: '', page: QUERY.DEFAULT_PAGE, limit: QUERY.DEFAULT_LIMIT }): Promise<any> {
     if (!CANDIDATES_STATES.includes(opts.status)) throw new Error(`invalid validator status : ${opts.status}`);
     return this.getRequest(STAKING.candidates, null, opts);
   }
 
-  getValidator(validatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getValidator(validatorAddr: string): Promise<any> {
     return this.getRequest(STAKING.validator, [validatorAddr]);
   }
 
-  getDelegatorsByValidator(validatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getDelegatorsByValidator(validatorAddr: string): Promise<any> {
     return this.getRequest(STAKING.delegatorsByValidator, [validatorAddr]);
   }
 
-  getUnbondingDelegatorsByValidator(validatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getUnbondingDelegatorsByValidator(validatorAddr: string): Promise<any> {
     return this.getRequest(STAKING.unbondingDelegatorsByValidator, [validatorAddr]);
   }
 
-  getStakingPool() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getStakingPool(): Promise<any> {
     return this.getRequest(STAKING.stakingPool);
   }
 
-  getStakingParams() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getStakingParams(): Promise<any> {
     return this.getRequest(STAKING.params);
   }
 
   /**
    * POST
    * */
-  generateDelegateTx(delegatorAddr, tx) {
+  //TODO @youngjoon-lee: use a proper type for tx (I don't know yet)
+  //TODO @youngjoon-lee: use a proper type for Promise
+  generateDelegateTx(delegatorAddr: string, tx: any): Promise<any> {
     return this.postRequest(STAKING.delegator, [delegatorAddr], tx);
   }
 
-  generateUnbondingTx(delegatorAddr, tx) {
+  //TODO @youngjoon-lee: use a proper type for tx (I don't know yet)
+  //TODO @youngjoon-lee: use a proper type for Promise
+  generateUnbondingTx(delegatorAddr: string, tx: any): Promise<any> {
     return this.postRequest(STAKING.delegatorUnbonding, [delegatorAddr], tx);
   }
 
-  generateRedelegateTx(delegatorAddr, tx) {
+  //TODO @youngjoon-lee: use a proper type for tx (I don't know yet)
+  //TODO @youngjoon-lee: use a proper type for Promise
+  generateRedelegateTx(delegatorAddr: string, tx: any): Promise<any> {
     return this.postRequest(STAKING.redelegation, [delegatorAddr], tx);
   }
 }
-
-export default Staking;

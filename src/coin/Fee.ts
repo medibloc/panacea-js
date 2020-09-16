@@ -1,34 +1,39 @@
-import is from 'is_js';
+const is = require('is_js');
 import Coin from './Coin';
 import { DEFAULT_GAS } from '../config/default';
 
-class Fee {
+export default class Fee {
+  public amount: Coin[];
+  public gas: string; //TODO @youngjoon-lee: to be number
+
+  //TODO @youngjoon-lee: to be type-safe
   constructor() {
     this.amount = null;
     this.gas = DEFAULT_GAS;
   }
 
-  setGasLimit(gasLimit) {
+  //TODO @youngjoon-lee: accept a number, not a string
+  setGasLimit(gasLimit: string): void {
     if (!is.number(+gasLimit)) {
       throw new Error('gas limit should be a number');
     }
     this.gas = `${gasLimit}`;
   }
 
-  setGasPrice(price) {
+  setGasPrice(price: string): void {
     const parsedCoin = Coin.parseCoin(price);
 
     // fee amount = gas price * gas limit
-    parsedCoin.amount = `${parsedCoin.amount * this.gas}`;
+    parsedCoin.amount = `${Number(parsedCoin.amount) * Number(this.gas)}`;
     this.addCoin(parsedCoin);
   }
 
-  setFee(fee) {
+  setFee(fee: string): void {
     const parsedCoin = Coin.parseCoin(fee);
     this.addCoin(parsedCoin);
   }
 
-  addCoin(parsedCoin) {
+  addCoin(parsedCoin: Coin): void {
     if (this.amount) {
       let found = false;
       this.amount.forEach((coin) => {
@@ -46,5 +51,3 @@ class Fee {
     }
   }
 }
-
-export default Fee;

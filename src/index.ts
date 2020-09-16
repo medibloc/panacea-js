@@ -1,3 +1,5 @@
+import 'reflect-metadata';  // for class-transformer
+
 import Account from './account';
 import Client from './client';
 import Coin, { Fee } from './coin';

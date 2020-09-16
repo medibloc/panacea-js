@@ -1,3 +1,5 @@
+import {classToPlain} from "class-transformer";
+
 const is = require('is_js');
 import {sortJsonProperties} from '../utils/encoding';
 import base from '../utils';
@@ -10,7 +12,7 @@ export default class Transaction {
   public sequence: string; //TODO @youngjoon-lee: to be number
   public account_number: string; //TODO @youngjoon-lee: to be number
   public chain_id: string;
-  public msgs: any[];    //TODO @youngjoon-lee: to be Message[]
+  public msgs: Record<string, any>[];    //TODO @youngjoon-lee: to be Message[]
   public memo: string;
   public fee: Fee;       //TODO @youngjoon-lee: to be optional, not null
   public signatures: any[];  //TODO @youngjoon-lee: to be Signature[]
@@ -33,9 +35,12 @@ export default class Transaction {
     this.signatures = data.signatures || [];
   }
 
-  addMsgs(...msgs: any): void {
+  addMsgs(...msgs: Record<string, any>[]): void {
     // I hope you fully understand the importance of the message's sequence
-    this.msgs = [...this.msgs, ...msgs];
+    this.msgs = [
+      ...this.msgs,
+      ...msgs.map(msg => classToPlain(msg)),
+    ];
   }
 
   setFee(fee: Fee): void {
@@ -46,7 +51,7 @@ export default class Transaction {
     const sortedJsonTx = sortJsonProperties({
       fee: this.fee,
       memo: this.memo,
-      msgs: this.msgs.map(msg => sortJsonProperties(msg)),
+      msgs: this.msgs,
       sequence: this.sequence.toString(),
       account_number: this.account_number.toString(),
       chain_id: this.chain_id,

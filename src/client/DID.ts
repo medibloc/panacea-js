@@ -1,5 +1,7 @@
 import Client from './Client';
 import { APIS } from '../config/default';
+import {DIDDocumentWithSeq} from "../message/DID";
+import {plainToClass} from "class-transformer";
 
 const { DID: DID_API } = APIS;
 
@@ -13,8 +15,10 @@ export default class DID extends Client {
   /**
    * GET
    * */
-  //TODO @youngjoon-lee: use a proper type for Promise
-  getDID(did: string): Promise<any> {
-    return this.getRequest(DID_API.did, [did]);
+  getDID(did: string): Promise<DIDDocumentWithSeq> {
+    return this.getRequest(DID_API.did, [did])
+      .then((data: Record<string, any>): DIDDocumentWithSeq => {
+        return plainToClass(DIDDocumentWithSeq, data, { excludeExtraneousValues: true });
+      });
   }
 }

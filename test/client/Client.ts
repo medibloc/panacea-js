@@ -1,3 +1,4 @@
+import 'reflect-metadata';  // for class-transformer
 import rewire = require('rewire');
 import config, { test } from '../../src/config';
 import { PARAM } from '../../src/config/default';

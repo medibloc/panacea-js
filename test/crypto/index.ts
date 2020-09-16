@@ -1,3 +1,4 @@
+import 'reflect-metadata';  // for class-transformer
 import * as fs from 'fs';
 import * as bip39 from 'bip39';
 import { PRIVKEY_LEN, PRIVKEY_MAX } from '../../src/config/default';

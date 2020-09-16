@@ -1,3 +1,4 @@
+import 'reflect-metadata';  // for class-transformer
 import { encoding } from '../../src';
 
 const { decodeTx } = encoding;

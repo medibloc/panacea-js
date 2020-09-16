@@ -1,3 +1,4 @@
+import 'reflect-metadata';  // for class-transformer
 import config, { test } from '../../src/config';
 import { Tx, BaseMessage as Msg, Fee } from '../../src';
 

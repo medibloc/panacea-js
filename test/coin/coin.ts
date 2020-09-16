@@ -1,3 +1,4 @@
+import 'reflect-metadata';  // for class-transformer
 import { Coin } from '../../src';
 import { DEFAULT_DENOM } from '../../src/config/default';
 

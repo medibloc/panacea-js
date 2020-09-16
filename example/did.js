@@ -1,4 +1,4 @@
-import panaceajs from '../dist/index.js';
+import panaceajs from '../dist/src/index.js';
 
 const txBroadcastMode = 'block';
 const chainId = 'testing';

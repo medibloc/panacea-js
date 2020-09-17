@@ -1,5 +1,4 @@
 import { PARAM } from './default';
-import { DIDDocument, DIDPubKey } from '../message/DID';
 
 export const DEFAULT_DENOM = 'umed';
 
@@ -72,41 +71,41 @@ export const MESSAGE = {
   DID: {
     CREATE_DID: {
       did: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
-      document: new DIDDocument({
+      document: {
         id: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
-        publicKey: [
-          new DIDPubKey({
-            id: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
-            type: 'Secp256k1VerificationKey2018',
-            publicKeyBase58: 'pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D',
-          }),
-        ],
+        verificationMethod: [{
+          '@context': 'https://www.w3.org/ns/did/v1',
+          id: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
+          type: 'Secp256k1VerificationKey2018',
+          controller: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
+          publicKeyBase58: 'pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D',
+        }],
         authentication: ['did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key2'],
-      }),
-      sigKeyId: 'did:panacea:mainnet:DnreD8QqXAQaEW9DwC16Wh#key1',
+      },
+      verificationMethodId: 'did:panacea:mainnet:DnreD8QqXAQaEW9DwC16Wh#key1',
       signature: 'asdfkljaslkfdjdlsk',
       fromAddress: ACCOUNT.address,
     },
     UPDATE_DID: {
       did: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
-      document: new DIDDocument({
+      document: {
         id: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
-        publicKey: [
-          new DIDPubKey({
-            id: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
-            type: 'Secp256k1VerificationKey2018',
-            publicKeyBase58: 'pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D',
-          }),
-        ],
+        verificationMethod: [{
+          '@context': 'https://www.w3.org/ns/did/v1',
+          id: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
+          type: 'Secp256k1VerificationKey2018',
+          controller: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
+          publicKeyBase58: 'pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D',
+        }],
         authentication: ['did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key2'],
-      }),
-      sigKeyId: 'did:panacea:mainnet:DnreD8QqXAQaEW9DwC16Wh#key1',
+      },
+      verificationMethodId: 'did:panacea:mainnet:DnreD8QqXAQaEW9DwC16Wh#key1',
       signature: 'asdfkljaslkfdjdlsk',
       fromAddress: ACCOUNT.address,
     },
     DEACTIVATE_DID: {
       did: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
-      sigKeyId: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
+      verificationMethodId: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
       signature: 'asdfkljaslkfdjdlsk',
       fromAddress: ACCOUNT.address,
     },

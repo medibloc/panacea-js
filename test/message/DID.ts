@@ -12,7 +12,7 @@ describe('DID message', () => {
       expect(msg.type).to.be.equal(config.MSG_TYPE.DID.CREATE_DID);
       expect(msg.value.did).to.be.equal(test.MESSAGE.DID.CREATE_DID.did);
       expect(msg.value.document).to.be.equal(test.MESSAGE.DID.CREATE_DID.document);
-      expect(msg.value.sig_key_id).to.be.equal(test.MESSAGE.DID.CREATE_DID.sigKeyId);
+      expect(msg.value.verification_method_id).to.be.equal(test.MESSAGE.DID.CREATE_DID.verificationMethodId);
       expect(msg.value.signature).to.be.equal(test.MESSAGE.DID.CREATE_DID.signature);
       expect(msg.value.from_address).to.be.equal(test.MESSAGE.DID.CREATE_DID.fromAddress);
     });
@@ -25,7 +25,7 @@ describe('DID message', () => {
       expect(msg.type).to.be.equal(config.MSG_TYPE.DID.UPDATE_DID);
       expect(msg.value.did).to.be.equal(test.MESSAGE.DID.UPDATE_DID.did);
       expect(msg.value.document).to.be.equal(test.MESSAGE.DID.UPDATE_DID.document);
-      expect(msg.value.sig_key_id).to.be.equal(test.MESSAGE.DID.UPDATE_DID.sigKeyId);
+      expect(msg.value.verification_method_id).to.be.equal(test.MESSAGE.DID.UPDATE_DID.verificationMethodId);
       expect(msg.value.signature).to.be.equal(test.MESSAGE.DID.UPDATE_DID.signature);
       expect(msg.value.from_address).to.be.equal(test.MESSAGE.DID.UPDATE_DID.fromAddress);
     });
@@ -37,7 +37,7 @@ describe('DID message', () => {
 
       expect(msg.type).to.be.equal(config.MSG_TYPE.DID.DEACTIVATE_DID);
       expect(msg.value.did).to.be.equal(test.MESSAGE.DID.DEACTIVATE_DID.did);
-      expect(msg.value.sig_key_id).to.be.equal(test.MESSAGE.DID.DEACTIVATE_DID.sigKeyId);
+      expect(msg.value.verification_method_id).to.be.equal(test.MESSAGE.DID.DEACTIVATE_DID.verificationMethodId);
       expect(msg.value.signature).to.be.equal(test.MESSAGE.DID.DEACTIVATE_DID.signature);
       expect(msg.value.from_address).to.be.equal(test.MESSAGE.DID.DEACTIVATE_DID.fromAddress);
     });

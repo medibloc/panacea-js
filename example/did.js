@@ -40,7 +40,7 @@ async function createDID(account, keystore) {
   const msg = new panaceajs.Message.DID.CreateDID({
     did: didDoc.id,
     document: didDoc,
-    sigKeyId: didDoc.publicKey[0].id,
+    verificationMethodId: didDoc.verificationMethod[0].id,
     signature: sig,
     fromAddress: account.address,
   });
@@ -79,7 +79,7 @@ async function updateDID(account, keystore, did, keyId, newDoc) {
   const msg = new panaceajs.Message.DID.UpdateDID({
     did,
     document: newDoc,
-    sigKeyId: keyId,
+    verificationMethodId: keyId,
     signature: sig,
     fromAddress: account.address,
   });
@@ -111,7 +111,7 @@ async function deactivateDID(account, keystore, did, keyId) {
 
   const msg = new panaceajs.Message.DID.DeactivateDID({
     did,
-    sigKeyId: keyId,
+    verificationMethodId: keyId,
     signature: sig,
     fromAddress: account.address,
   });
@@ -134,7 +134,7 @@ async function main() {
     const doc = await getDID(did);
     console.log(doc);
 
-    const keyId = doc.publicKey[0].id;
+    const keyId = doc.verificationMethod[0].id;
     const newDoc = doc;
     newDoc.authentication.push(keyId); // just for testing, push the same keyId again.
     await updateDID(account, keystore, did, keyId, newDoc);

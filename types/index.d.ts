@@ -369,16 +369,16 @@ export namespace Message {
       type: 'did/MsgCreateDID';
       value: {
         did: string;
-        document: DIDDocument;
-        sig_key_id: string;
+        document: Record<string, any>;
+        verification_method_id: string;
         signature: string;
         from_address: string;
       }
 
       constructor(data: {
         did: string;
-        document: DIDDocument;
-        sigKeyId: string;
+        document: Record<string, any>;
+        verificationMethodId: string;
         signature: string;
         fromAddress: string;
       })
@@ -388,16 +388,16 @@ export namespace Message {
       type: 'did/MsgUpdateDID';
       value: {
         did: string;
-        document: DIDDocument;
-        sig_key_id: string;
+        document: Record<string, any>;
+        verification_method_id: string;
         signature: string;
         from_address: string;
       }
 
       constructor(data: {
         did: string;
-        document: DIDDocument;
-        sigKeyId: string;
+        document: Record<string, any>;
+        verificationMethodId: string;
         signature: string;
         fromAddress: string;
       })
@@ -407,40 +407,16 @@ export namespace Message {
       type: 'did/MsgDeactivateDID';
       value: {
         did: string;
-        sig_key_id: string;
+        verification_method_id: string;
         signature: string;
         from_address: string;
       }
 
       constructor(data: {
         did: string;
-        sigKeyId: string;
+        verificationMethodId: string;
         signature: string;
         fromAddress: string;
-      })
-    }
-
-    class DIDDocument {
-      id: string;
-      publicKey: DIDPubKey[];
-      authentication: string[];
-
-      constructor(data: {
-        id: string;
-        publicKey: DIDPubKey[];
-        authentication: string[];
-      })
-    }
-
-    class DIDPubKey {
-      id: string;
-      type: string;
-      publicKeyBase58: string;
-
-      constructor(data: {
-        id: string;
-        type: string;
-        publicKeyBase58: string;
       })
     }
   }

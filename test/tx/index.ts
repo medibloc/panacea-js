@@ -1,19 +1,19 @@
-import { expect } from 'chai';
+import 'reflect-metadata';  // for class-transformer
 import config, { test } from '../../src/config';
-import { Tx, BaseMessage as Msg, Fee } from '../../';
+import { Tx, BaseMessage as Msg, Fee } from '../../src';
 
 describe('Transaction', () => {
   describe('constructor', () => {
     it('generates default tx structure', () => {
       const tx = new Tx(test.TX);
 
-      expect(tx.chain_id).to.be.equal(test.TX.chainId);
-      expect(tx.account_number).to.be.equal(`${test.TX.accountNumber}`);
-      expect(tx.sequence).to.be.equal(`${test.TX.sequence}`);
-      expect(tx.msgs).to.be.eql([]);
-      expect(tx.memo).to.be.equal(test.TX.memo);
-      expect(tx.fee).to.be.null;
-      expect(tx.signatures).to.be.eql([]);
+      expect(tx.chain_id).toEqual(test.TX.chainId);
+      expect(tx.account_number).toEqual(`${test.TX.accountNumber}`);
+      expect(tx.sequence).toEqual(`${test.TX.sequence}`);
+      expect(tx.msgs).toEqual([]);
+      expect(tx.memo).toEqual(test.TX.memo);
+      expect(tx.fee).toBeNull();
+      expect(tx.signatures).toEqual([]);
     });
 
     it('generates tx structure with message', () => {
@@ -22,8 +22,9 @@ describe('Transaction', () => {
         msg: new Msg(test.MESSAGE.BASE),
       });
 
-      expect(tx.msgs).to.be.an('array').lengthOf(1);
-      expect(tx.msgs[0].type).to.be.equal(config.MSG_TYPE.BASE.SEND);
+      expect(Array.isArray(tx.msgs)).toBe(true);
+      expect(tx.msgs).toHaveLength(1);
+      expect(tx.msgs[0].type).toEqual(config.MSG_TYPE.BASE.SEND);
     });
 
     it('generates tx structure with multiple messages', () => {
@@ -35,9 +36,10 @@ describe('Transaction', () => {
         ],
       });
 
-      expect(tx.msgs).to.be.an('array').lengthOf(2);
-      expect(tx.msgs[0].type).to.be.equal(config.MSG_TYPE.BASE.SEND);
-      expect(tx.msgs[1].type).to.be.equal(config.MSG_TYPE.BASE.SEND);
+      expect(Array.isArray(tx.msgs)).toBe(true);
+      expect(tx.msgs).toHaveLength(2);
+      expect(tx.msgs[0].type).toEqual(config.MSG_TYPE.BASE.SEND);
+      expect(tx.msgs[1].type).toEqual(config.MSG_TYPE.BASE.SEND);
     });
 
     it('generates tx structure with fee', () => {
@@ -52,24 +54,28 @@ describe('Transaction', () => {
         fee,
       });
 
-      expect(tx.fee).to.be.an('object');
-      expect(tx.fee!.amount).to.be.an('array').lengthOf(1);
-      expect(+tx.fee!.gas).to.be.a('number');
+      expect(typeof tx.fee).toBe('object');
+      expect(Array.isArray(tx.fee!.amount)).toBe(true);
+      expect(tx.fee!.amount).toHaveLength(1);
+      expect(typeof +tx.fee!.gas).toBe('number');
     });
   });
 
   describe('addMsgs', () => {
     it('add messages in the structure', () => {
       const tx = new Tx(test.TX);
-      expect(tx.msgs).to.be.an('array').lengthOf(0);
+      expect(Array.isArray(tx.msgs)).toBe(true);
+      expect(tx.msgs).toHaveLength(0);
 
       const msg = new Msg(test.MESSAGE.BASE);
       tx.addMsgs(msg);
-      expect(tx.msgs).to.be.an('array').lengthOf(1);
-      expect(tx.msgs[0].type).to.be.equal(msg.type);
+      expect(Array.isArray(tx.msgs)).toBe(true);
+      expect(tx.msgs).toHaveLength(1);
+      expect(tx.msgs[0].type).toEqual(msg.type);
 
       tx.addMsgs(msg, msg);
-      expect(tx.msgs).to.be.an('array').lengthOf(3);
+      expect(Array.isArray(tx.msgs)).toBe(true);
+      expect(tx.msgs).toHaveLength(3);
     });
   });
 
@@ -77,8 +83,8 @@ describe('Transaction', () => {
     it('generates serialized transaction hex string', () => {
       const tx = new Tx(test.TX);
       const signingData = tx.signingData();
-      expect(signingData).to.be.a('string');
-      expect(signingData).to.be.equal(test.SERIALIZED_TX);
+      expect(typeof signingData).toBe('string');
+      expect(signingData).toEqual(test.SERIALIZED_TX);
     });
   });
 
@@ -86,8 +92,9 @@ describe('Transaction', () => {
     it('generates transaction hash string', () => {
       const tx = new Tx(test.TX);
       const hash = tx.calculateHash();
-      expect(hash).to.be.a('string').lengthOf(64);
-      expect(hash).to.be.equal(test.HASH);
+      expect(typeof hash).toBe('string');
+      expect(hash).toHaveLength(64);
+      expect(hash).toEqual(test.HASH);
     });
   });
 
@@ -95,9 +102,10 @@ describe('Transaction', () => {
     it('generates signature', () => {
       const tx = new Tx(test.TX);
       const signature = tx.sign(test.SIGNING_PRIVKEY);
-      expect(signature).to.be.equal(test.SIGNATURE.signature);
-      expect(tx.signatures).to.be.an('array').lengthOf(1);
-      expect(tx.signatures[0]).to.be.eql(test.SIGNATURE);
+      expect(signature).toEqual(test.SIGNATURE.signature);
+      expect(Array.isArray(tx.signatures)).toBe(true);
+      expect(tx.signatures).toHaveLength(1);
+      expect(tx.signatures[0]).toEqual(test.SIGNATURE);
     });
   });
 
@@ -108,10 +116,12 @@ describe('Transaction', () => {
 
       // reset tx
       tx = new Tx(test.TX);
-      expect(tx.signatures).to.be.an('array').lengthOf(0);
+      expect(Array.isArray(tx.signatures)).toBe(true);
+      expect(tx.signatures).toHaveLength(0);
       tx.addSignature(test.SIGNING_PUBKEY, signature);
-      expect(tx.signatures).to.be.an('array').lengthOf(1);
-      expect(tx.signatures[0].signature).to.be.eql(signature);
+      expect(Array.isArray(tx.signatures)).toBe(true);
+      expect(tx.signatures).toHaveLength(1);
+      expect(tx.signatures[0].signature).toEqual(signature);
     });
   });
 
@@ -128,11 +138,11 @@ describe('Transaction', () => {
 
 
       const broadcastTx = tx.convertToBroadcastTx();
-      expect(broadcastTx.mode).to.be.equal('sync'); // default mode
-      expect(broadcastTx.tx.msg).to.be.eql(tx.msgs);
-      expect(broadcastTx.tx.fee).to.be.eql(fee);
-      expect(broadcastTx.tx.signatures).to.be.eql(tx.signatures);
-      expect(broadcastTx.tx.memo).to.be.eql(tx.memo);
+      expect(broadcastTx.mode).toEqual('sync'); // default mode
+      expect(broadcastTx.tx.msg).toEqual(tx.msgs);
+      expect(broadcastTx.tx.fee).toEqual(fee);
+      expect(broadcastTx.tx.signatures).toEqual(tx.signatures);
+      expect(broadcastTx.tx.memo).toEqual(tx.memo);
     });
   });
 });

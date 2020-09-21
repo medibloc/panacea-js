@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/extensions
-import panaceajs from '../lib/index.js';
+import panaceajs from '../dist/src/index.js';
 
 const txBroadcastMode = 'block';
 const chainId = 'testing';
@@ -136,7 +135,7 @@ async function main() {
 
     const keyId = doc.verificationMethod[0].id;
     const newDoc = doc;
-    newDoc.authentication.push(keyId); // just for testing, push the same keyId again.
+    newDoc.authentication.push(newDoc.authentication[0]); // just for testing, push the same authentication again
     await updateDID(account, keystore, did, keyId, newDoc);
     console.log(await getDID(did));
 

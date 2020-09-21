@@ -1,16 +1,28 @@
-import is from 'is_js';
 import {
+  entropyToMnemonic,
   generateSignatureFromHash,
   getAddressFromPrivateKey,
-  getAddressFromPublicKey, getPrivateKeyFromMnemonic,
-  getPublicKeyFromPrivateKey, validateMnemonic,
-  entropyToMnemonic,
+  getAddressFromPublicKey,
+  getPrivateKeyFromMnemonic,
+  getPublicKeyFromPrivateKey,
+  validateMnemonic,
 } from '../crypto';
-import { DEFAULT_PREFIX } from '../config/default';
+import {DEFAULT_PREFIX} from '../config/default';
+import {isHex} from "../utils/base";
+import Transaction from "tx";
+import Coin from "../coin";
 
 
-class Account {
-  constructor(data = {}) {
+export default class Account {
+  public readonly account_number: number;
+  public sequence: number;
+  public coins: Coin[];
+  public privateKey: string; //TODO @youngjoon-lee: make this optional, not null
+  public publicKey: string;  //TODO @youngjoon-lee: make this optional, not null
+  public address: string;    //TODO @youngjoon-lee: make this optional, not null
+
+  // TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any> = {}) {
     // eslint-disable-next-line no-param-reassign
     if (data.value) data = data.value; // In case that the data is from getAccount request
 
@@ -33,12 +45,12 @@ class Account {
     }
   }
 
-  increaseSequence() {
+  increaseSequence(): void {
     this.sequence += 1;
   }
 
-  setPrivateKey(privateKey) {
-    if (!is.hexadecimal(privateKey)) {
+  setPrivateKey(privateKey: string): void {
+    if (!isHex(privateKey)) {
       throw new Error('private key should be hexadecimal');
     }
 
@@ -47,7 +59,7 @@ class Account {
     this.address = getAddressFromPrivateKey(privateKey, DEFAULT_PREFIX);
   }
 
-  setPrivKeyFromMnemonic(mnemonic) {
+  setPrivKeyFromMnemonic(mnemonic: string): void {
     if (!validateMnemonic(mnemonic)) {
       throw new Error('invalid mnemonic');
     }
@@ -56,13 +68,13 @@ class Account {
     this.setPrivateKey(privateKey);
   }
 
-  setPrivKeyFromEntropy(entropy) {
+  setPrivKeyFromEntropy(entropy: string): void {
     const mnemonic = entropyToMnemonic(entropy);
     this.setPrivKeyFromMnemonic(mnemonic);
   }
 
-  setPublicKey(publicKey) {
-    if (!is.hexadecimal(publicKey)) {
+  setPublicKey(publicKey: string): void {
+    if (!isHex(publicKey)) {
       throw new Error('public key should be hexadecimal');
     }
 
@@ -72,7 +84,7 @@ class Account {
     this.address = getAddressFromPublicKey(publicKey, DEFAULT_PREFIX);
   }
 
-  setAddress(address) {
+  setAddress(address: string): void {
     if (this.address !== address) {
       this.privateKey = null;
       this.publicKey = null;
@@ -80,16 +92,14 @@ class Account {
     }
   }
 
-  sign(tx) {
+  sign(tx: Transaction): Transaction {
     tx.sign(this.privateKey);
     return tx;
   }
 
-  signTxHash(txHash) {
+  signTxHash(txHash: string): string {
     const signatureHex = generateSignatureFromHash(txHash, this.privateKey);
-    const signatureBase64 = Buffer.from(signatureHex, 'hex').toString('base64');
-    return signatureBase64;
+    return Buffer.from(signatureHex, 'hex').toString('base64');
   }
 }
 
-export default Account;

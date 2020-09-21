@@ -3,8 +3,12 @@ import { checkParams } from '../utils/validate';
 
 const { DID } = MSG_TYPE;
 
-class CreateDID {
-  constructor(data) {
+export class CreateDID {
+  public readonly type: string;
+  public readonly value: Record<string, any>; //TODO @youngjoon-lee: to be type-safe
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     const requiredParams = ['did', 'document', 'sigKeyId', 'signature', 'fromAddress'];
     checkParams(requiredParams, data);
 
@@ -19,8 +23,12 @@ class CreateDID {
   }
 }
 
-class UpdateDID {
-  constructor(data) {
+export class UpdateDID {
+  public readonly type: string;
+  public readonly value: Record<string, any>; //TODO @youngjoon-lee: to be type-safe
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     const requiredParams = ['did', 'document', 'sigKeyId', 'signature', 'fromAddress'];
     checkParams(requiredParams, data);
 
@@ -35,8 +43,12 @@ class UpdateDID {
   }
 }
 
-class DeactivateDID {
-  constructor(data) {
+export class DeactivateDID {
+  public readonly type: string;
+  public readonly value: Record<string, any>; //TODO @youngjoon-lee: to be type-safe
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     const requiredParams = ['did', 'sigKeyId', 'signature', 'fromAddress'];
     checkParams(requiredParams, data);
 
@@ -50,29 +62,30 @@ class DeactivateDID {
   }
 }
 
-class DIDDocument {
-  constructor(data) {
+export class DIDDocument {
+  public id: string;
+  public publicKey: Record<string, any>[]; //TODO @youngjoon-lee: use the DIDPubKey export class
+  public authentication: string[];
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     this.id = data.id;
     this.publicKey = data.publicKey;
     this.authentication = data.authentication;
   }
 }
 
-class DIDPubKey {
-  constructor(data) {
+export class DIDPubKey {
+  public id: string;
+  public type: string;
+  public publicKeyBase58: string;
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     this.id = data.id;
     this.type = data.type;
     this.publicKeyBase58 = data.publicKeyBase58;
   }
 }
 
-const InitialSequence = 0;
-
-export {
-  CreateDID,
-  UpdateDID,
-  DeactivateDID,
-  DIDDocument,
-  DIDPubKey,
-  InitialSequence,
-};
+export const InitialSequence = 0;

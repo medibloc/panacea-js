@@ -8,13 +8,12 @@ const bs58 = require('bs58');
 const didMethod = 'panacea';
 const keyType = 'Secp256k1VerificationKey2018';
 
-function generateDID(networkID, pubKeyBuf) {
+function generateDID(networkID: string, pubKeyBuf: Buffer) {
   const idStr = bs58.encode(pubKeyBuf.subarray(0, 16));
   return `did:${didMethod}:${networkID}:${idStr}`;
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export const generateDIDDocument = (networkID, keyIDSuffix, pubKeyHex) => {
+export const generateDIDDocument = (networkID: string, keyIDSuffix: string, pubKeyHex: string): DIDDocument => {
   const pubKeyBuf = Buffer.from(pubKeyHex, 'hex');
 
   const did = generateDID(networkID, pubKeyBuf);
@@ -31,7 +30,7 @@ export const generateDIDDocument = (networkID, keyIDSuffix, pubKeyHex) => {
   });
 };
 
-export const sign = (data, seq, privKey) => {
+export const sign = (data: any, seq: number, privKey: string): string => {
   const jsonStr = JSON.stringify(sortJsonProperties({
     data,
     sequence: seq.toString(),

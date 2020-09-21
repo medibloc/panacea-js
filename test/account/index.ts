@@ -1,6 +1,4 @@
-import 'mocha';
-import { expect } from 'chai';
-import { Account, Tx } from '../../';
+import { Account, Tx } from '../../src';
 import { test } from '../../src/config';
 
 
@@ -8,11 +6,11 @@ describe('ACCOUNT', () => {
   describe('constructor', () => {
     it('generates default ACCOUNT object', () => {
       const account = new Account();
-      expect(account.sequence).to.be.equal(0);
-      expect(account.account_number).to.be.equal(0);
-      expect(account.privateKey).to.be.null;
-      expect(account.publicKey).to.be.null;
-      expect(account.address).to.be.null;
+      expect(account.sequence).toEqual(0);
+      expect(account.account_number).toEqual(0);
+      expect(account.privateKey).toBeNull();
+      expect(account.publicKey).toBeNull();
+      expect(account.address).toBeNull();
     });
 
     it('generates ACCOUNT object with given data', () => {
@@ -25,38 +23,38 @@ describe('ACCOUNT', () => {
         }],
       };
       const account = new Account(sample);
-      expect(account.sequence).to.be.equal(sample.sequence);
-      expect(account.account_number).to.be.equal(sample.accountNumber);
-      expect(account.privateKey).to.be.null;
-      expect(account.publicKey).to.be.null;
-      expect(account.address).to.be.null;
+      expect(account.sequence).toEqual(sample.sequence);
+      expect(account.account_number).toEqual(sample.accountNumber);
+      expect(account.privateKey).toBeNull();
+      expect(account.publicKey).toBeNull();
+      expect(account.address).toBeNull();
     });
 
     it('generates ACCOUNT object with private key', () => {
       const account = new Account({
         privateKey: test.ACCOUNT.privKey,
       });
-      expect(account.privateKey).to.be.equal(test.ACCOUNT.privKey);
-      expect(account.publicKey).to.be.equal(test.ACCOUNT.pubKey);
-      expect(account.address).to.be.equal(test.ACCOUNT.address);
+      expect(account.privateKey).toEqual(test.ACCOUNT.privKey);
+      expect(account.publicKey).toEqual(test.ACCOUNT.pubKey);
+      expect(account.address).toEqual(test.ACCOUNT.address);
     });
 
     it('generates ACCOUNT object with public key', () => {
       const account = new Account({
         publicKey: test.ACCOUNT.pubKey,
       });
-      expect(account.privateKey).to.be.equal(null);
-      expect(account.publicKey).to.be.equal(test.ACCOUNT.pubKey);
-      expect(account.address).to.be.equal(test.ACCOUNT.address);
+      expect(account.privateKey).toEqual(null);
+      expect(account.publicKey).toEqual(test.ACCOUNT.pubKey);
+      expect(account.address).toEqual(test.ACCOUNT.address);
     });
 
     it('generates ACCOUNT object with public key', () => {
       const account = new Account({
         address: test.ACCOUNT.address,
       });
-      expect(account.privateKey).to.be.equal(null);
-      expect(account.publicKey).to.be.equal(null);
-      expect(account.address).to.be.equal(test.ACCOUNT.address);
+      expect(account.privateKey).toEqual(null);
+      expect(account.publicKey).toEqual(null);
+      expect(account.address).toEqual(test.ACCOUNT.address);
     });
 
     // it('generates ACCOUNT object from blockchain', () => {});
@@ -65,52 +63,52 @@ describe('ACCOUNT', () => {
   describe('increaseSequence', () => {
     it('increases ACCOUNT\'s sequence', () => {
       const account = new Account();
-      expect(account.sequence).to.be.equal(0);
+      expect(account.sequence).toEqual(0);
 
       account.increaseSequence();
-      expect(account.sequence).to.be.equal(1);
+      expect(account.sequence).toEqual(1);
     });
   });
 
   describe('setPrivateKey', () => {
     it('sets ACCOUNT\'s private key', () => {
       const account = new Account();
-      expect(account.privateKey).to.be.equal(null);
-      expect(account.publicKey).to.be.equal(null);
-      expect(account.address).to.be.equal(null);
+      expect(account.privateKey).toEqual(null);
+      expect(account.publicKey).toEqual(null);
+      expect(account.address).toEqual(null);
 
       account.setPrivateKey(test.ACCOUNT.privKey);
-      expect(account.privateKey).to.be.equal(test.ACCOUNT.privKey);
-      expect(account.publicKey).to.be.equal(test.ACCOUNT.pubKey);
-      expect(account.address).to.be.equal(test.ACCOUNT.address);
+      expect(account.privateKey).toEqual(test.ACCOUNT.privKey);
+      expect(account.publicKey).toEqual(test.ACCOUNT.pubKey);
+      expect(account.address).toEqual(test.ACCOUNT.address);
     });
   });
 
   describe('setPrivKeyFromMnemonic', () => {
     it('sets ACCOUNT\'s private key from mnemonic', () => {
       const account = new Account();
-      expect(account.privateKey).to.be.equal(null);
-      expect(account.publicKey).to.be.equal(null);
-      expect(account.address).to.be.equal(null);
+      expect(account.privateKey).toEqual(null);
+      expect(account.publicKey).toEqual(null);
+      expect(account.address).toEqual(null);
 
       account.setPrivKeyFromMnemonic(test.ACCOUNT.mnemonic);
-      expect(account.privateKey).to.be.equal(test.ACCOUNT.privKey);
-      expect(account.publicKey).to.be.equal(test.ACCOUNT.pubKey);
-      expect(account.address).to.be.equal(test.ACCOUNT.address);
+      expect(account.privateKey).toEqual(test.ACCOUNT.privKey);
+      expect(account.publicKey).toEqual(test.ACCOUNT.pubKey);
+      expect(account.address).toEqual(test.ACCOUNT.address);
     });
   });
 
   describe('setPublicKey', () => {
     it('sets ACCOUNT\'s public key', () => {
       const account = new Account();
-      expect(account.privateKey).to.be.equal(null);
-      expect(account.publicKey).to.be.equal(null);
-      expect(account.address).to.be.equal(null);
+      expect(account.privateKey).toEqual(null);
+      expect(account.publicKey).toEqual(null);
+      expect(account.address).toEqual(null);
 
       account.setPublicKey(test.ACCOUNT.pubKey);
-      expect(account.privateKey).to.be.equal(null);
-      expect(account.publicKey).to.be.equal(test.ACCOUNT.pubKey);
-      expect(account.address).to.be.equal(test.ACCOUNT.address);
+      expect(account.privateKey).toEqual(null);
+      expect(account.publicKey).toEqual(test.ACCOUNT.pubKey);
+      expect(account.address).toEqual(test.ACCOUNT.address);
     });
 
     it('remain it\'s private key ' +
@@ -120,14 +118,14 @@ describe('ACCOUNT', () => {
       });
 
       account.setPublicKey(test.ACCOUNT.pubKey);
-      expect(account.privateKey).to.be.equal(test.ACCOUNT.privKey);
-      expect(account.publicKey).to.be.equal(test.ACCOUNT.pubKey);
-      expect(account.address).to.be.equal(test.ACCOUNT.address);
+      expect(account.privateKey).toEqual(test.ACCOUNT.privKey);
+      expect(account.publicKey).toEqual(test.ACCOUNT.pubKey);
+      expect(account.address).toEqual(test.ACCOUNT.address);
 
       account.setPublicKey(test.ANOTHER_ACCOUNT.pubKey);
-      expect(account.privateKey).to.be.equal(null);
-      expect(account.publicKey).to.be.equal(test.ANOTHER_ACCOUNT.pubKey);
-      expect(account.address).to.be.equal(test.ANOTHER_ACCOUNT.address);
+      expect(account.privateKey).toEqual(null);
+      expect(account.publicKey).toEqual(test.ANOTHER_ACCOUNT.pubKey);
+      expect(account.address).toEqual(test.ANOTHER_ACCOUNT.address);
     });
   });
 
@@ -135,9 +133,9 @@ describe('ACCOUNT', () => {
     it('sets ACCOUNT\'s address', () => {
       const account = new Account();
       account.setAddress(test.ANOTHER_ACCOUNT.address);
-      expect(account.privateKey).to.be.equal(null);
-      expect(account.publicKey).to.be.equal(null);
-      expect(account.address).to.be.equal(test.ANOTHER_ACCOUNT.address);
+      expect(account.privateKey).toEqual(null);
+      expect(account.publicKey).toEqual(null);
+      expect(account.address).toEqual(test.ANOTHER_ACCOUNT.address);
     });
   });
 
@@ -150,7 +148,7 @@ describe('ACCOUNT', () => {
       const account = new Account({
         privateKey: test.ACCOUNT.privKey,
       });
-      expect(account.sign(tx).signatures[0].signature).to.be.equal(signature);
+      expect(account.sign(tx).signatures[0].signature).toEqual(signature);
     });
   });
 
@@ -160,7 +158,7 @@ describe('ACCOUNT', () => {
         privateKey: test.ACCOUNT.privKey,
       });
       const signature = account.signTxHash(test.HASH);
-      expect(signature).to.be.equal(test.SIGNATURE.signature);
+      expect(signature).toEqual(test.SIGNATURE.signature);
     });
   });
 });

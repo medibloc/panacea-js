@@ -1,7 +1,6 @@
-import is from 'is_js';
+import is from "is_js";
 
-// eslint-disable-next-line import/prefer-default-export
-export const sortJsonProperties = (jsonTx) => {
+export const sortJsonProperties = (jsonTx: any): any => {
   if (is.array(jsonTx)) {
     return jsonTx.map(sortJsonProperties);
   }
@@ -11,7 +10,7 @@ export const sortJsonProperties = (jsonTx) => {
     return jsonTx;
   }
 
-  const sorted = {};
+  const sorted: any = {};
   Object.keys(jsonTx)
     .sort()
     .forEach((key) => {

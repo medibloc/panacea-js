@@ -3,8 +3,12 @@ import { checkParams } from '../utils/validate';
 
 const { SLASHING } = MSG_TYPE;
 
-class Unjail {
-  constructor(data) {
+export class Unjail {
+  public readonly type: string;
+  public readonly value: Record<string, any>; //TODO @youngjoon-lee: to be type-safe
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     const requiredParams = ['address'];
     checkParams(requiredParams, data);
 
@@ -15,5 +19,3 @@ class Unjail {
   }
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export { Unjail };

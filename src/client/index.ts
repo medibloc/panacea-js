@@ -12,8 +12,19 @@ import Tendermint from './Tendermint';
 import Version from './Version';
 
 
-class Client extends BaseHandler {
-  constructor(serverUrl) {
+export default class Client extends BaseHandler {
+  public readonly Account: Account;
+  public readonly AOL: AOL;
+  public readonly DID: DID;
+  public readonly Distribution: Distribution;
+  public readonly Governance: Governance;
+  public readonly Minting: Minting;
+  public readonly Slashing: Slashing;
+  public readonly Staking: Staking;
+  public readonly Tendermint: Tendermint;
+  public readonly Version: Version;
+
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.Account = new Account(serverUrl);
@@ -29,4 +40,3 @@ class Client extends BaseHandler {
   }
 }
 
-export default Client;

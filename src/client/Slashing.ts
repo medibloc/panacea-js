@@ -3,8 +3,8 @@ import { APIS, QUERY } from '../config/default';
 
 const { SLASHING } = APIS;
 
-class Slashing extends Client {
-  constructor(serverUrl) {
+export default class Slashing extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getValidatorSigningInfo = this.getValidatorSigningInfo.bind(this);
@@ -16,24 +16,27 @@ class Slashing extends Client {
   /**
    * GET
    * */
-  getValidatorSigningInfo(validatorPubKey) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getValidatorSigningInfo(validatorPubKey: string): Promise<any> {
     return this.getRequest(SLASHING.validatorSigningInfo, [validatorPubKey]);
   }
 
-  getValidatorsSigningInfo(opts = { page: QUERY.DEFAULT_PAGE, limit: QUERY.DEFAULT_LIMIT }) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getValidatorsSigningInfo(opts = { page: QUERY.DEFAULT_PAGE, limit: QUERY.DEFAULT_LIMIT }): Promise<any> {
     return this.getRequest(SLASHING.validatorsSigningInfo, null, opts);
   }
 
-  getSlashingParams() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getSlashingParams(): Promise<any> {
     return this.getRequest(SLASHING.params);
   }
 
   /**
    * POST
    * */
-  generateUnjailTx(validatorAddr, tx) {
+  //TODO @youngjoon-lee: use a proper type for tx (I don't know yet)
+  //TODO @youngjoon-lee: use a proper type for Promise
+  generateUnjailTx(validatorAddr: string, tx: any): Promise<any> {
     return this.postRequest(SLASHING.unjail, [validatorAddr], tx);
   }
 }
-
-export default Slashing;

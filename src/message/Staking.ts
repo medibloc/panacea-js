@@ -3,8 +3,12 @@ import { checkParams } from '../utils/validate';
 
 const { STAKING } = MSG_TYPE;
 
-class CreateValidator {
-  constructor(data) {
+export class CreateValidator {
+  public readonly type: string;
+  public readonly value: Record<string, any>; //TODO @youngjoon-lee: to be type-safe
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     const requiredParams = [
       'description', 'commission', 'minSelfDelegation', 'delegatorAddress', 'validatorAddress', 'pubKey', 'value',
       'description.moniker',
@@ -39,8 +43,12 @@ class CreateValidator {
   }
 }
 
-class EditValidator {
-  constructor(data) {
+export class EditValidator {
+  public readonly type: string;
+  public readonly value: Record<string, any>; //TODO @youngjoon-lee: to be type-safe
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     const requiredParams = ['address'];
     checkParams(requiredParams, data);
 
@@ -48,13 +56,13 @@ class EditValidator {
 
     this.type = STAKING.EDIT_VALIDATOR;
 
-    const description = {
+    const description: Record<string, any> = {
       moniker: DO_NOT_MODIFY,
       identity: DO_NOT_MODIFY,
       website: DO_NOT_MODIFY,
       details: DO_NOT_MODIFY,
     };
-    Object.keys(data.description).forEach((k) => {
+    Object.keys(data.description).forEach((k: string) => {
       if (data.description[k]) description[k] = data.description[k];
     });
 
@@ -67,8 +75,12 @@ class EditValidator {
   }
 }
 
-class Delegate {
-  constructor(data) {
+export class Delegate {
+  public readonly type: string;
+  public readonly value: Record<string, any>; //TODO @youngjoon-lee: to be type-safe
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     const requiredParams = [
       'delegatorAddress', 'validatorAddress', 'amount', 'amount.denom', 'amount.amount',
     ];
@@ -86,8 +98,12 @@ class Delegate {
   }
 }
 
-class Redelegate {
-  constructor(data) {
+export class Redelegate {
+  public readonly type: string;
+  public readonly value: Record<string, any>; //TODO @youngjoon-lee: to be type-safe
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     const requiredParams = [
       'delegatorAddress', 'validatorSrcAddress', 'validatorDstAddress', 'amount.denom', 'amount.amount',
     ];
@@ -106,8 +122,12 @@ class Redelegate {
   }
 }
 
-class Undelegate {
-  constructor(data) {
+export class Undelegate {
+  public readonly type: string;
+  public readonly value: Record<string, any>; //TODO @youngjoon-lee: to be type-safe
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: Record<string, any>) {
     const requiredParams = [
       'delegatorAddress', 'validatorAddress', 'amount.denom', 'amount.amount',
     ];
@@ -124,11 +144,3 @@ class Undelegate {
     };
   }
 }
-
-export {
-  CreateValidator,
-  EditValidator,
-  Delegate,
-  Redelegate,
-  Undelegate,
-};

@@ -3,8 +3,8 @@ import { APIS } from '../config/default';
 
 const { VERSION } = APIS;
 
-class Version extends Client {
-  constructor(serverUrl) {
+export default class Version extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getVersion = this.getVersion.bind(this);
@@ -14,13 +14,13 @@ class Version extends Client {
   /**
    * GET
    * */
-  getVersion() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getVersion(): Promise<any> {
     return this.getRequest(VERSION.version);
   }
 
-  getNodeVersion() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getNodeVersion(): Promise<any> {
     return this.getRequest(VERSION.nodeVersion);
   }
 }
-
-export default Version;

@@ -1,5 +1,4 @@
-import { expect } from 'chai';
-import { encoding, Message, ISignature } from '../../';
+import { encoding, Message } from '../../src';
 
 const { encodeTx } = encoding;
 
@@ -15,7 +14,8 @@ describe('encode', () => {
     },
   };
 
-  const signature: ISignature = {
+  //TODO @youngjoon-lee: define a Signature type
+  const signature = {
     pub_key: {
       type: 'tendermint/PubKeySecp256k1',
       value: 'AyGbSDc7t55/bjIjpJODurciLqA8j2Bize5A065rZXf6',
@@ -43,6 +43,6 @@ describe('encode', () => {
 
   it('encode tx to base64 string', () => {
     const encodedTx = encodeTx(tx);
-    expect(encodedTx).to.equal(txData);
+    expect(encodedTx).toEqual(txData);
   });
 });

@@ -3,8 +3,8 @@ import { APIS } from '../config/default';
 
 const { DISTRIBUTION } = APIS;
 
-class Distribution extends Client {
-  constructor(serverUrl) {
+export default class Distribution extends Client {
+  constructor(serverUrl: string) {
     super(serverUrl);
 
     this.getDelegatorRewards = this.getDelegatorRewards.bind(this);
@@ -24,59 +24,73 @@ class Distribution extends Client {
   /**
    * GET
    * */
-  getDelegatorRewards(delegatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getDelegatorRewards(delegatorAddr: string): Promise<any> {
     return this.getRequest(DISTRIBUTION.delegatorReward, [delegatorAddr]);
   }
 
-  getDelegatorRewardFromValidator(delegatorAddr, validatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getDelegatorRewardFromValidator(delegatorAddr: string, validatorAddr: string): Promise<any> {
     return this.getRequest(DISTRIBUTION.delegatorRewardByValidator, [delegatorAddr, validatorAddr]);
   }
 
-  getDelegatorWithdrawAddress(delegatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getDelegatorWithdrawAddress(delegatorAddr: string): Promise<any> {
     return this.getRequest(DISTRIBUTION.delegatorWithdrawAddress, [delegatorAddr]);
   }
 
-  getValidatorDistributionInfo(validatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getValidatorDistributionInfo(validatorAddr: string): Promise<any> {
     return this.getRequest(DISTRIBUTION.validatorDistributionInfo, [validatorAddr]);
   }
 
-  getValidatorOutstandingReward(validatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getValidatorOutstandingReward(validatorAddr: string): Promise<any> {
     return this.getRequest(DISTRIBUTION.validatorOutstandingRewards, [validatorAddr]);
   }
 
-  getValidatorReward(validatorAddr) {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getValidatorReward(validatorAddr: string): Promise<any> {
     return this.getRequest(DISTRIBUTION.validatorReward, [validatorAddr]);
   }
 
-  getCommunityPoolBalance() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getCommunityPoolBalance(): Promise<any> {
     return this.getRequest(DISTRIBUTION.communityPool);
   }
 
-  getDistributionParams() {
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getDistributionParams(): Promise<any> {
     return this.getRequest(DISTRIBUTION.params);
   }
 
   /**
    * POST
    * */
-  generateWithdrawRewardsTx(delegatorAddr, tx) {
+  //TODO @youngjoon-lee: use a proper type for tx (I don't know yet)
+  //TODO @youngjoon-lee: use a proper type for Promise
+  generateWithdrawRewardsTx(delegatorAddr: string, tx: any): Promise<any> {
     return this.postRequest(DISTRIBUTION.delegatorReward, [delegatorAddr], tx);
   }
 
-  generateWithdrawRewardTx(delegatorAddr, validatorAddr, tx) {
+  //TODO @youngjoon-lee: use a proper type for tx (I don't know yet)
+  //TODO @youngjoon-lee: use a proper type for Promise
+  generateWithdrawRewardTx(delegatorAddr: string, validatorAddr: string, tx: any): Promise<any> {
     return this.postRequest(
       DISTRIBUTION.delegatorRewardByValidator,
       [delegatorAddr, validatorAddr], tx,
     );
   }
 
-  getnerateReplaceWithdrawAddrTx(delegatorAddr, tx) {
+  //TODO @youngjoon-lee: use a proper type for tx (I don't know yet)
+  //TODO @youngjoon-lee: use a proper type for Promise
+  getnerateReplaceWithdrawAddrTx(delegatorAddr: string, tx: any): Promise<any> {
     return this.postRequest(DISTRIBUTION.delegatorWithdrawAddress, [delegatorAddr], tx);
   }
 
-  generateWithdrawValidatorRewardTx(validatorAddr, tx) {
+  //TODO @youngjoon-lee: use a proper type for tx (I don't know yet)
+  //TODO @youngjoon-lee: use a proper type for Promise
+  generateWithdrawValidatorRewardTx(validatorAddr: string, tx: any): Promise<any> {
     return this.postRequest(DISTRIBUTION.validatorReward, [validatorAddr], tx);
   }
 }
-
-export default Distribution;

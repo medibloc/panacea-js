@@ -7,7 +7,7 @@ import * as crypto from './crypto';
 import utils from './utils';
 import encoding from './encoding';
 
-export default {
+export {
   Account,
   Client,
   Coin,

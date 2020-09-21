@@ -1,15 +1,22 @@
-import is from 'is_js';
-import { sortJsonProperties } from '../utils/encoding';
-import { sha256 } from '../utils';
-import {
-  generateSignatureFromHash,
-  getPublicKeyFromPrivateKey,
-} from '../crypto';
-import { BROADCAST_MODE } from '../config/default';
+import is from "is_js";
+import {sortJsonProperties} from '../utils/encoding';
+import base from '../utils';
+import {generateSignatureFromHash, getPublicKeyFromPrivateKey,} from '../crypto';
+import {BROADCAST_MODE} from '../config/default';
+import {Fee} from "../coin";
 
 
-class Transaction {
-  constructor(data) {
+export default class Transaction {
+  public sequence: string; //TODO @youngjoon-lee: to be number
+  public account_number: string; //TODO @youngjoon-lee: to be number
+  public chain_id: string;
+  public msgs: any[];    //TODO @youngjoon-lee: to be Message[]
+  public memo: string;
+  public fee: Fee;       //TODO @youngjoon-lee: to be optional, not null
+  public signatures: any[];  //TODO @youngjoon-lee: to be Signature[]
+
+  //TODO @youngjoon-lee: to be type-safe
+  constructor(data: any) {
     if (!data.chainId) {
       throw new Error('chain id should not be null');
     }
@@ -26,16 +33,16 @@ class Transaction {
     this.signatures = data.signatures || [];
   }
 
-  addMsgs(...msgs) {
+  addMsgs(...msgs: any): void {
     // I hope you fully understand the importance of the message's sequence
     this.msgs = [...this.msgs, ...msgs];
   }
 
-  setFee(fee) {
+  setFee(fee: Fee): void {
     this.fee = fee;
   }
 
-  signingData() {
+  signingData(): string {
     const sortedJsonTx = sortJsonProperties({
       fee: this.fee,
       memo: this.memo,
@@ -45,16 +52,15 @@ class Transaction {
       chain_id: this.chain_id,
     });
     const serializedTx = JSON.stringify(sortedJsonTx);
-    const serializedTxHex = Buffer.from(serializedTx).toString('hex');
-    return serializedTxHex;
+    return Buffer.from(serializedTx).toString('hex');
   }
 
-  calculateHash() {
+  calculateHash(): string {
     const signingData = this.signingData();
-    return sha256(signingData);
+    return base.sha256(signingData);
   }
 
-  sign(privateKey) {
+  sign(privateKey: string): string {
     if (!privateKey) {
       throw new Error('private key should not be null');
     }
@@ -66,8 +72,9 @@ class Transaction {
     return signatureBase64;
   }
 
-  addSignature(pubKey, signature) {
+  addSignature(pubKey: string, signature: string): void {
     const pubKeyBase64 = Buffer.from(pubKey, 'hex').toString('base64');
+    //TODO @youngjoon-lee: to be a class Signature
     this.signatures.push({
       pub_key: {
         type: 'tendermint/PubKeySecp256k1', // It only supports secp256k1 curve only
@@ -77,7 +84,8 @@ class Transaction {
     });
   }
 
-  convertToBroadcastTx(mode = 'sync') {
+  //TODO @youngjoon-lee: return a BroadcastTx object (to be defined)
+  convertToBroadcastTx(mode = 'sync'): Record<string, any> {
     if (!BROADCAST_MODE.includes(mode)) {
       throw new Error(`Invalid broadcast mode : ${mode}`);
     }
@@ -94,5 +102,3 @@ class Transaction {
     return broadcastTx;
   }
 }
-
-export default Transaction;

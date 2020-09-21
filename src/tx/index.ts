@@ -1,4 +1,4 @@
-const is = require('is_js');
+import is from "is_js";
 import {sortJsonProperties} from '../utils/encoding';
 import base from '../utils';
 import {generateSignatureFromHash, getPublicKeyFromPrivateKey,} from '../crypto';

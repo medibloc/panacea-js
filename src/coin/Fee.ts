@@ -1,4 +1,4 @@
-const is = require('is_js');
+import is from "is_js";
 import Coin from './Coin';
 import { DEFAULT_GAS } from '../config/default';
 

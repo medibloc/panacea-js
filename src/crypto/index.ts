@@ -4,7 +4,7 @@ import * as bip39 from 'bip39';
 const secureRandom = require('secure-random');
 const browserifiedCrypto = require('crypto-browserify');
 import { ec as EC } from 'elliptic';
-const is = require('is_js');
+import is from "is_js";
 import { v4 as uuidv4} from 'uuid';
 import ecc from 'secp256k1';
 

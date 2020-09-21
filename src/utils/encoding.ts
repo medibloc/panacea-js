@@ -1,4 +1,4 @@
-const is = require('is_js');
+import is from "is_js";
 
 export const sortJsonProperties = (jsonTx: any): any => {
   if (is.array(jsonTx)) {

@@ -1,4 +1,4 @@
-const is = require('is_js');
+import is from "is_js";
 import { DEFAULT_DENOM } from '../config/default';
 
 export default class Coin {

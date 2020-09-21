@@ -1,4 +1,4 @@
-const is = require('is_js');
+import is from "is_js";
 import { MSG_TYPE } from '../config/default';
 import { checkParams } from '../utils/validate';
 

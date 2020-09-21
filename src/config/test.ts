@@ -1,5 +1,5 @@
 import { PARAM } from './default';
-import { DIDDocument, DIDPubKey } from '../message/DID';
+import {DIDAuthentication, DIDDocument, DIDVerificationMethod} from '../message/DID';
 
 export const DEFAULT_DENOM = 'umed';
 
@@ -31,6 +31,49 @@ export const SIMPLE_TX = {
     ],
     gas: 200000,
   },
+};
+
+export const SIMPLE_DID_DOC = new DIDDocument(
+  ['https://www.w3.org/ns/did/v1'],
+  'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
+  [
+    new DIDVerificationMethod(
+      'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
+      'Secp256k1VerificationKey2018',
+      'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
+      'pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D',
+    ),
+  ],
+  [
+    new DIDAuthentication('did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key2'),
+    new DIDAuthentication('did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1', new DIDVerificationMethod(
+      'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
+      'Secp256k1VerificationKey2018',
+      'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
+      'pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D',
+    )),
+  ],
+);
+export const SIMPLE_DID_DOC_PLAIN = {
+  '@context': "https://www.w3.org/ns/did/v1",
+  id: "did:panacea:testnet:LfBBguz7sBppPUrAsvTzd",
+  verificationMethod: [
+    {
+      "id": "did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1",
+      "type": "Secp256k1VerificationKey2018",
+      "controller": "did:panacea:testnet:LfBBguz7sBppPUrAsvTzd",
+      "publicKeyBase58": "pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D"
+    }
+  ],
+  authentication: [
+    "did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key2",
+    {
+      "id": "did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1",
+      "type": "Secp256k1VerificationKey2018",
+      "controller": "did:panacea:testnet:LfBBguz7sBppPUrAsvTzd",
+      "publicKeyBase58": "pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D"
+    }
+  ]
 };
 
 export const MESSAGE = {
@@ -72,45 +115,21 @@ export const MESSAGE = {
   DID: {
     CREATE_DID: {
       did: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
-      document: new DIDDocument(
-        'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
-        [
-          new DIDPubKey(
-            'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
-            'Secp256k1VerificationKey2018',
-            'pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D',
-          ),
-        ],
-        [
-          'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key2',
-        ],
-      ),
-      sigKeyId: 'did:panacea:mainnet:DnreD8QqXAQaEW9DwC16Wh#key1',
+      document: SIMPLE_DID_DOC,
+      verificationMethodId: 'did:panacea:mainnet:DnreD8QqXAQaEW9DwC16Wh#key1',
       signature: 'asdfkljaslkfdjdlsk',
       fromAddress: ACCOUNT.address,
     },
     UPDATE_DID: {
       did: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
-      document: new DIDDocument(
-        'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
-        [
-          new DIDPubKey(
-            'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
-            'Secp256k1VerificationKey2018',
-            'pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D',
-          ),
-        ],
-        [
-          'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key2',
-        ],
-      ),
-      sigKeyId: 'did:panacea:mainnet:DnreD8QqXAQaEW9DwC16Wh#key1',
+      document: SIMPLE_DID_DOC,
+      verificationMethodId: 'did:panacea:mainnet:DnreD8QqXAQaEW9DwC16Wh#key1',
       signature: 'asdfkljaslkfdjdlsk',
       fromAddress: ACCOUNT.address,
     },
     DEACTIVATE_DID: {
       did: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
-      sigKeyId: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
+      verificationMethodId: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
       signature: 'asdfkljaslkfdjdlsk',
       fromAddress: ACCOUNT.address,
     },

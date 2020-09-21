@@ -1,3 +1,4 @@
+import 'reflect-metadata';  // for class-transformer
 import { Fee } from '../../src';
 import { DEFAULT_DENOM, DEFAULT_GAS } from '../../src/config/default';
 

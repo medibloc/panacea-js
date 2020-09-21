@@ -1,3 +1,4 @@
+import 'reflect-metadata';  // for class-transformer
 import { Account, Tx } from '../../src';
 import { test } from '../../src/config';
 

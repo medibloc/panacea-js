@@ -33,7 +33,7 @@ async function createDID(account, keystore) {
 
   const didPrivKey = panaceajs.crypto.getPrivateKeyFromKeyStore(keystore, didKeyPasswd);
   const didPubKey = panaceajs.crypto.getPublicKeyFromPrivateKey(didPrivKey);
-  const didDoc = panaceajs.utils.did.generateDIDDocument('testnet', 'key1', didPubKey);
+  const didDoc = panaceajs.utils.did.generateDIDDocument('key1', didPubKey);
   const sig = panaceajs.utils.did.sign(didDoc, panaceajs.Message.DID.InitialSequence, didPrivKey);
 
   const msg = new panaceajs.Message.DID.CreateDID({

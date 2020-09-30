@@ -1,5 +1,5 @@
 {
-  "name": "@youngjoon-lee/panacea-js",
+  "name": "@medibloc/panacea-js",
   "version": "1.3.0-test",
   "description": "JavaScript library for MediBloc written in Typescript",
   "main": "dist/index.js",

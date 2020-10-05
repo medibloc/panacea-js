@@ -4,7 +4,7 @@ import config, { test } from '../../src/config';
 import { PARAM } from '../../src/config/default';
 import { Client } from '../../src';
 
-const privFnRewire = rewire('../../dist/src/client/Client');
+const privFnRewire = rewire('../../dist/client/Client');
 const injectParams = privFnRewire.__get__('injectParams'); // eslint-disable-line no-underscore-dangle
 
 describe('client', () => {

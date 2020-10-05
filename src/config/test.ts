@@ -35,42 +35,42 @@ export const SIMPLE_TX = {
 
 export const SIMPLE_DID_DOC = new DIDDocument(
   ['https://www.w3.org/ns/did/v1'],
-  'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
+  'did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm',
   [
     new DIDVerificationMethod(
-      'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
+      'did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm#key1',
       'Secp256k1VerificationKey2018',
-      'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
+      'did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm',
       'pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D',
     ),
   ],
   [
-    new DIDAuthentication('did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key2'),
-    new DIDAuthentication('did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1', new DIDVerificationMethod(
-      'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
+    new DIDAuthentication('did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm#key2'),
+    new DIDAuthentication('did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm#key1', new DIDVerificationMethod(
+      'did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm#key1',
       'Secp256k1VerificationKey2018',
-      'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
+      'did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm',
       'pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D',
     )),
   ],
 );
 export const SIMPLE_DID_DOC_PLAIN = {
   '@context': "https://www.w3.org/ns/did/v1",
-  id: "did:panacea:testnet:LfBBguz7sBppPUrAsvTzd",
+  id: "did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm",
   verificationMethod: [
     {
-      "id": "did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1",
+      "id": "did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm#key1",
       "type": "Secp256k1VerificationKey2018",
-      "controller": "did:panacea:testnet:LfBBguz7sBppPUrAsvTzd",
+      "controller": "did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm",
       "publicKeyBase58": "pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D"
     }
   ],
   authentication: [
-    "did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key2",
+    "did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm#key2",
     {
-      "id": "did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1",
+      "id": "did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm#key1",
       "type": "Secp256k1VerificationKey2018",
-      "controller": "did:panacea:testnet:LfBBguz7sBppPUrAsvTzd",
+      "controller": "did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm",
       "publicKeyBase58": "pHtDjG9XTs1muhzno6qKor3UiK8v994zDoVHLGgT9R8D"
     }
   ]
@@ -114,22 +114,22 @@ export const MESSAGE = {
   },
   DID: {
     CREATE_DID: {
-      did: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
+      did: 'did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm',
       document: SIMPLE_DID_DOC,
-      verificationMethodId: 'did:panacea:mainnet:DnreD8QqXAQaEW9DwC16Wh#key1',
+      verificationMethodId: 'did:panacea:DnreD8QqXAQaEW9DwC16Wh#key1',
       signature: 'asdfkljaslkfdjdlsk',
       fromAddress: ACCOUNT.address,
     },
     UPDATE_DID: {
-      did: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
+      did: 'did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm',
       document: SIMPLE_DID_DOC,
-      verificationMethodId: 'did:panacea:mainnet:DnreD8QqXAQaEW9DwC16Wh#key1',
+      verificationMethodId: 'did:panacea:DnreD8QqXAQaEW9DwC16Wh#key1',
       signature: 'asdfkljaslkfdjdlsk',
       fromAddress: ACCOUNT.address,
     },
     DEACTIVATE_DID: {
-      did: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd',
-      verificationMethodId: 'did:panacea:testnet:LfBBguz7sBppPUrAsvTzd#key1',
+      did: 'did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm',
+      verificationMethodId: 'did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm#key1',
       signature: 'asdfkljaslkfdjdlsk',
       fromAddress: ACCOUNT.address,
     },

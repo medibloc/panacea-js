@@ -9,7 +9,7 @@ import {
 } from '../crypto';
 import {DEFAULT_PREFIX} from '../config/default';
 import {isHex} from "../utils/base";
-import Transaction from "tx";
+import Transaction from "../tx";
 import Coin from "../coin";
 
 

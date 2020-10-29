@@ -23,8 +23,9 @@ export default class Account {
 
   // TODO @youngjoon-lee: to be type-safe
   constructor(data: Record<string, any> = {}) {
-    // eslint-disable-next-line no-param-reassign
-    if (data.value) data = data.value; // In case that the data is from getAccount request
+    if (data.result) { // In case that the data is from getAccount request
+      data = data.result.value;
+    }
 
     this.sequence = +data.sequence || 0;
     this.account_number = data.account_number

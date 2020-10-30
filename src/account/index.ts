@@ -23,7 +23,10 @@ export default class Account {
 
   // TODO @youngjoon-lee: to be type-safe
   constructor(data: Record<string, any> = {}) {
-    if (data.result) { // In case that the data is from getAccount request
+    // In case that the data is from getAccount request
+    if (data.value) {  // for old cosmos-sdk
+      data = data.value;
+    } else if (data.result) {  // for new cosmos-sdk
       data = data.result.value;
     }
 

@@ -4,6 +4,14 @@
 
 TBD
 
+
+## [v1.3.1](https://github.com/medibloc/panacea-js/releases/tag/v1.3.1) - 2020-11-25
+
+### Bug fixes
+
+- [\#24](https://github.com/medibloc/panacea-js/pull/24) Follow up the new Cosmos REST spec for DID operations
+
+
 ## [v1.3.0](https://github.com/medibloc/panacea-js/releases/tag/v1.3.0) - 2020-10-30
 
 ### Features

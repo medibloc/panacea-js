@@ -18,8 +18,8 @@ export default class DID extends Client {
   getDID(did: string): Promise<DIDDocumentWithSeq> {
     return this.getRequest(DID_API.did, [did])
       .then((data: Record<string, any>): DIDDocumentWithSeq => {
-        //TODO @youngjoon-lee: handle the case when DID was already deactivated
-        return plainToClass(DIDDocumentWithSeq, data, { excludeExtraneousValues: true });
+        const result = data.result as Record<string, any>
+        return plainToClass(DIDDocumentWithSeq, result, { excludeExtraneousValues: true });
       });
   }
 }

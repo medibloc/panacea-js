@@ -2,8 +2,7 @@ proto_outdir = "./third_party/proto"
 
 [[dependencies]]
     target = "github.com/medibloc/panacea-core/proto"
-    # TODO: needs to be changed to 'stargate' or a specific revision
-    branch = "fix/108/proto-path"
+    branch = "stargate"  # TODO: use a specific revision
 
 [[dependencies]]
     target = "github.com/cosmos/cosmos-sdk/third_party/proto"

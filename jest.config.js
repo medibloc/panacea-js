@@ -1,6 +1,7 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  rootDir: 'test',
-  testRegex: '.ts$'
+  rootDir: 'src',
+  testRegex: '.spec.ts$',
+  testTimeout: 30000,
 };

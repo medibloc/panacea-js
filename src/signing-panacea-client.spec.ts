@@ -65,16 +65,24 @@ describe("SigningPanaceaClient", () => {
 
     describe("addRecord", () => {
       it("works", async () => {
+        // In this test, writer == owner
         const writerAddress = ownerAddress;
+        const writerWallet = wallet;
+
         const key = new TextEncoder().encode("key1");
         const value = new TextEncoder().encode("value1");
-        const res = await client.addRecord(ownerAddress, topicName, key, value, writerAddress, "memo!");
+
+        const writerClient = await SigningPanaceaClient.connectWithSigner(panacead.tendermintUrl, writerWallet);
+
+        const res = await writerClient.addRecord(ownerAddress, topicName, key, value, writerAddress, "memo!");
         expect(res).toBeTruthy();
 
         const record = await client.getPanaceaClient().getRecord(ownerAddress, topicName, Long.fromInt(0));
         expect(record.writerAddress).toEqual(writerAddress);
         expect(record.key).toEqual(key);
         expect(record.value).toEqual(value);
+
+        writerClient.disconnect();
       });
     });
 

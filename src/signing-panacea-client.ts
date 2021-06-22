@@ -14,6 +14,9 @@ import { PanaceaClient } from "./panacea-client";
 import { stringToPath } from "@cosmjs/crypto";
 import { MsgAddRecord, MsgAddWriter, MsgCreateTopic, MsgDeleteWriter } from "./proto/panacea/aol/v2/tx";
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// TODO: This FeeTable concept is removed on the latest CosmJS (not released yet).
+//       https://github.com/cosmos/cosmjs/blob/main/CHANGELOG.md#removed
 /**
  * A default gas price for all transactions (Panacea & Stargate), when a user doesn't specify it.
  */
@@ -48,6 +51,7 @@ export interface PanaceaFeeTable extends FeeTable {
   readonly deactivateDid: StdFee;
   readonly issueToken: StdFee;
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Options for creating HD Wallet (e.g. DirectSecp256k1HdWallet) for Panacea.

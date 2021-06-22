@@ -69,18 +69,6 @@ export interface SigningPanaceaClientOptions extends SigningStargateClientOption
   readonly panaceaGasLimits?: Partial<GasLimits<PanaceaFeeTable>>
 }
 
-const msgTypeCreateTopic = "/panacea.aol.v2.MsgCreateTopic";
-const msgTypeAddWriter = "/panacea.aol.v2.MsgAddWriter";
-const msgTypeDeleteWriter = "/panacea.aol.v2.MsgDeleteWriter";
-const msgTypeAddRecord = "/panacea.aol.v2.MsgAddRecord";
-
-const panaceaRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
-  [msgTypeCreateTopic, MsgCreateTopic],
-  [msgTypeAddWriter, MsgAddWriter],
-  [msgTypeDeleteWriter, MsgDeleteWriter],
-  [msgTypeAddRecord, MsgAddRecord],
-];
-
 /**
  * A class for executing transactions to Panacea.
  * It extends SigningStargateClient, so that you can call Stargate general transactions as well, such as sendTokens.
@@ -88,13 +76,25 @@ const panaceaRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
 export class SigningPanaceaClient extends SigningStargateClient {
   readonly panaceaFees: PanaceaFeeTable;
 
+  protected static msgTypeCreateTopic = "/panacea.aol.v2.MsgCreateTopic";
+  protected static msgTypeAddWriter = "/panacea.aol.v2.MsgAddWriter";
+  protected static msgTypeDeleteWriter = "/panacea.aol.v2.MsgDeleteWriter";
+  protected static msgTypeAddRecord = "/panacea.aol.v2.MsgAddRecord";
+
+  private static panaceaRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
+    [SigningPanaceaClient.msgTypeCreateTopic, MsgCreateTopic],
+    [SigningPanaceaClient.msgTypeAddWriter, MsgAddWriter],
+    [SigningPanaceaClient.msgTypeDeleteWriter, MsgDeleteWriter],
+    [SigningPanaceaClient.msgTypeAddRecord, MsgAddRecord],
+  ];
+
   constructor(tmClient: Tendermint34Client | undefined, signer: OfflineSigner, options: SigningPanaceaClientOptions) {
     // Before calling super(), set Panacea default options if not specified.
     if (!options.gasPrice) {
       options = { ...options, gasPrice: panaceaDefaultGasPrice };
     }
     if (!options.registry) {
-      const registry = new Registry([...defaultRegistryTypes, ...panaceaRegistryTypes])
+      const registry = new Registry([...defaultRegistryTypes, ...SigningPanaceaClient.panaceaRegistryTypes])
       options = { ...options, registry: registry};
     }
 
@@ -123,7 +123,7 @@ export class SigningPanaceaClient extends SigningStargateClient {
 
   async createTopic(ownerAddress: string, topicName: string, description: string, memo?: string): Promise<BroadcastTxResponse> {
     const msg = {
-      typeUrl: msgTypeCreateTopic,
+      typeUrl: SigningPanaceaClient.msgTypeCreateTopic,
       value: {
         topicName: topicName,
         description: description,
@@ -135,7 +135,7 @@ export class SigningPanaceaClient extends SigningStargateClient {
 
   async addWriter(ownerAddress: string, topicName: string, writerAddress: string, moniker: string, description: string, memo?: string): Promise<BroadcastTxResponse> {
     const msg = {
-      typeUrl: msgTypeAddWriter,
+      typeUrl: SigningPanaceaClient.msgTypeAddWriter,
       value: {
         topicName: topicName,
         moniker: moniker,
@@ -149,7 +149,7 @@ export class SigningPanaceaClient extends SigningStargateClient {
 
   async deleteWriter(ownerAddress: string, topicName: string, writerAddress: string, memo?: string): Promise<BroadcastTxResponse> {
     const msg = {
-      typeUrl: msgTypeDeleteWriter,
+      typeUrl: SigningPanaceaClient.msgTypeDeleteWriter,
       value: {
         topicName: topicName,
         writerAddress: writerAddress,
@@ -159,10 +159,9 @@ export class SigningPanaceaClient extends SigningStargateClient {
     return this.signAndBroadcast(ownerAddress, [msg], this.panaceaFees.deleteWriter, memo);
   }
 
-  // TODO: Accept a feePayerAddress and use it for the group signing.
   async addRecord(ownerAddress: string, topicName: string, key: Uint8Array, value: Uint8Array, writerAddress: string, memo?: string): Promise<BroadcastTxResponse> {
     const msg = {
-      typeUrl: msgTypeAddRecord,
+      typeUrl: SigningPanaceaClient.msgTypeAddRecord,
       value: {
         topicName: topicName,
         key: key,

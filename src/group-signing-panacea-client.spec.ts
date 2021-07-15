@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { TextEncoder } from "util";
 import Long from "long";
 import { Secp256k1HdWallet } from "@cosmjs/amino";
+import assert from "assert";
 
 describe("GroupSigningPanaceaClient", () => {
   pendingWithoutPanacead();
@@ -93,6 +94,7 @@ describe("GroupSigningPanaceaClient", () => {
         expect(res).toBeTruthy();
 
         const record = await client.getPanaceaClient().getRecord(ownerAddress, topicName, Long.fromInt(0));
+        assert(record);
         expect(record.writerAddress).toEqual(writerAddress);
         expect(record.key).toEqual(key);
         expect(record.value).toEqual(value);

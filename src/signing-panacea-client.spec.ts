@@ -8,6 +8,7 @@ import { DIDDocument } from "./proto/panacea/did/v2/did";
 import { isBroadcastTxSuccess } from "@cosmjs/stargate";
 import { Secp256k1 } from "./crypto/secp256k1";
 import { DidUtil } from "./did/util";
+import assert from "assert";
 
 describe("SigningPanaceaClient", () => {
   pendingWithoutPanacead();
@@ -51,6 +52,7 @@ describe("SigningPanaceaClient", () => {
         expect(res).toBeTruthy();
 
         const topic = await client.getPanaceaClient().getTopic(ownerAddress, topicName);
+        assert(topic);
         expect(topic.description).toEqual("description!");
       });
     });
@@ -62,6 +64,7 @@ describe("SigningPanaceaClient", () => {
         expect(res).toBeTruthy();
 
         const writer = await client.getPanaceaClient().getWriter(ownerAddress, topicName, writerAddress);
+        assert(writer);
         expect(writer.moniker).toEqual("jack");
         expect(writer.description).toEqual("hello");
       });
@@ -82,6 +85,7 @@ describe("SigningPanaceaClient", () => {
         expect(res).toBeTruthy();
 
         const record = await client.getPanaceaClient().getRecord(ownerAddress, topicName, Long.fromInt(0));
+        assert(record);
         expect(record.writerAddress).toEqual(writerAddress);
         expect(record.key).toEqual(key);
         expect(record.value).toEqual(value);
@@ -128,6 +132,7 @@ describe("SigningPanaceaClient", () => {
       expect(isBroadcastTxSuccess(res)).toBeTruthy();
 
       const didDocumentWithSeq = await client.getPanaceaClient().getDid(didDocument.id);
+      assert(didDocumentWithSeq);
       expect(didDocumentWithSeq.document).toEqual(didDocument);
     });
 
@@ -155,6 +160,7 @@ describe("SigningPanaceaClient", () => {
         expect(isBroadcastTxSuccess(res)).toBeTruthy();
 
         const didDocumentWithSeq = await client.getPanaceaClient().getDid(didDocument.id);
+        assert(didDocumentWithSeq);
         expect(didDocumentWithSeq.document).toEqual(didDocument);
       });
 

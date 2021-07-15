@@ -9,29 +9,32 @@ import {
 
 export const protobufPackage = "panacea.token.v2";
 
-/** this line is used by starport scaffolding # 3 */
-export interface QueryGetTokenRequest {
+/** QueryTokenRequest is the request type for the Query/Token RPC method. */
+export interface QueryTokenRequest {
   symbol: string;
 }
 
-export interface QueryGetTokenResponse {
-  Token: Token | undefined;
+/** QueryTokenResponse is the response type for the Query/Token RPC method. */
+export interface QueryTokenResponse {
+  token: Token | undefined;
 }
 
-export interface QueryAllTokenRequest {
+/** QueryTokensRequest is the request type for the Query/Tokens RPC method. */
+export interface QueryTokensRequest {
   pagination: PageRequest | undefined;
 }
 
-export interface QueryAllTokenResponse {
-  Token: Token[];
+/** QueryTokensResponse is the response type for the Query/Tokens RPC method. */
+export interface QueryTokensResponse {
+  token: Token[];
   pagination: PageResponse | undefined;
 }
 
-const baseQueryGetTokenRequest: object = { symbol: "" };
+const baseQueryTokenRequest: object = { symbol: "" };
 
-export const QueryGetTokenRequest = {
+export const QueryTokenRequest = {
   encode(
-    message: QueryGetTokenRequest,
+    message: QueryTokenRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.symbol !== "") {
@@ -40,13 +43,10 @@ export const QueryGetTokenRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryGetTokenRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryGetTokenRequest } as QueryGetTokenRequest;
+    const message = { ...baseQueryTokenRequest } as QueryTokenRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -61,8 +61,8 @@ export const QueryGetTokenRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetTokenRequest {
-    const message = { ...baseQueryGetTokenRequest } as QueryGetTokenRequest;
+  fromJSON(object: any): QueryTokenRequest {
+    const message = { ...baseQueryTokenRequest } as QueryTokenRequest;
     if (object.symbol !== undefined && object.symbol !== null) {
       message.symbol = String(object.symbol);
     } else {
@@ -71,14 +71,14 @@ export const QueryGetTokenRequest = {
     return message;
   },
 
-  toJSON(message: QueryGetTokenRequest): unknown {
+  toJSON(message: QueryTokenRequest): unknown {
     const obj: any = {};
     message.symbol !== undefined && (obj.symbol = message.symbol);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetTokenRequest>): QueryGetTokenRequest {
-    const message = { ...baseQueryGetTokenRequest } as QueryGetTokenRequest;
+  fromPartial(object: DeepPartial<QueryTokenRequest>): QueryTokenRequest {
+    const message = { ...baseQueryTokenRequest } as QueryTokenRequest;
     if (object.symbol !== undefined && object.symbol !== null) {
       message.symbol = object.symbol;
     } else {
@@ -88,31 +88,28 @@ export const QueryGetTokenRequest = {
   },
 };
 
-const baseQueryGetTokenResponse: object = {};
+const baseQueryTokenResponse: object = {};
 
-export const QueryGetTokenResponse = {
+export const QueryTokenResponse = {
   encode(
-    message: QueryGetTokenResponse,
+    message: QueryTokenResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.Token !== undefined) {
-      Token.encode(message.Token, writer.uint32(10).fork()).ldelim();
+    if (message.token !== undefined) {
+      Token.encode(message.token, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryGetTokenResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokenResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryGetTokenResponse } as QueryGetTokenResponse;
+    const message = { ...baseQueryTokenResponse } as QueryTokenResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.Token = Token.decode(reader, reader.uint32());
+          message.token = Token.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -122,41 +119,39 @@ export const QueryGetTokenResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetTokenResponse {
-    const message = { ...baseQueryGetTokenResponse } as QueryGetTokenResponse;
-    if (object.Token !== undefined && object.Token !== null) {
-      message.Token = Token.fromJSON(object.Token);
+  fromJSON(object: any): QueryTokenResponse {
+    const message = { ...baseQueryTokenResponse } as QueryTokenResponse;
+    if (object.token !== undefined && object.token !== null) {
+      message.token = Token.fromJSON(object.token);
     } else {
-      message.Token = undefined;
+      message.token = undefined;
     }
     return message;
   },
 
-  toJSON(message: QueryGetTokenResponse): unknown {
+  toJSON(message: QueryTokenResponse): unknown {
     const obj: any = {};
-    message.Token !== undefined &&
-      (obj.Token = message.Token ? Token.toJSON(message.Token) : undefined);
+    message.token !== undefined &&
+      (obj.token = message.token ? Token.toJSON(message.token) : undefined);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryGetTokenResponse>
-  ): QueryGetTokenResponse {
-    const message = { ...baseQueryGetTokenResponse } as QueryGetTokenResponse;
-    if (object.Token !== undefined && object.Token !== null) {
-      message.Token = Token.fromPartial(object.Token);
+  fromPartial(object: DeepPartial<QueryTokenResponse>): QueryTokenResponse {
+    const message = { ...baseQueryTokenResponse } as QueryTokenResponse;
+    if (object.token !== undefined && object.token !== null) {
+      message.token = Token.fromPartial(object.token);
     } else {
-      message.Token = undefined;
+      message.token = undefined;
     }
     return message;
   },
 };
 
-const baseQueryAllTokenRequest: object = {};
+const baseQueryTokensRequest: object = {};
 
-export const QueryAllTokenRequest = {
+export const QueryTokensRequest = {
   encode(
-    message: QueryAllTokenRequest,
+    message: QueryTokensRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.pagination !== undefined) {
@@ -165,13 +160,10 @@ export const QueryAllTokenRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAllTokenRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokensRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryAllTokenRequest } as QueryAllTokenRequest;
+    const message = { ...baseQueryTokensRequest } as QueryTokensRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -186,8 +178,8 @@ export const QueryAllTokenRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryAllTokenRequest {
-    const message = { ...baseQueryAllTokenRequest } as QueryAllTokenRequest;
+  fromJSON(object: any): QueryTokensRequest {
+    const message = { ...baseQueryTokensRequest } as QueryTokensRequest;
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageRequest.fromJSON(object.pagination);
     } else {
@@ -196,7 +188,7 @@ export const QueryAllTokenRequest = {
     return message;
   },
 
-  toJSON(message: QueryAllTokenRequest): unknown {
+  toJSON(message: QueryTokensRequest): unknown {
     const obj: any = {};
     message.pagination !== undefined &&
       (obj.pagination = message.pagination
@@ -205,8 +197,8 @@ export const QueryAllTokenRequest = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryAllTokenRequest>): QueryAllTokenRequest {
-    const message = { ...baseQueryAllTokenRequest } as QueryAllTokenRequest;
+  fromPartial(object: DeepPartial<QueryTokensRequest>): QueryTokensRequest {
+    const message = { ...baseQueryTokensRequest } as QueryTokensRequest;
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageRequest.fromPartial(object.pagination);
     } else {
@@ -216,14 +208,14 @@ export const QueryAllTokenRequest = {
   },
 };
 
-const baseQueryAllTokenResponse: object = {};
+const baseQueryTokensResponse: object = {};
 
-export const QueryAllTokenResponse = {
+export const QueryTokensResponse = {
   encode(
-    message: QueryAllTokenResponse,
+    message: QueryTokensResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    for (const v of message.Token) {
+    for (const v of message.token) {
       Token.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
@@ -235,19 +227,16 @@ export const QueryAllTokenResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAllTokenResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTokensResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryAllTokenResponse } as QueryAllTokenResponse;
-    message.Token = [];
+    const message = { ...baseQueryTokensResponse } as QueryTokensResponse;
+    message.token = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.Token.push(Token.decode(reader, reader.uint32()));
+          message.token.push(Token.decode(reader, reader.uint32()));
           break;
         case 2:
           message.pagination = PageResponse.decode(reader, reader.uint32());
@@ -260,12 +249,12 @@ export const QueryAllTokenResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryAllTokenResponse {
-    const message = { ...baseQueryAllTokenResponse } as QueryAllTokenResponse;
-    message.Token = [];
-    if (object.Token !== undefined && object.Token !== null) {
-      for (const e of object.Token) {
-        message.Token.push(Token.fromJSON(e));
+  fromJSON(object: any): QueryTokensResponse {
+    const message = { ...baseQueryTokensResponse } as QueryTokensResponse;
+    message.token = [];
+    if (object.token !== undefined && object.token !== null) {
+      for (const e of object.token) {
+        message.token.push(Token.fromJSON(e));
       }
     }
     if (object.pagination !== undefined && object.pagination !== null) {
@@ -276,12 +265,12 @@ export const QueryAllTokenResponse = {
     return message;
   },
 
-  toJSON(message: QueryAllTokenResponse): unknown {
+  toJSON(message: QueryTokensResponse): unknown {
     const obj: any = {};
-    if (message.Token) {
-      obj.Token = message.Token.map((e) => (e ? Token.toJSON(e) : undefined));
+    if (message.token) {
+      obj.token = message.token.map((e) => (e ? Token.toJSON(e) : undefined));
     } else {
-      obj.Token = [];
+      obj.token = [];
     }
     message.pagination !== undefined &&
       (obj.pagination = message.pagination
@@ -290,14 +279,12 @@ export const QueryAllTokenResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryAllTokenResponse>
-  ): QueryAllTokenResponse {
-    const message = { ...baseQueryAllTokenResponse } as QueryAllTokenResponse;
-    message.Token = [];
-    if (object.Token !== undefined && object.Token !== null) {
-      for (const e of object.Token) {
-        message.Token.push(Token.fromPartial(e));
+  fromPartial(object: DeepPartial<QueryTokensResponse>): QueryTokensResponse {
+    const message = { ...baseQueryTokensResponse } as QueryTokensResponse;
+    message.token = [];
+    if (object.token !== undefined && object.token !== null) {
+      for (const e of object.token) {
+        message.token.push(Token.fromPartial(e));
       }
     }
     if (object.pagination !== undefined && object.pagination !== null) {
@@ -311,9 +298,10 @@ export const QueryAllTokenResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
-  /** this line is used by starport scaffolding # 2 */
-  Token(request: QueryGetTokenRequest): Promise<QueryGetTokenResponse>;
-  TokenAll(request: QueryAllTokenRequest): Promise<QueryAllTokenResponse>;
+  /** Token returns token details. */
+  Token(request: QueryTokenRequest): Promise<QueryTokenResponse>;
+  /** Tokens returns details of all tokens. */
+  Tokens(request: QueryTokensRequest): Promise<QueryTokensResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -321,25 +309,21 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc;
     this.Token = this.Token.bind(this);
-    this.TokenAll = this.TokenAll.bind(this);
+    this.Tokens = this.Tokens.bind(this);
   }
-  Token(request: QueryGetTokenRequest): Promise<QueryGetTokenResponse> {
-    const data = QueryGetTokenRequest.encode(request).finish();
+  Token(request: QueryTokenRequest): Promise<QueryTokenResponse> {
+    const data = QueryTokenRequest.encode(request).finish();
     const promise = this.rpc.request("panacea.token.v2.Query", "Token", data);
     return promise.then((data) =>
-      QueryGetTokenResponse.decode(new _m0.Reader(data))
+      QueryTokenResponse.decode(new _m0.Reader(data))
     );
   }
 
-  TokenAll(request: QueryAllTokenRequest): Promise<QueryAllTokenResponse> {
-    const data = QueryAllTokenRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "panacea.token.v2.Query",
-      "TokenAll",
-      data
-    );
+  Tokens(request: QueryTokensRequest): Promise<QueryTokensResponse> {
+    const data = QueryTokensRequest.encode(request).finish();
+    const promise = this.rpc.request("panacea.token.v2.Query", "Tokens", data);
     return promise.then((data) =>
-      QueryAllTokenResponse.decode(new _m0.Reader(data))
+      QueryTokensResponse.decode(new _m0.Reader(data))
     );
   }
 }

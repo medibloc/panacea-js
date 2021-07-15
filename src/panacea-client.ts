@@ -2,8 +2,8 @@ import { createProtobufRpcClient, StargateClient } from "@cosmjs/stargate";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import {
   QueryClientImpl as AolQueryClientImpl,
-  QueryListTopicsResponse,
-  QueryListWritersResponse
+  QueryTopicsResponse,
+  QueryWritersResponse
 } from "./proto/panacea/aol/v2/query";
 import { Topic } from "./proto/panacea/aol/v2/topic";
 import { PageRequest } from "./proto/cosmos/base/query/v1beta1/pagination";
@@ -34,7 +34,7 @@ export class PanaceaClient extends StargateClient {
     const queryService = new AolQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
     try {
       const resp = await queryService.Topic({ownerAddress: ownerAddress, topicName: topicName});
-      return resp.Topic ?? null;
+      return resp.topic ?? null;
     } catch (error) {
       if (rpcErrMsgNotFound.test(error)) {
         return null;
@@ -43,7 +43,7 @@ export class PanaceaClient extends StargateClient {
     }
   }
 
-  async getTopics(ownerAddress: string, pageRequest?: PageRequest): Promise<QueryListTopicsResponse> {
+  async getTopics(ownerAddress: string, pageRequest?: PageRequest): Promise<QueryTopicsResponse> {
     const queryService = new AolQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
     return await queryService.Topics({ownerAddress: ownerAddress, pagination: pageRequest});
   }
@@ -56,7 +56,7 @@ export class PanaceaClient extends StargateClient {
         topicName: topicName,
         writerAddress: writerAddress
       });
-      return resp.Writer ?? null;
+      return resp.writer ?? null;
     } catch (error) {
       if (rpcErrMsgNotFound.test(error)) {
         return null;
@@ -65,7 +65,7 @@ export class PanaceaClient extends StargateClient {
     }
   }
 
-  async getWriters(ownerAddress: string, topicName: string, pageRequest?: PageRequest): Promise<QueryListWritersResponse> {
+  async getWriters(ownerAddress: string, topicName: string, pageRequest?: PageRequest): Promise<QueryWritersResponse> {
     const queryService = new AolQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
     return await queryService.Writers({ownerAddress: ownerAddress, topicName: topicName, pagination: pageRequest});
   }
@@ -74,7 +74,7 @@ export class PanaceaClient extends StargateClient {
     const queryService = new AolQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
     try {
       const resp = await queryService.Record({ownerAddress: ownerAddress, topicName: topicName, offset: offset})
-      return resp.Record ?? null;
+      return resp.record ?? null;
     } catch (error) {
       if (rpcErrMsgNotFound.test(error)) {
         return null;

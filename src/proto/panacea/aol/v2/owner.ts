@@ -4,6 +4,7 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "panacea.aol.v2";
 
+/** Owner defines a owner type. */
 export interface Owner {
   totalTopics: Long;
 }

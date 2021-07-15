@@ -5,6 +5,7 @@ import { Coin } from "../../../cosmos/base/v1beta1/coin";
 
 export const protobufPackage = "panacea.token.v2";
 
+/** Token defines a token. */
 export interface Token {
   name: string;
   symbol: string;

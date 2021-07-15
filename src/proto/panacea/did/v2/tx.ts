@@ -5,38 +5,44 @@ import { DIDDocument } from "../../../panacea/did/v2/did";
 
 export const protobufPackage = "panacea.did.v2";
 
+/** MsgCreateDID defines the Msg/CreateDID request type. */
 export interface MsgCreateDID {
-  DID: string;
+  did: string;
   document: DIDDocument | undefined;
-  verificationMethodID: string;
+  verificationMethodId: string;
   signature: Uint8Array;
   fromAddress: string;
 }
 
+/** MsgCreateDIDResponse defines the Msg/CreateDID response type. */
 export interface MsgCreateDIDResponse {}
 
+/** MsgUpdateDID defines the Msg/UpdateDID request type. */
 export interface MsgUpdateDID {
-  DID: string;
+  did: string;
   document: DIDDocument | undefined;
-  verificationMethodID: string;
+  verificationMethodId: string;
   signature: Uint8Array;
   fromAddress: string;
 }
 
+/** MsgUpdateDIDResponse defines the Msg/UpdateDID response type. */
 export interface MsgUpdateDIDResponse {}
 
+/** MsgDeactivateDID defines the Msg/DeactivateDID request type. */
 export interface MsgDeactivateDID {
-  DID: string;
-  verificationMethodID: string;
+  did: string;
+  verificationMethodId: string;
   signature: Uint8Array;
   fromAddress: string;
 }
 
+/** MsgDeactivateDIDResponse defines the Msg/DeactivateDID response type. */
 export interface MsgDeactivateDIDResponse {}
 
 const baseMsgCreateDID: object = {
-  DID: "",
-  verificationMethodID: "",
+  did: "",
+  verificationMethodId: "",
   fromAddress: "",
 };
 
@@ -45,14 +51,14 @@ export const MsgCreateDID = {
     message: MsgCreateDID,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.DID !== "") {
-      writer.uint32(10).string(message.DID);
+    if (message.did !== "") {
+      writer.uint32(10).string(message.did);
     }
     if (message.document !== undefined) {
       DIDDocument.encode(message.document, writer.uint32(18).fork()).ldelim();
     }
-    if (message.verificationMethodID !== "") {
-      writer.uint32(26).string(message.verificationMethodID);
+    if (message.verificationMethodId !== "") {
+      writer.uint32(26).string(message.verificationMethodId);
     }
     if (message.signature.length !== 0) {
       writer.uint32(34).bytes(message.signature);
@@ -72,13 +78,13 @@ export const MsgCreateDID = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.DID = reader.string();
+          message.did = reader.string();
           break;
         case 2:
           message.document = DIDDocument.decode(reader, reader.uint32());
           break;
         case 3:
-          message.verificationMethodID = reader.string();
+          message.verificationMethodId = reader.string();
           break;
         case 4:
           message.signature = reader.bytes();
@@ -97,10 +103,10 @@ export const MsgCreateDID = {
   fromJSON(object: any): MsgCreateDID {
     const message = { ...baseMsgCreateDID } as MsgCreateDID;
     message.signature = new Uint8Array();
-    if (object.DID !== undefined && object.DID !== null) {
-      message.DID = String(object.DID);
+    if (object.did !== undefined && object.did !== null) {
+      message.did = String(object.did);
     } else {
-      message.DID = "";
+      message.did = "";
     }
     if (object.document !== undefined && object.document !== null) {
       message.document = DIDDocument.fromJSON(object.document);
@@ -108,12 +114,12 @@ export const MsgCreateDID = {
       message.document = undefined;
     }
     if (
-      object.verificationMethodID !== undefined &&
-      object.verificationMethodID !== null
+      object.verificationMethodId !== undefined &&
+      object.verificationMethodId !== null
     ) {
-      message.verificationMethodID = String(object.verificationMethodID);
+      message.verificationMethodId = String(object.verificationMethodId);
     } else {
-      message.verificationMethodID = "";
+      message.verificationMethodId = "";
     }
     if (object.signature !== undefined && object.signature !== null) {
       message.signature = bytesFromBase64(object.signature);
@@ -128,13 +134,13 @@ export const MsgCreateDID = {
 
   toJSON(message: MsgCreateDID): unknown {
     const obj: any = {};
-    message.DID !== undefined && (obj.DID = message.DID);
+    message.did !== undefined && (obj.did = message.did);
     message.document !== undefined &&
       (obj.document = message.document
         ? DIDDocument.toJSON(message.document)
         : undefined);
-    message.verificationMethodID !== undefined &&
-      (obj.verificationMethodID = message.verificationMethodID);
+    message.verificationMethodId !== undefined &&
+      (obj.verificationMethodId = message.verificationMethodId);
     message.signature !== undefined &&
       (obj.signature = base64FromBytes(
         message.signature !== undefined ? message.signature : new Uint8Array()
@@ -146,10 +152,10 @@ export const MsgCreateDID = {
 
   fromPartial(object: DeepPartial<MsgCreateDID>): MsgCreateDID {
     const message = { ...baseMsgCreateDID } as MsgCreateDID;
-    if (object.DID !== undefined && object.DID !== null) {
-      message.DID = object.DID;
+    if (object.did !== undefined && object.did !== null) {
+      message.did = object.did;
     } else {
-      message.DID = "";
+      message.did = "";
     }
     if (object.document !== undefined && object.document !== null) {
       message.document = DIDDocument.fromPartial(object.document);
@@ -157,12 +163,12 @@ export const MsgCreateDID = {
       message.document = undefined;
     }
     if (
-      object.verificationMethodID !== undefined &&
-      object.verificationMethodID !== null
+      object.verificationMethodId !== undefined &&
+      object.verificationMethodId !== null
     ) {
-      message.verificationMethodID = object.verificationMethodID;
+      message.verificationMethodId = object.verificationMethodId;
     } else {
-      message.verificationMethodID = "";
+      message.verificationMethodId = "";
     }
     if (object.signature !== undefined && object.signature !== null) {
       message.signature = object.signature;
@@ -223,8 +229,8 @@ export const MsgCreateDIDResponse = {
 };
 
 const baseMsgUpdateDID: object = {
-  DID: "",
-  verificationMethodID: "",
+  did: "",
+  verificationMethodId: "",
   fromAddress: "",
 };
 
@@ -233,14 +239,14 @@ export const MsgUpdateDID = {
     message: MsgUpdateDID,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.DID !== "") {
-      writer.uint32(10).string(message.DID);
+    if (message.did !== "") {
+      writer.uint32(10).string(message.did);
     }
     if (message.document !== undefined) {
       DIDDocument.encode(message.document, writer.uint32(18).fork()).ldelim();
     }
-    if (message.verificationMethodID !== "") {
-      writer.uint32(26).string(message.verificationMethodID);
+    if (message.verificationMethodId !== "") {
+      writer.uint32(26).string(message.verificationMethodId);
     }
     if (message.signature.length !== 0) {
       writer.uint32(34).bytes(message.signature);
@@ -260,13 +266,13 @@ export const MsgUpdateDID = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.DID = reader.string();
+          message.did = reader.string();
           break;
         case 2:
           message.document = DIDDocument.decode(reader, reader.uint32());
           break;
         case 3:
-          message.verificationMethodID = reader.string();
+          message.verificationMethodId = reader.string();
           break;
         case 4:
           message.signature = reader.bytes();
@@ -285,10 +291,10 @@ export const MsgUpdateDID = {
   fromJSON(object: any): MsgUpdateDID {
     const message = { ...baseMsgUpdateDID } as MsgUpdateDID;
     message.signature = new Uint8Array();
-    if (object.DID !== undefined && object.DID !== null) {
-      message.DID = String(object.DID);
+    if (object.did !== undefined && object.did !== null) {
+      message.did = String(object.did);
     } else {
-      message.DID = "";
+      message.did = "";
     }
     if (object.document !== undefined && object.document !== null) {
       message.document = DIDDocument.fromJSON(object.document);
@@ -296,12 +302,12 @@ export const MsgUpdateDID = {
       message.document = undefined;
     }
     if (
-      object.verificationMethodID !== undefined &&
-      object.verificationMethodID !== null
+      object.verificationMethodId !== undefined &&
+      object.verificationMethodId !== null
     ) {
-      message.verificationMethodID = String(object.verificationMethodID);
+      message.verificationMethodId = String(object.verificationMethodId);
     } else {
-      message.verificationMethodID = "";
+      message.verificationMethodId = "";
     }
     if (object.signature !== undefined && object.signature !== null) {
       message.signature = bytesFromBase64(object.signature);
@@ -316,13 +322,13 @@ export const MsgUpdateDID = {
 
   toJSON(message: MsgUpdateDID): unknown {
     const obj: any = {};
-    message.DID !== undefined && (obj.DID = message.DID);
+    message.did !== undefined && (obj.did = message.did);
     message.document !== undefined &&
       (obj.document = message.document
         ? DIDDocument.toJSON(message.document)
         : undefined);
-    message.verificationMethodID !== undefined &&
-      (obj.verificationMethodID = message.verificationMethodID);
+    message.verificationMethodId !== undefined &&
+      (obj.verificationMethodId = message.verificationMethodId);
     message.signature !== undefined &&
       (obj.signature = base64FromBytes(
         message.signature !== undefined ? message.signature : new Uint8Array()
@@ -334,10 +340,10 @@ export const MsgUpdateDID = {
 
   fromPartial(object: DeepPartial<MsgUpdateDID>): MsgUpdateDID {
     const message = { ...baseMsgUpdateDID } as MsgUpdateDID;
-    if (object.DID !== undefined && object.DID !== null) {
-      message.DID = object.DID;
+    if (object.did !== undefined && object.did !== null) {
+      message.did = object.did;
     } else {
-      message.DID = "";
+      message.did = "";
     }
     if (object.document !== undefined && object.document !== null) {
       message.document = DIDDocument.fromPartial(object.document);
@@ -345,12 +351,12 @@ export const MsgUpdateDID = {
       message.document = undefined;
     }
     if (
-      object.verificationMethodID !== undefined &&
-      object.verificationMethodID !== null
+      object.verificationMethodId !== undefined &&
+      object.verificationMethodId !== null
     ) {
-      message.verificationMethodID = object.verificationMethodID;
+      message.verificationMethodId = object.verificationMethodId;
     } else {
-      message.verificationMethodID = "";
+      message.verificationMethodId = "";
     }
     if (object.signature !== undefined && object.signature !== null) {
       message.signature = object.signature;
@@ -411,8 +417,8 @@ export const MsgUpdateDIDResponse = {
 };
 
 const baseMsgDeactivateDID: object = {
-  DID: "",
-  verificationMethodID: "",
+  did: "",
+  verificationMethodId: "",
   fromAddress: "",
 };
 
@@ -421,11 +427,11 @@ export const MsgDeactivateDID = {
     message: MsgDeactivateDID,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.DID !== "") {
-      writer.uint32(10).string(message.DID);
+    if (message.did !== "") {
+      writer.uint32(10).string(message.did);
     }
-    if (message.verificationMethodID !== "") {
-      writer.uint32(18).string(message.verificationMethodID);
+    if (message.verificationMethodId !== "") {
+      writer.uint32(18).string(message.verificationMethodId);
     }
     if (message.signature.length !== 0) {
       writer.uint32(26).bytes(message.signature);
@@ -445,10 +451,10 @@ export const MsgDeactivateDID = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.DID = reader.string();
+          message.did = reader.string();
           break;
         case 2:
-          message.verificationMethodID = reader.string();
+          message.verificationMethodId = reader.string();
           break;
         case 3:
           message.signature = reader.bytes();
@@ -467,18 +473,18 @@ export const MsgDeactivateDID = {
   fromJSON(object: any): MsgDeactivateDID {
     const message = { ...baseMsgDeactivateDID } as MsgDeactivateDID;
     message.signature = new Uint8Array();
-    if (object.DID !== undefined && object.DID !== null) {
-      message.DID = String(object.DID);
+    if (object.did !== undefined && object.did !== null) {
+      message.did = String(object.did);
     } else {
-      message.DID = "";
+      message.did = "";
     }
     if (
-      object.verificationMethodID !== undefined &&
-      object.verificationMethodID !== null
+      object.verificationMethodId !== undefined &&
+      object.verificationMethodId !== null
     ) {
-      message.verificationMethodID = String(object.verificationMethodID);
+      message.verificationMethodId = String(object.verificationMethodId);
     } else {
-      message.verificationMethodID = "";
+      message.verificationMethodId = "";
     }
     if (object.signature !== undefined && object.signature !== null) {
       message.signature = bytesFromBase64(object.signature);
@@ -493,9 +499,9 @@ export const MsgDeactivateDID = {
 
   toJSON(message: MsgDeactivateDID): unknown {
     const obj: any = {};
-    message.DID !== undefined && (obj.DID = message.DID);
-    message.verificationMethodID !== undefined &&
-      (obj.verificationMethodID = message.verificationMethodID);
+    message.did !== undefined && (obj.did = message.did);
+    message.verificationMethodId !== undefined &&
+      (obj.verificationMethodId = message.verificationMethodId);
     message.signature !== undefined &&
       (obj.signature = base64FromBytes(
         message.signature !== undefined ? message.signature : new Uint8Array()
@@ -507,18 +513,18 @@ export const MsgDeactivateDID = {
 
   fromPartial(object: DeepPartial<MsgDeactivateDID>): MsgDeactivateDID {
     const message = { ...baseMsgDeactivateDID } as MsgDeactivateDID;
-    if (object.DID !== undefined && object.DID !== null) {
-      message.DID = object.DID;
+    if (object.did !== undefined && object.did !== null) {
+      message.did = object.did;
     } else {
-      message.DID = "";
+      message.did = "";
     }
     if (
-      object.verificationMethodID !== undefined &&
-      object.verificationMethodID !== null
+      object.verificationMethodId !== undefined &&
+      object.verificationMethodId !== null
     ) {
-      message.verificationMethodID = object.verificationMethodID;
+      message.verificationMethodId = object.verificationMethodId;
     } else {
-      message.verificationMethodID = "";
+      message.verificationMethodId = "";
     }
     if (object.signature !== undefined && object.signature !== null) {
       message.signature = object.signature;
@@ -586,9 +592,13 @@ export const MsgDeactivateDIDResponse = {
   },
 };
 
+/** Msg defines the Msg service. */
 export interface Msg {
+  /** CreateDID defines a method for creating a DID. */
   CreateDID(request: MsgCreateDID): Promise<MsgCreateDIDResponse>;
+  /** UpdateDID defines a method for updating a DID. */
   UpdateDID(request: MsgUpdateDID): Promise<MsgUpdateDIDResponse>;
+  /** DeactivateDID defines a method for deactivating a DID. */
   DeactivateDID(request: MsgDeactivateDID): Promise<MsgDeactivateDIDResponse>;
 }
 

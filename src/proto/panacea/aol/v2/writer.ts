@@ -4,6 +4,7 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "panacea.aol.v2";
 
+/** Topic defines a topic type. */
 export interface Writer {
   moniker: string;
   description: string;

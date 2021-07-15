@@ -5,37 +5,39 @@ import { DIDDocumentWithSeq } from "../../../panacea/did/v2/did";
 
 export const protobufPackage = "panacea.did.v2";
 
-/** this line is used by starport scaffolding # 3 */
-export interface QueryGetDIDRequest {
-  DID: string;
+/** QueryDIDRequest is the request type for the Query/DIDDocumentWithSeq RPC method. */
+export interface QueryDIDRequest {
+  /** NOTE: Using base64 due to the URI path cannot contain colons. */
+  didBase64: string;
 }
 
-export interface QueryGetDIDResponse {
-  DIDDocumentWithSeq: DIDDocumentWithSeq | undefined;
+/** QueryDIDResponse is the response type for the Query/DIDDocumentWithSeq RPC method. */
+export interface QueryDIDResponse {
+  didDocumentWithSeq: DIDDocumentWithSeq | undefined;
 }
 
-const baseQueryGetDIDRequest: object = { DID: "" };
+const baseQueryDIDRequest: object = { didBase64: "" };
 
-export const QueryGetDIDRequest = {
+export const QueryDIDRequest = {
   encode(
-    message: QueryGetDIDRequest,
+    message: QueryDIDRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.DID !== "") {
-      writer.uint32(10).string(message.DID);
+    if (message.didBase64 !== "") {
+      writer.uint32(10).string(message.didBase64);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetDIDRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDIDRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryGetDIDRequest } as QueryGetDIDRequest;
+    const message = { ...baseQueryDIDRequest } as QueryDIDRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.DID = reader.string();
+          message.didBase64 = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -45,58 +47,58 @@ export const QueryGetDIDRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetDIDRequest {
-    const message = { ...baseQueryGetDIDRequest } as QueryGetDIDRequest;
-    if (object.DID !== undefined && object.DID !== null) {
-      message.DID = String(object.DID);
+  fromJSON(object: any): QueryDIDRequest {
+    const message = { ...baseQueryDIDRequest } as QueryDIDRequest;
+    if (object.didBase64 !== undefined && object.didBase64 !== null) {
+      message.didBase64 = String(object.didBase64);
     } else {
-      message.DID = "";
+      message.didBase64 = "";
     }
     return message;
   },
 
-  toJSON(message: QueryGetDIDRequest): unknown {
+  toJSON(message: QueryDIDRequest): unknown {
     const obj: any = {};
-    message.DID !== undefined && (obj.DID = message.DID);
+    message.didBase64 !== undefined && (obj.didBase64 = message.didBase64);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetDIDRequest>): QueryGetDIDRequest {
-    const message = { ...baseQueryGetDIDRequest } as QueryGetDIDRequest;
-    if (object.DID !== undefined && object.DID !== null) {
-      message.DID = object.DID;
+  fromPartial(object: DeepPartial<QueryDIDRequest>): QueryDIDRequest {
+    const message = { ...baseQueryDIDRequest } as QueryDIDRequest;
+    if (object.didBase64 !== undefined && object.didBase64 !== null) {
+      message.didBase64 = object.didBase64;
     } else {
-      message.DID = "";
+      message.didBase64 = "";
     }
     return message;
   },
 };
 
-const baseQueryGetDIDResponse: object = {};
+const baseQueryDIDResponse: object = {};
 
-export const QueryGetDIDResponse = {
+export const QueryDIDResponse = {
   encode(
-    message: QueryGetDIDResponse,
+    message: QueryDIDResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.DIDDocumentWithSeq !== undefined) {
+    if (message.didDocumentWithSeq !== undefined) {
       DIDDocumentWithSeq.encode(
-        message.DIDDocumentWithSeq,
+        message.didDocumentWithSeq,
         writer.uint32(10).fork()
       ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetDIDResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDIDResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryGetDIDResponse } as QueryGetDIDResponse;
+    const message = { ...baseQueryDIDResponse } as QueryDIDResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.DIDDocumentWithSeq = DIDDocumentWithSeq.decode(
+          message.didDocumentWithSeq = DIDDocumentWithSeq.decode(
             reader,
             reader.uint32()
           );
@@ -109,41 +111,41 @@ export const QueryGetDIDResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetDIDResponse {
-    const message = { ...baseQueryGetDIDResponse } as QueryGetDIDResponse;
+  fromJSON(object: any): QueryDIDResponse {
+    const message = { ...baseQueryDIDResponse } as QueryDIDResponse;
     if (
-      object.DIDDocumentWithSeq !== undefined &&
-      object.DIDDocumentWithSeq !== null
+      object.didDocumentWithSeq !== undefined &&
+      object.didDocumentWithSeq !== null
     ) {
-      message.DIDDocumentWithSeq = DIDDocumentWithSeq.fromJSON(
-        object.DIDDocumentWithSeq
+      message.didDocumentWithSeq = DIDDocumentWithSeq.fromJSON(
+        object.didDocumentWithSeq
       );
     } else {
-      message.DIDDocumentWithSeq = undefined;
+      message.didDocumentWithSeq = undefined;
     }
     return message;
   },
 
-  toJSON(message: QueryGetDIDResponse): unknown {
+  toJSON(message: QueryDIDResponse): unknown {
     const obj: any = {};
-    message.DIDDocumentWithSeq !== undefined &&
-      (obj.DIDDocumentWithSeq = message.DIDDocumentWithSeq
-        ? DIDDocumentWithSeq.toJSON(message.DIDDocumentWithSeq)
+    message.didDocumentWithSeq !== undefined &&
+      (obj.didDocumentWithSeq = message.didDocumentWithSeq
+        ? DIDDocumentWithSeq.toJSON(message.didDocumentWithSeq)
         : undefined);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetDIDResponse>): QueryGetDIDResponse {
-    const message = { ...baseQueryGetDIDResponse } as QueryGetDIDResponse;
+  fromPartial(object: DeepPartial<QueryDIDResponse>): QueryDIDResponse {
+    const message = { ...baseQueryDIDResponse } as QueryDIDResponse;
     if (
-      object.DIDDocumentWithSeq !== undefined &&
-      object.DIDDocumentWithSeq !== null
+      object.didDocumentWithSeq !== undefined &&
+      object.didDocumentWithSeq !== null
     ) {
-      message.DIDDocumentWithSeq = DIDDocumentWithSeq.fromPartial(
-        object.DIDDocumentWithSeq
+      message.didDocumentWithSeq = DIDDocumentWithSeq.fromPartial(
+        object.didDocumentWithSeq
       );
     } else {
-      message.DIDDocumentWithSeq = undefined;
+      message.didDocumentWithSeq = undefined;
     }
     return message;
   },
@@ -151,26 +153,21 @@ export const QueryGetDIDResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
-  DIDDocumentWithSeq(request: QueryGetDIDRequest): Promise<QueryGetDIDResponse>;
+  /** DID returns a DID Document with a sequence number. */
+  DID(request: QueryDIDRequest): Promise<QueryDIDResponse>;
 }
 
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
   constructor(rpc: Rpc) {
     this.rpc = rpc;
-    this.DIDDocumentWithSeq = this.DIDDocumentWithSeq.bind(this);
+    this.DID = this.DID.bind(this);
   }
-  DIDDocumentWithSeq(
-    request: QueryGetDIDRequest
-  ): Promise<QueryGetDIDResponse> {
-    const data = QueryGetDIDRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "panacea.did.v2.Query",
-      "DIDDocumentWithSeq",
-      data
-    );
+  DID(request: QueryDIDRequest): Promise<QueryDIDResponse> {
+    const data = QueryDIDRequest.encode(request).finish();
+    const promise = this.rpc.request("panacea.did.v2.Query", "DID", data);
     return promise.then((data) =>
-      QueryGetDIDResponse.decode(new _m0.Reader(data))
+      QueryDIDResponse.decode(new _m0.Reader(data))
     );
   }
 }

@@ -5,7 +5,7 @@ import { IntProto } from "../../../cosmos/base/v1beta1/coin";
 
 export const protobufPackage = "panacea.token.v2";
 
-/** this line is used by starport scaffolding # proto/tx/message */
+/** MsgIssueToken defines the Msg/IssueToken request type. */
 export interface MsgIssueToken {
   name: string;
   shortSymbol: string;
@@ -14,6 +14,7 @@ export interface MsgIssueToken {
   ownerAddress: string;
 }
 
+/** MsgIssueTokenResponse defines the Msg/IssueToken response type. */
 export interface MsgIssueTokenResponse {}
 
 const baseMsgIssueToken: object = {
@@ -207,7 +208,7 @@ export const MsgIssueTokenResponse = {
 
 /** Msg defines the Msg service. */
 export interface Msg {
-  /** this line is used by starport scaffolding # proto/tx/rpc */
+  /** IssueToken defines a method for issuing a token. */
   IssueToken(request: MsgIssueToken): Promise<MsgIssueTokenResponse>;
 }
 

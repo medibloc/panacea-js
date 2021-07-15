@@ -4,15 +4,23 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "panacea.did.v2";
 
+/** Strings defines a JSON-LD string array format which is marshalled to a single string if the array length is 1. */
 export interface Strings {
   values: string[];
 }
 
+/**
+ * DIDDocument defines a W3C DID Document
+ *
+ * NOTE: All 'json_name' and 'gogoproto.customtype' tags are for panacea-core to unmarshal the v1.3 genesis which is in the W3C JSON-LD format.
+ *       On the other hand, the panacea-core and cosmos-sdk don't use those tags to marshal result to JSON (via grpc-gateway).
+ */
 export interface DIDDocument {
   contexts: Strings | undefined;
-  ID: string;
+  id: string;
   controller: Strings | undefined;
   verificationMethods: VerificationMethod[];
+  /** TODO: the repeated gogoproto.customtype has an issue: https://github.com/gogo/protobuf/issues/478 */
   authentications: VerificationRelationship[];
   assertionMethods: VerificationRelationship[];
   keyAgreements: VerificationRelationship[];
@@ -21,27 +29,37 @@ export interface DIDDocument {
   services: Service[];
 }
 
+/** VerificationMethod defines a W3C verification method */
 export interface VerificationMethod {
-  ID: string;
+  id: string;
   type: string;
   controller: string;
-  pubKeyBase58: string;
+  publicKeyBase58: string;
 }
 
+/** VerificationRelationship defines a W3C verification relationship */
 export interface VerificationRelationship {
-  verificationMethodID: string;
-  dedicatedVerificationMethod: VerificationMethod | undefined;
+  verificationMethodId: string | undefined;
+  verificationMethod: VerificationMethod | undefined;
 }
 
+/** Service defines a service in the W3C DID Document. */
 export interface Service {
-  ID: string;
+  id: string;
   type: string;
   serviceEndpoint: string;
 }
 
+/** DIDDocumentWithSeq defines a message for DID Document with a sequence number for preventing replay attacks. */
 export interface DIDDocumentWithSeq {
   document: DIDDocument | undefined;
-  seq: Long;
+  sequence: Long;
+}
+
+/** DataWithSeq defines a message for data with a sequence number for preventing replay attacks. */
+export interface DataWithSeq {
+  data: Uint8Array;
+  sequence: Long;
 }
 
 const baseStrings: object = { values: "" };
@@ -109,7 +127,7 @@ export const Strings = {
   },
 };
 
-const baseDIDDocument: object = { ID: "" };
+const baseDIDDocument: object = { id: "" };
 
 export const DIDDocument = {
   encode(
@@ -119,8 +137,8 @@ export const DIDDocument = {
     if (message.contexts !== undefined) {
       Strings.encode(message.contexts, writer.uint32(10).fork()).ldelim();
     }
-    if (message.ID !== "") {
-      writer.uint32(18).string(message.ID);
+    if (message.id !== "") {
+      writer.uint32(18).string(message.id);
     }
     if (message.controller !== undefined) {
       Strings.encode(message.controller, writer.uint32(26).fork()).ldelim();
@@ -167,7 +185,7 @@ export const DIDDocument = {
           message.contexts = Strings.decode(reader, reader.uint32());
           break;
         case 2:
-          message.ID = reader.string();
+          message.id = reader.string();
           break;
         case 3:
           message.controller = Strings.decode(reader, reader.uint32());
@@ -227,10 +245,10 @@ export const DIDDocument = {
     } else {
       message.contexts = undefined;
     }
-    if (object.ID !== undefined && object.ID !== null) {
-      message.ID = String(object.ID);
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
     } else {
-      message.ID = "";
+      message.id = "";
     }
     if (object.controller !== undefined && object.controller !== null) {
       message.controller = Strings.fromJSON(object.controller);
@@ -300,7 +318,7 @@ export const DIDDocument = {
       (obj.contexts = message.contexts
         ? Strings.toJSON(message.contexts)
         : undefined);
-    message.ID !== undefined && (obj.ID = message.ID);
+    message.id !== undefined && (obj.id = message.id);
     message.controller !== undefined &&
       (obj.controller = message.controller
         ? Strings.toJSON(message.controller)
@@ -371,10 +389,10 @@ export const DIDDocument = {
     } else {
       message.contexts = undefined;
     }
-    if (object.ID !== undefined && object.ID !== null) {
-      message.ID = object.ID;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
     } else {
-      message.ID = "";
+      message.id = "";
     }
     if (object.controller !== undefined && object.controller !== null) {
       message.controller = Strings.fromPartial(object.controller);
@@ -440,10 +458,10 @@ export const DIDDocument = {
 };
 
 const baseVerificationMethod: object = {
-  ID: "",
+  id: "",
   type: "",
   controller: "",
-  pubKeyBase58: "",
+  publicKeyBase58: "",
 };
 
 export const VerificationMethod = {
@@ -451,8 +469,8 @@ export const VerificationMethod = {
     message: VerificationMethod,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.ID !== "") {
-      writer.uint32(10).string(message.ID);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
     }
     if (message.type !== "") {
       writer.uint32(18).string(message.type);
@@ -460,8 +478,8 @@ export const VerificationMethod = {
     if (message.controller !== "") {
       writer.uint32(26).string(message.controller);
     }
-    if (message.pubKeyBase58 !== "") {
-      writer.uint32(34).string(message.pubKeyBase58);
+    if (message.publicKeyBase58 !== "") {
+      writer.uint32(34).string(message.publicKeyBase58);
     }
     return writer;
   },
@@ -474,7 +492,7 @@ export const VerificationMethod = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.ID = reader.string();
+          message.id = reader.string();
           break;
         case 2:
           message.type = reader.string();
@@ -483,7 +501,7 @@ export const VerificationMethod = {
           message.controller = reader.string();
           break;
         case 4:
-          message.pubKeyBase58 = reader.string();
+          message.publicKeyBase58 = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -495,10 +513,10 @@ export const VerificationMethod = {
 
   fromJSON(object: any): VerificationMethod {
     const message = { ...baseVerificationMethod } as VerificationMethod;
-    if (object.ID !== undefined && object.ID !== null) {
-      message.ID = String(object.ID);
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
     } else {
-      message.ID = "";
+      message.id = "";
     }
     if (object.type !== undefined && object.type !== null) {
       message.type = String(object.type);
@@ -510,30 +528,33 @@ export const VerificationMethod = {
     } else {
       message.controller = "";
     }
-    if (object.pubKeyBase58 !== undefined && object.pubKeyBase58 !== null) {
-      message.pubKeyBase58 = String(object.pubKeyBase58);
+    if (
+      object.publicKeyBase58 !== undefined &&
+      object.publicKeyBase58 !== null
+    ) {
+      message.publicKeyBase58 = String(object.publicKeyBase58);
     } else {
-      message.pubKeyBase58 = "";
+      message.publicKeyBase58 = "";
     }
     return message;
   },
 
   toJSON(message: VerificationMethod): unknown {
     const obj: any = {};
-    message.ID !== undefined && (obj.ID = message.ID);
+    message.id !== undefined && (obj.id = message.id);
     message.type !== undefined && (obj.type = message.type);
     message.controller !== undefined && (obj.controller = message.controller);
-    message.pubKeyBase58 !== undefined &&
-      (obj.pubKeyBase58 = message.pubKeyBase58);
+    message.publicKeyBase58 !== undefined &&
+      (obj.publicKeyBase58 = message.publicKeyBase58);
     return obj;
   },
 
   fromPartial(object: DeepPartial<VerificationMethod>): VerificationMethod {
     const message = { ...baseVerificationMethod } as VerificationMethod;
-    if (object.ID !== undefined && object.ID !== null) {
-      message.ID = object.ID;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
     } else {
-      message.ID = "";
+      message.id = "";
     }
     if (object.type !== undefined && object.type !== null) {
       message.type = object.type;
@@ -545,28 +566,31 @@ export const VerificationMethod = {
     } else {
       message.controller = "";
     }
-    if (object.pubKeyBase58 !== undefined && object.pubKeyBase58 !== null) {
-      message.pubKeyBase58 = object.pubKeyBase58;
+    if (
+      object.publicKeyBase58 !== undefined &&
+      object.publicKeyBase58 !== null
+    ) {
+      message.publicKeyBase58 = object.publicKeyBase58;
     } else {
-      message.pubKeyBase58 = "";
+      message.publicKeyBase58 = "";
     }
     return message;
   },
 };
 
-const baseVerificationRelationship: object = { verificationMethodID: "" };
+const baseVerificationRelationship: object = {};
 
 export const VerificationRelationship = {
   encode(
     message: VerificationRelationship,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.verificationMethodID !== "") {
-      writer.uint32(10).string(message.verificationMethodID);
+    if (message.verificationMethodId !== undefined) {
+      writer.uint32(10).string(message.verificationMethodId);
     }
-    if (message.dedicatedVerificationMethod !== undefined) {
+    if (message.verificationMethod !== undefined) {
       VerificationMethod.encode(
-        message.dedicatedVerificationMethod,
+        message.verificationMethod,
         writer.uint32(18).fork()
       ).ldelim();
     }
@@ -586,10 +610,10 @@ export const VerificationRelationship = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.verificationMethodID = reader.string();
+          message.verificationMethodId = reader.string();
           break;
         case 2:
-          message.dedicatedVerificationMethod = VerificationMethod.decode(
+          message.verificationMethod = VerificationMethod.decode(
             reader,
             reader.uint32()
           );
@@ -607,33 +631,33 @@ export const VerificationRelationship = {
       ...baseVerificationRelationship,
     } as VerificationRelationship;
     if (
-      object.verificationMethodID !== undefined &&
-      object.verificationMethodID !== null
+      object.verificationMethodId !== undefined &&
+      object.verificationMethodId !== null
     ) {
-      message.verificationMethodID = String(object.verificationMethodID);
+      message.verificationMethodId = String(object.verificationMethodId);
     } else {
-      message.verificationMethodID = "";
+      message.verificationMethodId = undefined;
     }
     if (
-      object.dedicatedVerificationMethod !== undefined &&
-      object.dedicatedVerificationMethod !== null
+      object.verificationMethod !== undefined &&
+      object.verificationMethod !== null
     ) {
-      message.dedicatedVerificationMethod = VerificationMethod.fromJSON(
-        object.dedicatedVerificationMethod
+      message.verificationMethod = VerificationMethod.fromJSON(
+        object.verificationMethod
       );
     } else {
-      message.dedicatedVerificationMethod = undefined;
+      message.verificationMethod = undefined;
     }
     return message;
   },
 
   toJSON(message: VerificationRelationship): unknown {
     const obj: any = {};
-    message.verificationMethodID !== undefined &&
-      (obj.verificationMethodID = message.verificationMethodID);
-    message.dedicatedVerificationMethod !== undefined &&
-      (obj.dedicatedVerificationMethod = message.dedicatedVerificationMethod
-        ? VerificationMethod.toJSON(message.dedicatedVerificationMethod)
+    message.verificationMethodId !== undefined &&
+      (obj.verificationMethodId = message.verificationMethodId);
+    message.verificationMethod !== undefined &&
+      (obj.verificationMethod = message.verificationMethod
+        ? VerificationMethod.toJSON(message.verificationMethod)
         : undefined);
     return obj;
   },
@@ -645,36 +669,36 @@ export const VerificationRelationship = {
       ...baseVerificationRelationship,
     } as VerificationRelationship;
     if (
-      object.verificationMethodID !== undefined &&
-      object.verificationMethodID !== null
+      object.verificationMethodId !== undefined &&
+      object.verificationMethodId !== null
     ) {
-      message.verificationMethodID = object.verificationMethodID;
+      message.verificationMethodId = object.verificationMethodId;
     } else {
-      message.verificationMethodID = "";
+      message.verificationMethodId = undefined;
     }
     if (
-      object.dedicatedVerificationMethod !== undefined &&
-      object.dedicatedVerificationMethod !== null
+      object.verificationMethod !== undefined &&
+      object.verificationMethod !== null
     ) {
-      message.dedicatedVerificationMethod = VerificationMethod.fromPartial(
-        object.dedicatedVerificationMethod
+      message.verificationMethod = VerificationMethod.fromPartial(
+        object.verificationMethod
       );
     } else {
-      message.dedicatedVerificationMethod = undefined;
+      message.verificationMethod = undefined;
     }
     return message;
   },
 };
 
-const baseService: object = { ID: "", type: "", serviceEndpoint: "" };
+const baseService: object = { id: "", type: "", serviceEndpoint: "" };
 
 export const Service = {
   encode(
     message: Service,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.ID !== "") {
-      writer.uint32(10).string(message.ID);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
     }
     if (message.type !== "") {
       writer.uint32(18).string(message.type);
@@ -693,7 +717,7 @@ export const Service = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.ID = reader.string();
+          message.id = reader.string();
           break;
         case 2:
           message.type = reader.string();
@@ -711,10 +735,10 @@ export const Service = {
 
   fromJSON(object: any): Service {
     const message = { ...baseService } as Service;
-    if (object.ID !== undefined && object.ID !== null) {
-      message.ID = String(object.ID);
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
     } else {
-      message.ID = "";
+      message.id = "";
     }
     if (object.type !== undefined && object.type !== null) {
       message.type = String(object.type);
@@ -734,7 +758,7 @@ export const Service = {
 
   toJSON(message: Service): unknown {
     const obj: any = {};
-    message.ID !== undefined && (obj.ID = message.ID);
+    message.id !== undefined && (obj.id = message.id);
     message.type !== undefined && (obj.type = message.type);
     message.serviceEndpoint !== undefined &&
       (obj.serviceEndpoint = message.serviceEndpoint);
@@ -743,10 +767,10 @@ export const Service = {
 
   fromPartial(object: DeepPartial<Service>): Service {
     const message = { ...baseService } as Service;
-    if (object.ID !== undefined && object.ID !== null) {
-      message.ID = object.ID;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
     } else {
-      message.ID = "";
+      message.id = "";
     }
     if (object.type !== undefined && object.type !== null) {
       message.type = object.type;
@@ -765,7 +789,7 @@ export const Service = {
   },
 };
 
-const baseDIDDocumentWithSeq: object = { seq: Long.UZERO };
+const baseDIDDocumentWithSeq: object = { sequence: Long.UZERO };
 
 export const DIDDocumentWithSeq = {
   encode(
@@ -775,8 +799,8 @@ export const DIDDocumentWithSeq = {
     if (message.document !== undefined) {
       DIDDocument.encode(message.document, writer.uint32(10).fork()).ldelim();
     }
-    if (!message.seq.isZero()) {
-      writer.uint32(16).uint64(message.seq);
+    if (!message.sequence.isZero()) {
+      writer.uint32(16).uint64(message.sequence);
     }
     return writer;
   },
@@ -792,7 +816,7 @@ export const DIDDocumentWithSeq = {
           message.document = DIDDocument.decode(reader, reader.uint32());
           break;
         case 2:
-          message.seq = reader.uint64() as Long;
+          message.sequence = reader.uint64() as Long;
           break;
         default:
           reader.skipType(tag & 7);
@@ -809,10 +833,10 @@ export const DIDDocumentWithSeq = {
     } else {
       message.document = undefined;
     }
-    if (object.seq !== undefined && object.seq !== null) {
-      message.seq = Long.fromString(object.seq);
+    if (object.sequence !== undefined && object.sequence !== null) {
+      message.sequence = Long.fromString(object.sequence);
     } else {
-      message.seq = Long.UZERO;
+      message.sequence = Long.UZERO;
     }
     return message;
   },
@@ -823,8 +847,8 @@ export const DIDDocumentWithSeq = {
       (obj.document = message.document
         ? DIDDocument.toJSON(message.document)
         : undefined);
-    message.seq !== undefined &&
-      (obj.seq = (message.seq || Long.UZERO).toString());
+    message.sequence !== undefined &&
+      (obj.sequence = (message.sequence || Long.UZERO).toString());
     return obj;
   },
 
@@ -835,14 +859,126 @@ export const DIDDocumentWithSeq = {
     } else {
       message.document = undefined;
     }
-    if (object.seq !== undefined && object.seq !== null) {
-      message.seq = object.seq as Long;
+    if (object.sequence !== undefined && object.sequence !== null) {
+      message.sequence = object.sequence as Long;
     } else {
-      message.seq = Long.UZERO;
+      message.sequence = Long.UZERO;
     }
     return message;
   },
 };
+
+const baseDataWithSeq: object = { sequence: Long.UZERO };
+
+export const DataWithSeq = {
+  encode(
+    message: DataWithSeq,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.data.length !== 0) {
+      writer.uint32(10).bytes(message.data);
+    }
+    if (!message.sequence.isZero()) {
+      writer.uint32(16).uint64(message.sequence);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): DataWithSeq {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseDataWithSeq } as DataWithSeq;
+    message.data = new Uint8Array();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.data = reader.bytes();
+          break;
+        case 2:
+          message.sequence = reader.uint64() as Long;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): DataWithSeq {
+    const message = { ...baseDataWithSeq } as DataWithSeq;
+    message.data = new Uint8Array();
+    if (object.data !== undefined && object.data !== null) {
+      message.data = bytesFromBase64(object.data);
+    }
+    if (object.sequence !== undefined && object.sequence !== null) {
+      message.sequence = Long.fromString(object.sequence);
+    } else {
+      message.sequence = Long.UZERO;
+    }
+    return message;
+  },
+
+  toJSON(message: DataWithSeq): unknown {
+    const obj: any = {};
+    message.data !== undefined &&
+      (obj.data = base64FromBytes(
+        message.data !== undefined ? message.data : new Uint8Array()
+      ));
+    message.sequence !== undefined &&
+      (obj.sequence = (message.sequence || Long.UZERO).toString());
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<DataWithSeq>): DataWithSeq {
+    const message = { ...baseDataWithSeq } as DataWithSeq;
+    if (object.data !== undefined && object.data !== null) {
+      message.data = object.data;
+    } else {
+      message.data = new Uint8Array();
+    }
+    if (object.sequence !== undefined && object.sequence !== null) {
+      message.sequence = object.sequence as Long;
+    } else {
+      message.sequence = Long.UZERO;
+    }
+    return message;
+  },
+};
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
+
+const atob: (b64: string) => string =
+  globalThis.atob ||
+  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
+function bytesFromBase64(b64: string): Uint8Array {
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; ++i) {
+    arr[i] = bin.charCodeAt(i);
+  }
+  return arr;
+}
+
+const btoa: (bin: string) => string =
+  globalThis.btoa ||
+  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
+function base64FromBytes(arr: Uint8Array): string {
+  const bin: string[] = [];
+  for (const byte of arr) {
+    bin.push(String.fromCharCode(byte));
+  }
+  return btoa(bin.join(""));
+}
 
 type Builtin =
   | Date

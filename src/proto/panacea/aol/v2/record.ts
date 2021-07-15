@@ -4,6 +4,7 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "panacea.aol.v2";
 
+/** Record defines a record type. */
 export interface Record {
   key: Uint8Array;
   value: Uint8Array;

@@ -13,6 +13,10 @@ import { SigningStargateClientOptions } from "@cosmjs/stargate/build/signingstar
 import { PanaceaClient } from "./panacea-client";
 import { stringToPath } from "@cosmjs/crypto";
 import { MsgAddRecord, MsgAddWriter, MsgCreateTopic, MsgDeleteWriter } from "./proto/panacea/aol/v2/tx";
+import { MsgCreateDID, MsgDeactivateDID, MsgUpdateDID } from "./proto/panacea/did/v2/tx";
+import { MsgIssueToken } from "./proto/panacea/token/v2/tx";
+import { DIDDocument } from "./proto/panacea/did/v2/did";
+import { IntProto } from "./proto/cosmos/base/v1beta1/coin";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // TODO: This FeeTable concept is removed on the latest CosmJS (not released yet).
@@ -80,12 +84,20 @@ export class SigningPanaceaClient extends SigningStargateClient {
   protected static msgTypeAddWriter = "/panacea.aol.v2.MsgAddWriter";
   protected static msgTypeDeleteWriter = "/panacea.aol.v2.MsgDeleteWriter";
   protected static msgTypeAddRecord = "/panacea.aol.v2.MsgAddRecord";
+  protected static msgTypeCreateDid = "/panacea.did.v2.MsgCreateDID";
+  protected static msgTypeUpdateDid = "/panacea.did.v2.MsgUpdateDID";
+  protected static msgTypeDeactivateDid = "/panacea.did.v2.MsgDeactivateDID";
+  protected static msgTypeIssueToken = "/panacea.token.v2.MsgIssueToken";
 
   private static panaceaRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
     [SigningPanaceaClient.msgTypeCreateTopic, MsgCreateTopic],
     [SigningPanaceaClient.msgTypeAddWriter, MsgAddWriter],
     [SigningPanaceaClient.msgTypeDeleteWriter, MsgDeleteWriter],
     [SigningPanaceaClient.msgTypeAddRecord, MsgAddRecord],
+    [SigningPanaceaClient.msgTypeCreateDid, MsgCreateDID],
+    [SigningPanaceaClient.msgTypeUpdateDid, MsgUpdateDID],
+    [SigningPanaceaClient.msgTypeDeactivateDid, MsgDeactivateDID],
+    [SigningPanaceaClient.msgTypeIssueToken, MsgIssueToken],
   ];
 
   constructor(tmClient: Tendermint34Client | undefined, signer: OfflineSigner, options: SigningPanaceaClientOptions) {
@@ -142,8 +154,8 @@ export class SigningPanaceaClient extends SigningStargateClient {
         description: description,
         writerAddress: writerAddress,
         ownerAddress: ownerAddress,
-      }
-    }
+      },
+    };
     return this.signAndBroadcast(ownerAddress, [msg], this.panaceaFees.addWriter, memo);
   }
 
@@ -154,8 +166,8 @@ export class SigningPanaceaClient extends SigningStargateClient {
         topicName: topicName,
         writerAddress: writerAddress,
         ownerAddress: ownerAddress,
-      }
-    }
+      },
+    };
     return this.signAndBroadcast(ownerAddress, [msg], this.panaceaFees.deleteWriter, memo);
   }
 
@@ -168,10 +180,63 @@ export class SigningPanaceaClient extends SigningStargateClient {
         value: value,
         writerAddress: writerAddress,
         ownerAddress: ownerAddress,
-      }
-    }
+      },
+    };
     return this.signAndBroadcast(writerAddress, [msg], this.panaceaFees.addWriter, memo);
   }
 
-  // TODO: implement x/did, x/token transactions
+  async createDid(didDocument: DIDDocument, verficationMethodId: string, signature: Uint8Array, fromAddress: string, memo?: string): Promise<BroadcastTxResponse> {
+    const msg = {
+      typeUrl: SigningPanaceaClient.msgTypeCreateDid,
+      value: {
+        did: didDocument.id,
+        document: didDocument,
+        verificationMethodId:  verficationMethodId,
+        signature: signature,
+        fromAddress: fromAddress,
+      },
+    };
+    return this.signAndBroadcast(fromAddress, [msg], this.panaceaFees.createDid, memo);
+  }
+
+  async updateDid(didDocument: DIDDocument, verficationMethodId: string, signature: Uint8Array, fromAddress: string, memo?: string): Promise<BroadcastTxResponse> {
+    const msg = {
+      typeUrl: SigningPanaceaClient.msgTypeUpdateDid,
+      value: {
+        did: didDocument.id,
+        document: didDocument,
+        verificationMethodId:  verficationMethodId,
+        signature: signature,
+        fromAddress: fromAddress,
+      },
+    };
+    return this.signAndBroadcast(fromAddress, [msg], this.panaceaFees.updateDid, memo);
+  }
+
+  async deactivateDid(did: string, verficationMethodId: string, signature: Uint8Array, fromAddress: string, memo?: string): Promise<BroadcastTxResponse> {
+    const msg = {
+      typeUrl: SigningPanaceaClient.msgTypeDeactivateDid,
+      value: {
+        did: did,
+        verificationMethodId:  verficationMethodId,
+        signature: signature,
+        fromAddress: fromAddress,
+      },
+    };
+    return this.signAndBroadcast(fromAddress, [msg], this.panaceaFees.deactivateDid, memo);
+  }
+
+  async issueToken(name: string, shortSymbol: string, totalSupplyMicro: IntProto, mintable: boolean, ownerAddress: string, memo?: string): Promise<BroadcastTxResponse> {
+    const msg = {
+      typeUrl: SigningPanaceaClient.msgTypeIssueToken,
+      value: {
+        name: name,
+        shortSymbol: shortSymbol,
+        totalSupplyMicro: totalSupplyMicro,
+        mintable: mintable,
+        ownerAddress: ownerAddress,
+      },
+    };
+    return this.signAndBroadcast(ownerAddress, [msg], this.panaceaFees.issueToken, memo);
+  }
 }

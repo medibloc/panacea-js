@@ -165,7 +165,6 @@ describe("SigningPanaceaClient", () => {
       });
 
       it("deactivateDid", async () => {
-        console.log(didDocument.id);
         const signature = DidUtil.signDid(privKey, didDocument.id);
 
         const res = await client.deactivateDid(didDocument.id, didDocument.verificationMethods[0].id, signature, fromAddress);

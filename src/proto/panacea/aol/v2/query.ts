@@ -11,62 +11,71 @@ import { Record } from "../../../panacea/aol/v2/record";
 
 export const protobufPackage = "panacea.aol.v2";
 
-/** this line is used by starport scaffolding # 3 */
-export interface QueryGetTopicRequest {
+/** QueryTopicRequest is the request type for the Query/Topic RPC method. */
+export interface QueryTopicRequest {
   ownerAddress: string;
   topicName: string;
 }
 
-export interface QueryGetTopicResponse {
-  Topic: Topic | undefined;
+/** QueryTopicResponse is the response type for the Query/Topic RPC method. */
+export interface QueryTopicResponse {
+  topic: Topic | undefined;
 }
 
-export interface QueryListTopicsRequest {
+/** QueryTopicsRequest is the request type for the Query/Topics RPC method. */
+export interface QueryTopicsRequest {
   ownerAddress: string;
   pagination: PageRequest | undefined;
 }
 
-export interface QueryListTopicsResponse {
+/** QueryTopicsResponse is the response type for the Query/Topics RPC method. */
+export interface QueryTopicsResponse {
   topicNames: string[];
   pagination: PageResponse | undefined;
 }
 
-export interface QueryGetWriterRequest {
+/** QueryWriterRequest is the request type for the Query/Writer RPC method. */
+export interface QueryWriterRequest {
   ownerAddress: string;
   topicName: string;
   writerAddress: string;
 }
 
-export interface QueryGetWriterResponse {
-  Writer: Writer | undefined;
+/** QueryWriterResponse is the response type for the Query/Writer RPC method. */
+export interface QueryWriterResponse {
+  writer: Writer | undefined;
 }
 
-export interface QueryListWritersRequest {
+/** QueryWritersRequest is the request type for the Query/Writers RPC method. */
+export interface QueryWritersRequest {
   ownerAddress: string;
   topicName: string;
   pagination: PageRequest | undefined;
 }
 
-export interface QueryListWritersResponse {
+/** QueryWritersResponse is the response type for the Query/Writers RPC method. */
+export interface QueryWritersResponse {
   writerAddresses: string[];
   pagination: PageResponse | undefined;
 }
 
-export interface QueryGetRecordRequest {
+/** QueryRecordRequest is the request type for the Query/Record RPC method. */
+export interface QueryRecordRequest {
   ownerAddress: string;
   topicName: string;
   offset: Long;
 }
 
-export interface QueryGetRecordResponse {
-  Record: Record | undefined;
+/** QueryRecordResponse is the response type for the Query/Record RPC method. */
+export interface QueryRecordResponse {
+  record: Record | undefined;
 }
 
-const baseQueryGetTopicRequest: object = { ownerAddress: "", topicName: "" };
+const baseQueryTopicRequest: object = { ownerAddress: "", topicName: "" };
 
-export const QueryGetTopicRequest = {
+export const QueryTopicRequest = {
   encode(
-    message: QueryGetTopicRequest,
+    message: QueryTopicRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.ownerAddress !== "") {
@@ -78,13 +87,10 @@ export const QueryGetTopicRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryGetTopicRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTopicRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryGetTopicRequest } as QueryGetTopicRequest;
+    const message = { ...baseQueryTopicRequest } as QueryTopicRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -102,8 +108,8 @@ export const QueryGetTopicRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetTopicRequest {
-    const message = { ...baseQueryGetTopicRequest } as QueryGetTopicRequest;
+  fromJSON(object: any): QueryTopicRequest {
+    const message = { ...baseQueryTopicRequest } as QueryTopicRequest;
     if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
       message.ownerAddress = String(object.ownerAddress);
     } else {
@@ -117,7 +123,7 @@ export const QueryGetTopicRequest = {
     return message;
   },
 
-  toJSON(message: QueryGetTopicRequest): unknown {
+  toJSON(message: QueryTopicRequest): unknown {
     const obj: any = {};
     message.ownerAddress !== undefined &&
       (obj.ownerAddress = message.ownerAddress);
@@ -125,8 +131,8 @@ export const QueryGetTopicRequest = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGetTopicRequest>): QueryGetTopicRequest {
-    const message = { ...baseQueryGetTopicRequest } as QueryGetTopicRequest;
+  fromPartial(object: DeepPartial<QueryTopicRequest>): QueryTopicRequest {
+    const message = { ...baseQueryTopicRequest } as QueryTopicRequest;
     if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
       message.ownerAddress = object.ownerAddress;
     } else {
@@ -141,31 +147,28 @@ export const QueryGetTopicRequest = {
   },
 };
 
-const baseQueryGetTopicResponse: object = {};
+const baseQueryTopicResponse: object = {};
 
-export const QueryGetTopicResponse = {
+export const QueryTopicResponse = {
   encode(
-    message: QueryGetTopicResponse,
+    message: QueryTopicResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.Topic !== undefined) {
-      Topic.encode(message.Topic, writer.uint32(10).fork()).ldelim();
+    if (message.topic !== undefined) {
+      Topic.encode(message.topic, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryGetTopicResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTopicResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryGetTopicResponse } as QueryGetTopicResponse;
+    const message = { ...baseQueryTopicResponse } as QueryTopicResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.Topic = Topic.decode(reader, reader.uint32());
+          message.topic = Topic.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -175,41 +178,39 @@ export const QueryGetTopicResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetTopicResponse {
-    const message = { ...baseQueryGetTopicResponse } as QueryGetTopicResponse;
-    if (object.Topic !== undefined && object.Topic !== null) {
-      message.Topic = Topic.fromJSON(object.Topic);
+  fromJSON(object: any): QueryTopicResponse {
+    const message = { ...baseQueryTopicResponse } as QueryTopicResponse;
+    if (object.topic !== undefined && object.topic !== null) {
+      message.topic = Topic.fromJSON(object.topic);
     } else {
-      message.Topic = undefined;
+      message.topic = undefined;
     }
     return message;
   },
 
-  toJSON(message: QueryGetTopicResponse): unknown {
+  toJSON(message: QueryTopicResponse): unknown {
     const obj: any = {};
-    message.Topic !== undefined &&
-      (obj.Topic = message.Topic ? Topic.toJSON(message.Topic) : undefined);
+    message.topic !== undefined &&
+      (obj.topic = message.topic ? Topic.toJSON(message.topic) : undefined);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryGetTopicResponse>
-  ): QueryGetTopicResponse {
-    const message = { ...baseQueryGetTopicResponse } as QueryGetTopicResponse;
-    if (object.Topic !== undefined && object.Topic !== null) {
-      message.Topic = Topic.fromPartial(object.Topic);
+  fromPartial(object: DeepPartial<QueryTopicResponse>): QueryTopicResponse {
+    const message = { ...baseQueryTopicResponse } as QueryTopicResponse;
+    if (object.topic !== undefined && object.topic !== null) {
+      message.topic = Topic.fromPartial(object.topic);
     } else {
-      message.Topic = undefined;
+      message.topic = undefined;
     }
     return message;
   },
 };
 
-const baseQueryListTopicsRequest: object = { ownerAddress: "" };
+const baseQueryTopicsRequest: object = { ownerAddress: "" };
 
-export const QueryListTopicsRequest = {
+export const QueryTopicsRequest = {
   encode(
-    message: QueryListTopicsRequest,
+    message: QueryTopicsRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.ownerAddress !== "") {
@@ -221,13 +222,10 @@ export const QueryListTopicsRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryListTopicsRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTopicsRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryListTopicsRequest } as QueryListTopicsRequest;
+    const message = { ...baseQueryTopicsRequest } as QueryTopicsRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -245,8 +243,8 @@ export const QueryListTopicsRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryListTopicsRequest {
-    const message = { ...baseQueryListTopicsRequest } as QueryListTopicsRequest;
+  fromJSON(object: any): QueryTopicsRequest {
+    const message = { ...baseQueryTopicsRequest } as QueryTopicsRequest;
     if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
       message.ownerAddress = String(object.ownerAddress);
     } else {
@@ -260,7 +258,7 @@ export const QueryListTopicsRequest = {
     return message;
   },
 
-  toJSON(message: QueryListTopicsRequest): unknown {
+  toJSON(message: QueryTopicsRequest): unknown {
     const obj: any = {};
     message.ownerAddress !== undefined &&
       (obj.ownerAddress = message.ownerAddress);
@@ -271,10 +269,8 @@ export const QueryListTopicsRequest = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryListTopicsRequest>
-  ): QueryListTopicsRequest {
-    const message = { ...baseQueryListTopicsRequest } as QueryListTopicsRequest;
+  fromPartial(object: DeepPartial<QueryTopicsRequest>): QueryTopicsRequest {
+    const message = { ...baseQueryTopicsRequest } as QueryTopicsRequest;
     if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
       message.ownerAddress = object.ownerAddress;
     } else {
@@ -289,11 +285,11 @@ export const QueryListTopicsRequest = {
   },
 };
 
-const baseQueryListTopicsResponse: object = { topicNames: "" };
+const baseQueryTopicsResponse: object = { topicNames: "" };
 
-export const QueryListTopicsResponse = {
+export const QueryTopicsResponse = {
   encode(
-    message: QueryListTopicsResponse,
+    message: QueryTopicsResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     for (const v of message.topicNames) {
@@ -308,15 +304,10 @@ export const QueryListTopicsResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryListTopicsResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryTopicsResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryListTopicsResponse,
-    } as QueryListTopicsResponse;
+    const message = { ...baseQueryTopicsResponse } as QueryTopicsResponse;
     message.topicNames = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -335,10 +326,8 @@ export const QueryListTopicsResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryListTopicsResponse {
-    const message = {
-      ...baseQueryListTopicsResponse,
-    } as QueryListTopicsResponse;
+  fromJSON(object: any): QueryTopicsResponse {
+    const message = { ...baseQueryTopicsResponse } as QueryTopicsResponse;
     message.topicNames = [];
     if (object.topicNames !== undefined && object.topicNames !== null) {
       for (const e of object.topicNames) {
@@ -353,7 +342,7 @@ export const QueryListTopicsResponse = {
     return message;
   },
 
-  toJSON(message: QueryListTopicsResponse): unknown {
+  toJSON(message: QueryTopicsResponse): unknown {
     const obj: any = {};
     if (message.topicNames) {
       obj.topicNames = message.topicNames.map((e) => e);
@@ -367,12 +356,8 @@ export const QueryListTopicsResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryListTopicsResponse>
-  ): QueryListTopicsResponse {
-    const message = {
-      ...baseQueryListTopicsResponse,
-    } as QueryListTopicsResponse;
+  fromPartial(object: DeepPartial<QueryTopicsResponse>): QueryTopicsResponse {
+    const message = { ...baseQueryTopicsResponse } as QueryTopicsResponse;
     message.topicNames = [];
     if (object.topicNames !== undefined && object.topicNames !== null) {
       for (const e of object.topicNames) {
@@ -388,15 +373,15 @@ export const QueryListTopicsResponse = {
   },
 };
 
-const baseQueryGetWriterRequest: object = {
+const baseQueryWriterRequest: object = {
   ownerAddress: "",
   topicName: "",
   writerAddress: "",
 };
 
-export const QueryGetWriterRequest = {
+export const QueryWriterRequest = {
   encode(
-    message: QueryGetWriterRequest,
+    message: QueryWriterRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.ownerAddress !== "") {
@@ -411,13 +396,10 @@ export const QueryGetWriterRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryGetWriterRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryWriterRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryGetWriterRequest } as QueryGetWriterRequest;
+    const message = { ...baseQueryWriterRequest } as QueryWriterRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -438,8 +420,8 @@ export const QueryGetWriterRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetWriterRequest {
-    const message = { ...baseQueryGetWriterRequest } as QueryGetWriterRequest;
+  fromJSON(object: any): QueryWriterRequest {
+    const message = { ...baseQueryWriterRequest } as QueryWriterRequest;
     if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
       message.ownerAddress = String(object.ownerAddress);
     } else {
@@ -458,7 +440,7 @@ export const QueryGetWriterRequest = {
     return message;
   },
 
-  toJSON(message: QueryGetWriterRequest): unknown {
+  toJSON(message: QueryWriterRequest): unknown {
     const obj: any = {};
     message.ownerAddress !== undefined &&
       (obj.ownerAddress = message.ownerAddress);
@@ -468,10 +450,8 @@ export const QueryGetWriterRequest = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryGetWriterRequest>
-  ): QueryGetWriterRequest {
-    const message = { ...baseQueryGetWriterRequest } as QueryGetWriterRequest;
+  fromPartial(object: DeepPartial<QueryWriterRequest>): QueryWriterRequest {
+    const message = { ...baseQueryWriterRequest } as QueryWriterRequest;
     if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
       message.ownerAddress = object.ownerAddress;
     } else {
@@ -491,31 +471,28 @@ export const QueryGetWriterRequest = {
   },
 };
 
-const baseQueryGetWriterResponse: object = {};
+const baseQueryWriterResponse: object = {};
 
-export const QueryGetWriterResponse = {
+export const QueryWriterResponse = {
   encode(
-    message: QueryGetWriterResponse,
+    message: QueryWriterResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.Writer !== undefined) {
-      Writer.encode(message.Writer, writer.uint32(10).fork()).ldelim();
+    if (message.writer !== undefined) {
+      Writer.encode(message.writer, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryGetWriterResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryWriterResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryGetWriterResponse } as QueryGetWriterResponse;
+    const message = { ...baseQueryWriterResponse } as QueryWriterResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.Writer = Writer.decode(reader, reader.uint32());
+          message.writer = Writer.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -525,41 +502,39 @@ export const QueryGetWriterResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetWriterResponse {
-    const message = { ...baseQueryGetWriterResponse } as QueryGetWriterResponse;
-    if (object.Writer !== undefined && object.Writer !== null) {
-      message.Writer = Writer.fromJSON(object.Writer);
+  fromJSON(object: any): QueryWriterResponse {
+    const message = { ...baseQueryWriterResponse } as QueryWriterResponse;
+    if (object.writer !== undefined && object.writer !== null) {
+      message.writer = Writer.fromJSON(object.writer);
     } else {
-      message.Writer = undefined;
+      message.writer = undefined;
     }
     return message;
   },
 
-  toJSON(message: QueryGetWriterResponse): unknown {
+  toJSON(message: QueryWriterResponse): unknown {
     const obj: any = {};
-    message.Writer !== undefined &&
-      (obj.Writer = message.Writer ? Writer.toJSON(message.Writer) : undefined);
+    message.writer !== undefined &&
+      (obj.writer = message.writer ? Writer.toJSON(message.writer) : undefined);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryGetWriterResponse>
-  ): QueryGetWriterResponse {
-    const message = { ...baseQueryGetWriterResponse } as QueryGetWriterResponse;
-    if (object.Writer !== undefined && object.Writer !== null) {
-      message.Writer = Writer.fromPartial(object.Writer);
+  fromPartial(object: DeepPartial<QueryWriterResponse>): QueryWriterResponse {
+    const message = { ...baseQueryWriterResponse } as QueryWriterResponse;
+    if (object.writer !== undefined && object.writer !== null) {
+      message.writer = Writer.fromPartial(object.writer);
     } else {
-      message.Writer = undefined;
+      message.writer = undefined;
     }
     return message;
   },
 };
 
-const baseQueryListWritersRequest: object = { ownerAddress: "", topicName: "" };
+const baseQueryWritersRequest: object = { ownerAddress: "", topicName: "" };
 
-export const QueryListWritersRequest = {
+export const QueryWritersRequest = {
   encode(
-    message: QueryListWritersRequest,
+    message: QueryWritersRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.ownerAddress !== "") {
@@ -574,15 +549,10 @@ export const QueryListWritersRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryListWritersRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryWritersRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryListWritersRequest,
-    } as QueryListWritersRequest;
+    const message = { ...baseQueryWritersRequest } as QueryWritersRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -603,10 +573,8 @@ export const QueryListWritersRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryListWritersRequest {
-    const message = {
-      ...baseQueryListWritersRequest,
-    } as QueryListWritersRequest;
+  fromJSON(object: any): QueryWritersRequest {
+    const message = { ...baseQueryWritersRequest } as QueryWritersRequest;
     if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
       message.ownerAddress = String(object.ownerAddress);
     } else {
@@ -625,7 +593,7 @@ export const QueryListWritersRequest = {
     return message;
   },
 
-  toJSON(message: QueryListWritersRequest): unknown {
+  toJSON(message: QueryWritersRequest): unknown {
     const obj: any = {};
     message.ownerAddress !== undefined &&
       (obj.ownerAddress = message.ownerAddress);
@@ -637,12 +605,8 @@ export const QueryListWritersRequest = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryListWritersRequest>
-  ): QueryListWritersRequest {
-    const message = {
-      ...baseQueryListWritersRequest,
-    } as QueryListWritersRequest;
+  fromPartial(object: DeepPartial<QueryWritersRequest>): QueryWritersRequest {
+    const message = { ...baseQueryWritersRequest } as QueryWritersRequest;
     if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
       message.ownerAddress = object.ownerAddress;
     } else {
@@ -662,11 +626,11 @@ export const QueryListWritersRequest = {
   },
 };
 
-const baseQueryListWritersResponse: object = { writerAddresses: "" };
+const baseQueryWritersResponse: object = { writerAddresses: "" };
 
-export const QueryListWritersResponse = {
+export const QueryWritersResponse = {
   encode(
-    message: QueryListWritersResponse,
+    message: QueryWritersResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     for (const v of message.writerAddresses) {
@@ -684,12 +648,10 @@ export const QueryListWritersResponse = {
   decode(
     input: _m0.Reader | Uint8Array,
     length?: number
-  ): QueryListWritersResponse {
+  ): QueryWritersResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryListWritersResponse,
-    } as QueryListWritersResponse;
+    const message = { ...baseQueryWritersResponse } as QueryWritersResponse;
     message.writerAddresses = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -708,10 +670,8 @@ export const QueryListWritersResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryListWritersResponse {
-    const message = {
-      ...baseQueryListWritersResponse,
-    } as QueryListWritersResponse;
+  fromJSON(object: any): QueryWritersResponse {
+    const message = { ...baseQueryWritersResponse } as QueryWritersResponse;
     message.writerAddresses = [];
     if (
       object.writerAddresses !== undefined &&
@@ -729,7 +689,7 @@ export const QueryListWritersResponse = {
     return message;
   },
 
-  toJSON(message: QueryListWritersResponse): unknown {
+  toJSON(message: QueryWritersResponse): unknown {
     const obj: any = {};
     if (message.writerAddresses) {
       obj.writerAddresses = message.writerAddresses.map((e) => e);
@@ -743,12 +703,8 @@ export const QueryListWritersResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryListWritersResponse>
-  ): QueryListWritersResponse {
-    const message = {
-      ...baseQueryListWritersResponse,
-    } as QueryListWritersResponse;
+  fromPartial(object: DeepPartial<QueryWritersResponse>): QueryWritersResponse {
+    const message = { ...baseQueryWritersResponse } as QueryWritersResponse;
     message.writerAddresses = [];
     if (
       object.writerAddresses !== undefined &&
@@ -767,15 +723,15 @@ export const QueryListWritersResponse = {
   },
 };
 
-const baseQueryGetRecordRequest: object = {
+const baseQueryRecordRequest: object = {
   ownerAddress: "",
   topicName: "",
   offset: Long.UZERO,
 };
 
-export const QueryGetRecordRequest = {
+export const QueryRecordRequest = {
   encode(
-    message: QueryGetRecordRequest,
+    message: QueryRecordRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.ownerAddress !== "") {
@@ -790,13 +746,10 @@ export const QueryGetRecordRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryGetRecordRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryRecordRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryGetRecordRequest } as QueryGetRecordRequest;
+    const message = { ...baseQueryRecordRequest } as QueryRecordRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -817,8 +770,8 @@ export const QueryGetRecordRequest = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetRecordRequest {
-    const message = { ...baseQueryGetRecordRequest } as QueryGetRecordRequest;
+  fromJSON(object: any): QueryRecordRequest {
+    const message = { ...baseQueryRecordRequest } as QueryRecordRequest;
     if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
       message.ownerAddress = String(object.ownerAddress);
     } else {
@@ -837,7 +790,7 @@ export const QueryGetRecordRequest = {
     return message;
   },
 
-  toJSON(message: QueryGetRecordRequest): unknown {
+  toJSON(message: QueryRecordRequest): unknown {
     const obj: any = {};
     message.ownerAddress !== undefined &&
       (obj.ownerAddress = message.ownerAddress);
@@ -847,10 +800,8 @@ export const QueryGetRecordRequest = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryGetRecordRequest>
-  ): QueryGetRecordRequest {
-    const message = { ...baseQueryGetRecordRequest } as QueryGetRecordRequest;
+  fromPartial(object: DeepPartial<QueryRecordRequest>): QueryRecordRequest {
+    const message = { ...baseQueryRecordRequest } as QueryRecordRequest;
     if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
       message.ownerAddress = object.ownerAddress;
     } else {
@@ -870,31 +821,28 @@ export const QueryGetRecordRequest = {
   },
 };
 
-const baseQueryGetRecordResponse: object = {};
+const baseQueryRecordResponse: object = {};
 
-export const QueryGetRecordResponse = {
+export const QueryRecordResponse = {
   encode(
-    message: QueryGetRecordResponse,
+    message: QueryRecordResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.Record !== undefined) {
-      Record.encode(message.Record, writer.uint32(10).fork()).ldelim();
+    if (message.record !== undefined) {
+      Record.encode(message.record, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryGetRecordResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryRecordResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryGetRecordResponse } as QueryGetRecordResponse;
+    const message = { ...baseQueryRecordResponse } as QueryRecordResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.Record = Record.decode(reader, reader.uint32());
+          message.record = Record.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -904,31 +852,29 @@ export const QueryGetRecordResponse = {
     return message;
   },
 
-  fromJSON(object: any): QueryGetRecordResponse {
-    const message = { ...baseQueryGetRecordResponse } as QueryGetRecordResponse;
-    if (object.Record !== undefined && object.Record !== null) {
-      message.Record = Record.fromJSON(object.Record);
+  fromJSON(object: any): QueryRecordResponse {
+    const message = { ...baseQueryRecordResponse } as QueryRecordResponse;
+    if (object.record !== undefined && object.record !== null) {
+      message.record = Record.fromJSON(object.record);
     } else {
-      message.Record = undefined;
+      message.record = undefined;
     }
     return message;
   },
 
-  toJSON(message: QueryGetRecordResponse): unknown {
+  toJSON(message: QueryRecordResponse): unknown {
     const obj: any = {};
-    message.Record !== undefined &&
-      (obj.Record = message.Record ? Record.toJSON(message.Record) : undefined);
+    message.record !== undefined &&
+      (obj.record = message.record ? Record.toJSON(message.record) : undefined);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryGetRecordResponse>
-  ): QueryGetRecordResponse {
-    const message = { ...baseQueryGetRecordResponse } as QueryGetRecordResponse;
-    if (object.Record !== undefined && object.Record !== null) {
-      message.Record = Record.fromPartial(object.Record);
+  fromPartial(object: DeepPartial<QueryRecordResponse>): QueryRecordResponse {
+    const message = { ...baseQueryRecordResponse } as QueryRecordResponse;
+    if (object.record !== undefined && object.record !== null) {
+      message.record = Record.fromPartial(object.record);
     } else {
-      message.Record = undefined;
+      message.record = undefined;
     }
     return message;
   },
@@ -936,11 +882,16 @@ export const QueryGetRecordResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
-  Topic(request: QueryGetTopicRequest): Promise<QueryGetTopicResponse>;
-  Topics(request: QueryListTopicsRequest): Promise<QueryListTopicsResponse>;
-  Writer(request: QueryGetWriterRequest): Promise<QueryGetWriterResponse>;
-  Writers(request: QueryListWritersRequest): Promise<QueryListWritersResponse>;
-  Record(request: QueryGetRecordRequest): Promise<QueryGetRecordResponse>;
+  /** Topic returns topic details. */
+  Topic(request: QueryTopicRequest): Promise<QueryTopicResponse>;
+  /** Topics returns topic names. */
+  Topics(request: QueryTopicsRequest): Promise<QueryTopicsResponse>;
+  /** Writer returns writer details. */
+  Writer(request: QueryWriterRequest): Promise<QueryWriterResponse>;
+  /** Writers returns writer addresses. */
+  Writers(request: QueryWritersRequest): Promise<QueryWritersResponse>;
+  /** Record returns record details. */
+  Record(request: QueryRecordRequest): Promise<QueryRecordResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -953,43 +904,43 @@ export class QueryClientImpl implements Query {
     this.Writers = this.Writers.bind(this);
     this.Record = this.Record.bind(this);
   }
-  Topic(request: QueryGetTopicRequest): Promise<QueryGetTopicResponse> {
-    const data = QueryGetTopicRequest.encode(request).finish();
+  Topic(request: QueryTopicRequest): Promise<QueryTopicResponse> {
+    const data = QueryTopicRequest.encode(request).finish();
     const promise = this.rpc.request("panacea.aol.v2.Query", "Topic", data);
     return promise.then((data) =>
-      QueryGetTopicResponse.decode(new _m0.Reader(data))
+      QueryTopicResponse.decode(new _m0.Reader(data))
     );
   }
 
-  Topics(request: QueryListTopicsRequest): Promise<QueryListTopicsResponse> {
-    const data = QueryListTopicsRequest.encode(request).finish();
+  Topics(request: QueryTopicsRequest): Promise<QueryTopicsResponse> {
+    const data = QueryTopicsRequest.encode(request).finish();
     const promise = this.rpc.request("panacea.aol.v2.Query", "Topics", data);
     return promise.then((data) =>
-      QueryListTopicsResponse.decode(new _m0.Reader(data))
+      QueryTopicsResponse.decode(new _m0.Reader(data))
     );
   }
 
-  Writer(request: QueryGetWriterRequest): Promise<QueryGetWriterResponse> {
-    const data = QueryGetWriterRequest.encode(request).finish();
+  Writer(request: QueryWriterRequest): Promise<QueryWriterResponse> {
+    const data = QueryWriterRequest.encode(request).finish();
     const promise = this.rpc.request("panacea.aol.v2.Query", "Writer", data);
     return promise.then((data) =>
-      QueryGetWriterResponse.decode(new _m0.Reader(data))
+      QueryWriterResponse.decode(new _m0.Reader(data))
     );
   }
 
-  Writers(request: QueryListWritersRequest): Promise<QueryListWritersResponse> {
-    const data = QueryListWritersRequest.encode(request).finish();
+  Writers(request: QueryWritersRequest): Promise<QueryWritersResponse> {
+    const data = QueryWritersRequest.encode(request).finish();
     const promise = this.rpc.request("panacea.aol.v2.Query", "Writers", data);
     return promise.then((data) =>
-      QueryListWritersResponse.decode(new _m0.Reader(data))
+      QueryWritersResponse.decode(new _m0.Reader(data))
     );
   }
 
-  Record(request: QueryGetRecordRequest): Promise<QueryGetRecordResponse> {
-    const data = QueryGetRecordRequest.encode(request).finish();
+  Record(request: QueryRecordRequest): Promise<QueryRecordResponse> {
+    const data = QueryRecordRequest.encode(request).finish();
     const promise = this.rpc.request("panacea.aol.v2.Query", "Record", data);
     return promise.then((data) =>
-      QueryGetRecordResponse.decode(new _m0.Reader(data))
+      QueryRecordResponse.decode(new _m0.Reader(data))
     );
   }
 }

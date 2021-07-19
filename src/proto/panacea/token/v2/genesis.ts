@@ -7,7 +7,6 @@ export const protobufPackage = "panacea.token.v2";
 
 /** GenesisState defines the token module's genesis state. */
 export interface GenesisState {
-  /** this line is used by starport scaffolding # genesis/proto/state */
   tokens: { [key: string]: Token };
 }
 

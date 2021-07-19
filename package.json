@@ -13,7 +13,7 @@
   "scripts": {
     "proto-gen": "./protocgen.sh",
     "build": "tsc --module commonjs",
-    "test": "jest",
+    "test": "jest --runInBand",
     "lint": "eslint src test --ext .ts,.tsx",
     "doc": "typedoc",
     "prepublishOnly": "npm run build"

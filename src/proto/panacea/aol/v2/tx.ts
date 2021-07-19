@@ -4,14 +4,17 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "panacea.aol.v2";
 
+/** MsgCreateTopic defines the Msg/CreateTopic request type. */
 export interface MsgCreateTopic {
   topicName: string;
   description: string;
   ownerAddress: string;
 }
 
+/** MsgCreateTopicResponse defines the Msg/CreateTopic response type. */
 export interface MsgCreateTopicResponse {}
 
+/** MsgAddWriter defines the Msg/AddWriter request type. */
 export interface MsgAddWriter {
   topicName: string;
   moniker: string;
@@ -20,16 +23,20 @@ export interface MsgAddWriter {
   ownerAddress: string;
 }
 
+/** MsgAddWriter defines the Msg/AddWriter response type. */
 export interface MsgAddWriterResponse {}
 
+/** MsgDeleteWriter defines the Msg/DeleteWriter request type. */
 export interface MsgDeleteWriter {
   topicName: string;
   writerAddress: string;
   ownerAddress: string;
 }
 
+/** MsgDeleteWriter defines the Msg/DeleteWriter response type. */
 export interface MsgDeleteWriterResponse {}
 
+/** MsgAddRecord defines the Msg/AddRecord request type. */
 export interface MsgAddRecord {
   topicName: string;
   key: Uint8Array;
@@ -39,6 +46,7 @@ export interface MsgAddRecord {
   feePayerAddress: string;
 }
 
+/** MsgAddRecordResponse defines the Msg/AddRecordResponse response type. */
 export interface MsgAddRecordResponse {
   ownerAddress: string;
   topicName: string;
@@ -782,9 +790,13 @@ export const MsgAddRecordResponse = {
 
 /** Msg defines the Msg service. */
 export interface Msg {
+  /** CreateTopic defines a method for creating a topic. */
   CreateTopic(request: MsgCreateTopic): Promise<MsgCreateTopicResponse>;
+  /** AddWriter defines a method for adding a writer to the topic. */
   AddWriter(request: MsgAddWriter): Promise<MsgAddWriterResponse>;
+  /** DeleteWriter defines a method for deleting a writer to the topic. */
   DeleteWriter(request: MsgDeleteWriter): Promise<MsgDeleteWriterResponse>;
+  /** AddRecord defines a method for adding a record to the topic with the writer. */
   AddRecord(request: MsgAddRecord): Promise<MsgAddRecordResponse>;
 }
 

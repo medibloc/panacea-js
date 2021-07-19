@@ -46,6 +46,8 @@ jobs:
           ghcr.io/medibloc/panacea-core:master \
           bash /root/scripts/panacea-core/init.sh
 
+        wget -qO- https://raw.githubusercontent.com/eficode/wait-for/v2.1.2/wait-for | sh -s -- localhost:26657 -t 30
+
     - name: Run tests
       env:
         PANACEAD_ENABLED: true

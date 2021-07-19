@@ -165,12 +165,14 @@ describe("SigningPanaceaClient", () => {
       });
 
       it("deactivateDid", async () => {
+        console.log(didDocument.id);
         const signature = DidUtil.signDid(privKey, didDocument.id);
 
         const res = await client.deactivateDid(didDocument.id, didDocument.verificationMethods[0].id, signature, fromAddress);
         expect(isBroadcastTxSuccess(res)).toBeTruthy();
 
-        await expect(client.getPanaceaClient().getDid(didDocument.id)).rejects.toThrow(/DID was already deactivated/);
+        const didDocumentWithSeq = await client.getPanaceaClient().getDid(didDocument.id);
+        expect(didDocumentWithSeq).toBeNull();
       });
     });
   });

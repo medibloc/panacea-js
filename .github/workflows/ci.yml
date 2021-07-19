@@ -20,10 +20,33 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: yarn install
-    - run: yarn build
-    - run: yarn test  # TODO: Run panacead and set PANACEAD_ENABLED=true
+
+    - name: Install dependencies
+      run: yarn install
+
+    - name: Build
+      run: yarn build
+
+    - name: Run a panacea-core docker container
+      env:
+        CHAIN_ID: testing
+        MNEMONIC: bulb rail shoot abandon eye domain injury return dash away base retreat vote solve recall glass joy neck cabin volcano enemy tribe output nominee
+      run: |
+        docker run --rm -d \
+          -e CHAIN_ID="${CHAIN_ID}" \
+          -e MNEMONIC="${MNEMONIC}" \
+          -p 26657:26657 \
+          -v $(pwd)/scripts:/root/scripts \
+          --name core \
+          ghcr.io/medibloc/panacea-core:master \
+          bash /root/scripts/panacea-core/init.sh
+
+    - name: Run tests
+      env:
+        PANACEAD_ENABLED: true
+      run: yarn test

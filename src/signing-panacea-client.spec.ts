@@ -16,7 +16,7 @@ describe("SigningPanaceaClient", () => {
   let wallet: DirectSecp256k1HdWallet;
 
   beforeAll(async () => {
-    wallet = await DirectSecp256k1HdWallet.fromMnemonic(panacead.genesisAccountMnemonic, panaceaWalletOpts);
+    wallet = await DirectSecp256k1HdWallet.fromMnemonic(panacead.mnemonic, panaceaWalletOpts);
   });
 
   describe("connectWithSigner", () => {

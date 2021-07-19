@@ -19,7 +19,7 @@ describe("PanaceaClient", () => {
     let client: PanaceaClient;
 
     beforeAll(async () => {
-      const wallet = await DirectSecp256k1HdWallet.fromMnemonic(panacead.genesisAccountMnemonic, panaceaWalletOpts);
+      const wallet = await DirectSecp256k1HdWallet.fromMnemonic(panacead.mnemonic, panaceaWalletOpts);
       const [firstAddress] = await wallet.getAccounts();
       ownerAddress = firstAddress.address;
     });

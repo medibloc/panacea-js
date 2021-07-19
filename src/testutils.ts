@@ -1,7 +1,7 @@
 export const panacead = {
-  tendermintUrl: "http://localhost:26657",
-  chainId: "testing",
-  genesisAccountMnemonic: "bulb rail shoot abandon eye domain injury return dash away base retreat vote solve recall glass joy neck cabin volcano enemy tribe output nominee",
+  tendermintUrl: process.env.TENDERMINT_URL || "http://localhost:26657",
+  chainId: process.env.CHAIN_ID || "",
+  mnemonic: process.env.MNEMONIC || "",
 }
 
 export function panaceadEnabled(): boolean {

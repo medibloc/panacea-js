@@ -52,5 +52,12 @@ describe("PanaceaClient", () => {
         expect(topic).toBeNull();
       });
     });
+
+    describe("getDid", () => {
+      it("works for non-existent DID", async () => {
+        const didDocumentWithSeq = await client.getDid("did:panacea:7Prd74ry1Uct87nZqL3ny7aR7Cg46JamVbJgk8azVgUm");
+        expect(didDocumentWithSeq).toBeNull();
+      });
+    });
   });
 });

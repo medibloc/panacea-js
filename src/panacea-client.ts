@@ -5,11 +5,19 @@ import {
   QueryTopicsResponse,
   QueryWritersResponse
 } from "./proto/panacea/aol/v2/query";
+import {
+  QueryClientImpl as DidQueryClientImpl,
+} from "./proto/panacea/did/v2/query";
+import {
+  QueryClientImpl as TokenQueryClientImpl, QueryTokensResponse,
+} from "./proto/panacea/token/v2/query";
 import { Topic } from "./proto/panacea/aol/v2/topic";
 import { PageRequest } from "./proto/cosmos/base/query/v1beta1/pagination";
 import { Writer } from "./proto/panacea/aol/v2/writer";
 import { Record } from "./proto/panacea/aol/v2/record";
 import Long from "long";
+import { DIDDocumentWithSeq } from "./proto/panacea/did/v2/did";
+import { Token } from "./proto/panacea/token/v2/token";
 
 const rpcErrMsgNotFound = /rpc error: code = NotFound/i;
 
@@ -83,5 +91,34 @@ export class PanaceaClient extends StargateClient {
     }
   }
 
-  // TODO: implement x/did, x/token queries
+  async getDid(did: string): Promise<DIDDocumentWithSeq | null> {
+    const queryService = new DidQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
+    try {
+      const resp = await queryService.DID({didBase64: new Buffer(did).toString('base64')});
+      return resp.didDocumentWithSeq ?? null;
+    } catch (error) {
+      if (rpcErrMsgNotFound.test(error)) {
+        return null;
+      }
+      throw error;
+    }
+  }
+
+  async getToken(symbol: string): Promise<Token | null> {
+    const queryService = new TokenQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
+    try {
+      const resp = await queryService.Token({symbol: symbol});
+      return resp.token ?? null;
+    } catch (error) {
+      if (rpcErrMsgNotFound.test(error)) {
+        return null;
+      }
+      throw error;
+    }
+  }
+
+  async getTokens(pageRequest?: PageRequest): Promise<QueryTokensResponse> {
+    const queryService = new TokenQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
+    return await queryService.Tokens({pagination: pageRequest});
+  }
 }

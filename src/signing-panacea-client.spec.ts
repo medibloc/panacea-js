@@ -4,6 +4,10 @@ import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { v4 as uuidv4 } from "uuid";
 import { TextEncoder } from "util";
 import Long from "long";
+import { DIDDocument } from "./proto/panacea/did/v2/did";
+import { isBroadcastTxSuccess } from "@cosmjs/stargate";
+import { Secp256k1 } from "./crypto/secp256k1";
+import { DidUtil } from "./did/util";
 
 describe("SigningPanaceaClient", () => {
   pendingWithoutPanacead();
@@ -97,4 +101,105 @@ describe("SigningPanaceaClient", () => {
       });
     });
   });
+
+  describe("DID", () => {
+    let fromAddress: string;
+    let client: SigningPanaceaClient;
+
+    beforeAll(async () => {
+      const [firstAccount] = await wallet.getAccounts();
+      fromAddress = firstAccount.address;
+    });
+
+    beforeEach(async () => {
+      client = await SigningPanaceaClient.connectWithSigner(panacead.tendermintUrl, wallet);
+    });
+
+    afterEach(() => {
+      client.disconnect();
+    });
+
+    it("createDid", async () => {
+      const privKey = Secp256k1.generatePrivateKey();
+      const didDocument = generateDidDocument(privKey);
+      const signature = DidUtil.signDidDocument(privKey, didDocument);
+
+      const res = await client.createDid(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress);
+      expect(isBroadcastTxSuccess(res)).toBeTruthy();
+
+      const didDocumentWithSeq = await client.getPanaceaClient().getDid(didDocument.id);
+      expect(didDocumentWithSeq.document).toEqual(didDocument);
+    });
+
+    describe("mutateDid", () => {
+      let privKey: Uint8Array;
+      let didDocument: DIDDocument;
+
+      beforeEach(async () => {
+        privKey = Secp256k1.generatePrivateKey();
+        didDocument = generateDidDocument(privKey);
+        const signature = DidUtil.signDidDocument(privKey, didDocument);
+
+        const res = await client.createDid(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress);
+        expect(isBroadcastTxSuccess(res)).toBeTruthy();
+      });
+
+      it("updateDid", async () => {
+        didDocument.assertionMethods.push({
+          verificationMethodId: didDocument.verificationMethods[0].id,
+          verificationMethod: undefined,
+        });
+        const signature = DidUtil.signDidDocument(privKey, didDocument);
+
+        const res = await client.updateDid(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress);
+        expect(isBroadcastTxSuccess(res)).toBeTruthy();
+
+        const didDocumentWithSeq = await client.getPanaceaClient().getDid(didDocument.id);
+        expect(didDocumentWithSeq.document).toEqual(didDocument);
+      });
+
+      it("deactivateDid", async () => {
+        const signature = DidUtil.signDid(privKey, didDocument.id);
+
+        const res = await client.deactivateDid(didDocument.id, didDocument.verificationMethods[0].id, signature, fromAddress);
+        expect(isBroadcastTxSuccess(res)).toBeTruthy();
+
+        await expect(client.getPanaceaClient().getDid(didDocument.id)).rejects.toThrow(/DID was already deactivated/);
+      });
+    });
+  });
 });
+
+// A test utility function
+function generateDidDocument(privKey: Uint8Array): DIDDocument {
+  const pubKeyCompressed = Secp256k1.getPublicKeyCompressed(privKey);
+
+  const did = DidUtil.getDid(pubKeyCompressed);
+  const verificationMethodId = `${did}#key1`;
+  return {
+    contexts: {
+      values: ['https://www.w3.org/ns/did/v1'],
+    },
+    id: did,
+    controller: undefined,
+    verificationMethods: [
+      {
+        id: verificationMethodId,
+        type: 'EcdsaSecp256k1VerificationKey2019',
+        controller: did,
+        publicKeyBase58: DidUtil.getPublicKeyBase58(pubKeyCompressed),
+      },
+    ],
+    authentications: [
+      {
+        verificationMethodId: verificationMethodId,
+        verificationMethod: undefined,
+      }
+    ],
+    assertionMethods: [],
+    keyAgreements: [],
+    capabilityInvocations: [],
+    capabilityDelegations: [],
+    services: [],
+  };
+}

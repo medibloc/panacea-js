@@ -113,8 +113,8 @@ export class SigningPanaceaClient extends SigningStargateClient {
     super(tmClient, signer, options);
 
     // Build a PanaceaFeeTable
-    const { panaceaGasLimits = panaceaDefaultGasLimits } = options; // Use the default one, if not specified
-    this.panaceaFees = buildFeeTable(options.gasPrice, panaceaDefaultGasLimits, panaceaGasLimits)
+    const { gasPrice = panaceaDefaultGasPrice, panaceaGasLimits = panaceaDefaultGasLimits } = options; // Use the default one, if not specified
+    this.panaceaFees = buildFeeTable(gasPrice, panaceaDefaultGasLimits, panaceaGasLimits)
   }
 
   /**

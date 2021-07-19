@@ -106,8 +106,10 @@ export class GroupSigningPanaceaClient extends SigningPanaceaClient {
     memo: string,
     explicitSignerDatas?: SignerData[],
   ): Promise<TxRaw> {
-    let signerDatas: SignerData[] = explicitSignerDatas;
-    if (!signerDatas) {
+    let signerDatas: SignerData[];
+    if (explicitSignerDatas) {
+      signerDatas = explicitSignerDatas;
+    } else {
       // Retrieve 'SignerData's from the chain.
       const chainId = await this.getChainId();
       signerDatas = await Promise.all(

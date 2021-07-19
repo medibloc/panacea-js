@@ -1,5 +1,5 @@
 export const panacead = {
-  tendermintUrl: "localhost:26657",
+  tendermintUrl: "http://localhost:26657",
   chainId: "testing",
   genesisAccountMnemonic: "bulb rail shoot abandon eye domain injury return dash away base retreat vote solve recall glass joy neck cabin volcano enemy tribe output nominee",
 }

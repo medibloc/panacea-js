@@ -33,9 +33,6 @@ jobs:
       run: yarn build
 
     - name: Run a panacea-core docker container
-      env:
-        CHAIN_ID: ${{ env.CHAIN_ID }}
-        MNEMONIC: ${{ env.MNEMONIC }}
       run: |
         docker run --rm -d \
           -e CHAIN_ID="${CHAIN_ID}" \
@@ -52,6 +49,4 @@ jobs:
       env:
         PANACEAD_ENABLED: true
         TENDERMINT_URL: http://localhost:26657
-        CHAIN_ID: ${{ env.CHAIN_ID }}
-        MNEMONIC: ${{ env.MNEMONIC }}
       run: yarn test

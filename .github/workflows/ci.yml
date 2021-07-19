@@ -31,7 +31,7 @@ jobs:
     - name: Run a panacea-core docker container
       env:
         CHAIN_ID: testing
-        MNEMONIC: bulb rail shoot abandon eye domain injury return dash away base retreat vote solve recall glass joy neck cabin volcano enemy tribe output nominee
+        MNEMONIC: ${{ secrets.TEST_MNEMONIC }}
       run: |
         docker run --rm -d \
           -e CHAIN_ID="${CHAIN_ID}" \

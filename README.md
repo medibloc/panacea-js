@@ -1,35 +1,58 @@
-# panacea-js
+# Panacea Javascript SDK
 
-Official client-side JavaScript library for the [medibloc blockchain](https://github.com/medibloc/panacea-core).
+The `panacea-js` is the official [Panacea](https://github.com/medibloc/panacea-core) Javascript SDK written in Typescript, powered by [CosmJS](https://github.com/cosmos/cosmjs).
 
-## Install
+The `panacea-js` extends the CosmJS in order to provide [Panacea-specific features](https://github.com/medibloc/panacea-core#key-features) (AOL, DID, and so on).
+So, it exposes CosmJS basic functions as they are, such as `connectWithSigner` and `sendTokens`.
 
-```bash
-npm install @medibloc/panacea-js
-```
+## Usage
 
-Please refers to the [documentation](https://panacea-js.readthedocs.io/en/latest/)
-
-## Test
+### Installation
 
 ```bash
-npm test
+yarn add @medibloc/panacea-js @cosmjs/proto-signing @cosmjs/stargate
 ```
+
+### Examples
+
+A list of examples can be found at the [example.md](docs/examples.md).
+
+## Contribution
+
+Install dependencies and build the project.
+```bash
+yarn install
+yarn build
+```
+
+To run simple unit tests,
+```bash
+yarn test
+````
+
+To run integration tests with [panacea-core](https://github.com/medibloc/panacea-core), start a `panacea-core` daemon first.
+```bash
+docker run --rm -d \
+  -e CHAIN_ID="chain-1" \
+  -e MNEMONIC="..." \
+  -p 26657:26657 \
+  -v $(pwd)/scripts:/root/scripts \
+  --name core \
+  ghcr.io/medibloc/panacea-core:master \
+  bash /root/scripts/panacea-core/init.sh
+```
+
+Then, the integration tests can be run with the following environment variables.
+```bash
+PANACEAD_ENABLED=true \
+TENDERMINT_URL="http://localhost:26657" \
+CHAIN_ID="chain-1" \
+MNEMONIC="..." \
+yarn test
+```
+
+For more details, please see the [CI script](.github/workflows/ci.yml).
 
 ## License
 
-```
-Copyright 2018 MediBloc
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```
+[Apache-2.0 License](LICENSE)

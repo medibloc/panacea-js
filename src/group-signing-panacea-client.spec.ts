@@ -16,9 +16,9 @@ describe("GroupSigningPanaceaClient", () => {
   let feePayerWallet: DirectSecp256k1HdWallet;
 
   beforeAll(async () => {
-    ownerWallet = await DirectSecp256k1HdWallet.fromMnemonic(panacead.genesisAccountMnemonic, panaceaWalletOpts);
+    ownerWallet = await DirectSecp256k1HdWallet.fromMnemonic(panacead.mnemonic, panaceaWalletOpts);
     writerWallet = await DirectSecp256k1HdWallet.generate(24, panaceaWalletOpts);
-    feePayerWallet = await DirectSecp256k1HdWallet.fromMnemonic(panacead.genesisAccountMnemonic, panaceaWalletOpts);
+    feePayerWallet = await DirectSecp256k1HdWallet.fromMnemonic(panacead.mnemonic, panaceaWalletOpts);
   });
 
   describe("connectWithSigners", () => {

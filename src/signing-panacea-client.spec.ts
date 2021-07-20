@@ -16,7 +16,7 @@ describe("SigningPanaceaClient", () => {
   let wallet: DirectSecp256k1HdWallet;
 
   beforeAll(async () => {
-    wallet = await DirectSecp256k1HdWallet.fromMnemonic(panacead.genesisAccountMnemonic, panaceaWalletOpts);
+    wallet = await DirectSecp256k1HdWallet.fromMnemonic(panacead.mnemonic, panaceaWalletOpts);
   });
 
   describe("connectWithSigner", () => {
@@ -170,7 +170,8 @@ describe("SigningPanaceaClient", () => {
         const res = await client.deactivateDid(didDocument.id, didDocument.verificationMethods[0].id, signature, fromAddress);
         expect(isBroadcastTxSuccess(res)).toBeTruthy();
 
-        await expect(client.getPanaceaClient().getDid(didDocument.id)).rejects.toThrow(/DID was already deactivated/);
+        const didDocumentWithSeq = await client.getPanaceaClient().getDid(didDocument.id);
+        expect(didDocumentWithSeq).toBeNull();
       });
     });
   });

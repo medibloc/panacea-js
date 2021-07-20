@@ -4,6 +4,12 @@
 
 TBD
 
+## [v2.0.0](https://github.com/medibloc/panacea-js/releases/tag/v2.0.0) - 2021-07-20
+
+### Features
+
+- [\#37](https://github.com/medibloc/panacea-js/pull/37) feat: Support Panacea v2 based on Cosmos v0.42 Stargate
+
 
 ## [v1.3.1](https://github.com/medibloc/panacea-js/releases/tag/v1.3.1) - 2020-11-25
 

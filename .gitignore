@@ -17,5 +17,3 @@ docs/_build
 
 #Logs
 npm-debug.log*
-
-third_party/proto/

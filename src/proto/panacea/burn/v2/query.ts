@@ -8,7 +8,6 @@ export const protobufPackage = "panacea.burn.v2";
 export interface Query {}
 
 export class QueryClientImpl implements Query {
-  // @ts-ignore
   private readonly rpc: Rpc;
   constructor(rpc: Rpc) {
     this.rpc = rpc;

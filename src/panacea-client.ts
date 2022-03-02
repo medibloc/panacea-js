@@ -124,10 +124,10 @@ export class PanaceaClient extends StargateClient {
     return await queryService.Tokens({pagination: pageRequest});
   }
 
-  async getDeal(dealId: Long): Promise<Deal | null> {
+  async getDeal(dealId: string): Promise<Deal | null> {
     const queryService = new DealQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
     try {
-      const resp = await queryService.Deal({dealId: dealId});
+      const resp = await queryService.Deal({dealId: Long.fromValue(dealId)});
       return resp.deal ?? null;
     } catch (error) {
       if (rpcErrMsgNotFound.test(error)) {

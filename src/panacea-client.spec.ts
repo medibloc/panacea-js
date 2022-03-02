@@ -60,12 +60,16 @@ describe("PanaceaClient", () => {
         expect(didDocumentWithSeq).toBeNull();
       });
     });
+  });
 
+  describe("market", () => {
+    let client: PanaceaClient;
+    
     describe("getDeal", () => {
       it("works for non-existent deal", async () => {
-        const deal = await client.getDeal(Long.fromValue(1))
+        const deal = await client.getDeal("1")
         expect(deal).toBeNull();
       });
     })
-  });
+  })
 });

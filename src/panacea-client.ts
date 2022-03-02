@@ -11,6 +11,7 @@ import {
 import {
   QueryClientImpl as TokenQueryClientImpl, QueryTokensResponse,
 } from "./proto/panacea/token/v2/query";
+import { QueryClientImpl as DealQueryClientImpl } from "./proto/panacea/market/v2/query";
 import { Topic } from "./proto/panacea/aol/v2/topic";
 import { PageRequest } from "./proto/cosmos/base/query/v1beta1/pagination";
 import { Writer } from "./proto/panacea/aol/v2/writer";
@@ -18,6 +19,7 @@ import { Record } from "./proto/panacea/aol/v2/record";
 import Long from "long";
 import { DIDDocumentWithSeq } from "./proto/panacea/did/v2/did";
 import { Token } from "./proto/panacea/token/v2/token";
+import { Deal } from "./proto/panacea/market/v2/deal";
 
 const rpcErrMsgNotFound = /rpc error: code = NotFound/i;
 
@@ -120,5 +122,18 @@ export class PanaceaClient extends StargateClient {
   async getTokens(pageRequest?: PageRequest): Promise<QueryTokensResponse> {
     const queryService = new TokenQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
     return await queryService.Tokens({pagination: pageRequest});
+  }
+
+  async getDeal(dealId: Long): Promise<Deal | null> {
+    const queryService = new DealQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
+    try {
+      const resp = await queryService.Deal({dealId: dealId});
+      return resp.deal ?? null;
+    } catch (error) {
+      if (rpcErrMsgNotFound.test(error)) {
+        return null;
+      }
+      throw error;
+    }
   }
 }

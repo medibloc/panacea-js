@@ -2,6 +2,7 @@ import { panacead, pendingWithoutPanacead } from "./testutils";
 import { PanaceaClient } from "./panacea-client";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { panaceaWalletOpts } from "./signing-panacea-client";
+import Long from 'long';
 
 describe("PanaceaClient", () => {
   pendingWithoutPanacead();
@@ -59,5 +60,12 @@ describe("PanaceaClient", () => {
         expect(didDocumentWithSeq).toBeNull();
       });
     });
+
+    describe("getDeal", () => {
+      it("works for non-existent deal", async () => {
+        const deal = await client.getDeal(Long.fromValue(1))
+        expect(deal).toBeNull();
+      });
+    })
   });
 });

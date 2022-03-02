@@ -175,6 +175,8 @@ describe("SigningPanaceaClient", () => {
       });
     });
   });
+
+  // TODO: Market Test
 });
 
 // A test utility function
@@ -209,4 +211,5 @@ function generateDidDocument(privKey: Uint8Array): DIDDocument {
     capabilityDelegations: [],
     services: [],
   };
+  
 }

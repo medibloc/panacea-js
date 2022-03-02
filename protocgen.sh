@@ -8,7 +8,7 @@ SRC_PATH="${SCRIPT_DIR}/third_party/proto"
 DST_PATH="${SCRIPT_DIR}/src/proto"
 
 # Fetch 3rd-party proto files
-PANACEA_CORE_VER_SHORT="2.0.1"
+PANACEA_CORE_VER_SHORT="2.0.2"
 PANACEA_CORE_VER="v${PANACEA_CORE_VER_SHORT}"
 
 mkdir -p ${SRC_PATH}

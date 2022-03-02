@@ -15,8 +15,9 @@ import { stringToPath } from "@cosmjs/crypto";
 import { MsgAddRecord, MsgAddWriter, MsgCreateTopic, MsgDeleteWriter } from "./proto/panacea/aol/v2/tx";
 import { MsgCreateDID, MsgDeactivateDID, MsgUpdateDID } from "./proto/panacea/did/v2/tx";
 import { MsgIssueToken } from "./proto/panacea/token/v2/tx";
+import { MsgCreateDeal, MsgSellData, MsgDeactivateDeal, DataValidationCertificate } from "./proto/panacea/market/v2/tx";
 import { DIDDocument } from "./proto/panacea/did/v2/did";
-import { IntProto } from "./proto/cosmos/base/v1beta1/coin";
+import { IntProto, Coin } from "./proto/cosmos/base/v1beta1/coin";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // TODO: This FeeTable concept is removed on the latest CosmJS (not released yet).
@@ -40,6 +41,9 @@ export const panaceaDefaultGasLimits: GasLimits<PanaceaFeeTable> = {
   updateDid: 200000,
   deactivateDid: 200000,
   issueToken: 200000,
+  createDeal: 200000,
+  sellData: 200000,
+  deactivateDeal: 200000,
 }
 
 /**
@@ -54,6 +58,9 @@ export interface PanaceaFeeTable extends FeeTable {
   readonly updateDid: StdFee;
   readonly deactivateDid: StdFee;
   readonly issueToken: StdFee;
+  readonly createDeal: StdFee;
+  readonly sellData: StdFee;
+  readonly deactivateDeal: StdFee;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -88,6 +95,9 @@ export class SigningPanaceaClient extends SigningStargateClient {
   protected static msgTypeUpdateDid = "/panacea.did.v2.MsgUpdateDID";
   protected static msgTypeDeactivateDid = "/panacea.did.v2.MsgDeactivateDID";
   protected static msgTypeIssueToken = "/panacea.token.v2.MsgIssueToken";
+  protected static msgTypeCreateDeal = "/panacea.market.v2.MsgCreateDeal";
+  protected static msgTypeSellData = "/panacea.market.v2.MsgSellData";
+  protected static msgTypeDeactivateDeal = "/panacea.market.v2.MsgDeactivateDeal"
 
   private static panaceaRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
     [SigningPanaceaClient.msgTypeCreateTopic, MsgCreateTopic],
@@ -98,6 +108,9 @@ export class SigningPanaceaClient extends SigningStargateClient {
     [SigningPanaceaClient.msgTypeUpdateDid, MsgUpdateDID],
     [SigningPanaceaClient.msgTypeDeactivateDid, MsgDeactivateDID],
     [SigningPanaceaClient.msgTypeIssueToken, MsgIssueToken],
+    [SigningPanaceaClient.msgTypeCreateDeal, MsgCreateDeal],
+    [SigningPanaceaClient.msgTypeSellData, MsgSellData],
+    [SigningPanaceaClient.msgTypeDeactivateDeal, MsgDeactivateDeal],
   ];
 
   constructor(tmClient: Tendermint34Client | undefined, signer: OfflineSigner, options: SigningPanaceaClientOptions) {
@@ -238,5 +251,42 @@ export class SigningPanaceaClient extends SigningStargateClient {
       },
     };
     return this.signAndBroadcast(ownerAddress, [msg], this.panaceaFees.issueToken, memo);
+  }
+
+
+  async createDeal(ownerAddress: string, dataSchema: string[], budget: Coin, maxNumData: Long, trustedDataValidators: string[], memo?: string): Promise<BroadcastTxResponse> {
+    const msg = {
+      typeUrl: SigningPanaceaClient.msgTypeCreateDeal,
+      value: {
+        owner: ownerAddress,
+        dataSchema: dataSchema,
+        budget: budget,
+        maxNumData: maxNumData,
+        trustedDataValidators: trustedDataValidators,
+      }
+    };
+    return this.signAndBroadcast(ownerAddress, [msg], this.panaceaFees.createDeal, memo)
+  }
+
+  async sellData(seller: string, cert: DataValidationCertificate, memo?: string): Promise<BroadcastTxResponse> {
+    const msg = {
+      typeUrl: SigningPanaceaClient.msgTypeSellData,
+      value: {
+        seller: seller,
+        cert: cert,
+      },
+    };
+    return this.signAndBroadcast(seller, [msg], this.panaceaFees.sellData, memo)
+  }
+
+  async deactivateDeal(dealId: Long, deactivateRequester: string, memo?: string): Promise<BroadcastTxResponse> {
+    const msg = {
+      typeUrl: SigningPanaceaClient.msgTypeDeactivateDeal,
+      value: {
+        dealId: dealId,
+        deactivateRequester: deactivateRequester,
+      },
+    };
+    return this.signAndBroadcast(deactivateRequester, [msg], this.panaceaFees.deactivateDeal, memo)
   }
 }

@@ -60,15 +60,5 @@ describe("PanaceaClient", () => {
       });
     });
   });
-
-  describe("market", () => {
-    let client: PanaceaClient;
-    
-    describe("getDeal", () => {
-      it("works for non-existent deal", async () => {
-        const deal = await client.getDeal("1")
-        expect(deal).toBeNull();
-      });
-    })
-  })
+  // TODO: Market Query Test
 });

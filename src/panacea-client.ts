@@ -18,6 +18,7 @@ import { Record } from "./proto/panacea/aol/v2/record";
 import Long from "long";
 import { DIDDocumentWithSeq } from "./proto/panacea/did/v2/did";
 import { Token } from "./proto/panacea/token/v2/token";
+import { StargateClientOptions } from "@cosmjs/stargate/build/stargateclient";
 
 const rpcErrMsgNotFound = /rpc error: code = NotFound/i;
 
@@ -26,8 +27,8 @@ const rpcErrMsgNotFound = /rpc error: code = NotFound/i;
  * It extends StargateClient, so that you can call Stargate general queries, such as getBalance.
  */
 export class PanaceaClient extends StargateClient {
-  constructor(tmClient: Tendermint34Client | undefined) {
-    super(tmClient);
+  constructor(tmClient: Tendermint34Client | undefined, options: StargateClientOptions) {
+    super(tmClient, options);
   }
 
   /**
@@ -35,13 +36,13 @@ export class PanaceaClient extends StargateClient {
    */
   static async connect(endpoint: string): Promise<PanaceaClient> {
     const tmClient = await Tendermint34Client.connect(endpoint);
-    return new PanaceaClient(tmClient);
+    return new PanaceaClient(tmClient, {});
   }
 
   async getTopic(ownerAddress: string, topicName: string): Promise<Topic | null> {
     const queryService = new AolQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
     try {
-      const resp = await queryService.Topic({ownerAddress: ownerAddress, topicName: topicName});
+      const resp = await queryService.Topic({ ownerAddress: ownerAddress, topicName: topicName });
       return resp.topic ?? null;
     } catch (error) {
       if (rpcErrMsgNotFound.test(error)) {
@@ -53,7 +54,7 @@ export class PanaceaClient extends StargateClient {
 
   async getTopics(ownerAddress: string, pageRequest?: PageRequest): Promise<QueryTopicsResponse> {
     const queryService = new AolQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
-    return await queryService.Topics({ownerAddress: ownerAddress, pagination: pageRequest});
+    return await queryService.Topics({ ownerAddress: ownerAddress, pagination: pageRequest });
   }
 
   async getWriter(ownerAddress: string, topicName: string, writerAddress: string): Promise<Writer | null> {
@@ -75,13 +76,13 @@ export class PanaceaClient extends StargateClient {
 
   async getWriters(ownerAddress: string, topicName: string, pageRequest?: PageRequest): Promise<QueryWritersResponse> {
     const queryService = new AolQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
-    return await queryService.Writers({ownerAddress: ownerAddress, topicName: topicName, pagination: pageRequest});
+    return await queryService.Writers({ ownerAddress: ownerAddress, topicName: topicName, pagination: pageRequest });
   }
 
   async getRecord(ownerAddress: string, topicName: string, offset: Long): Promise<Record | null> {
     const queryService = new AolQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
     try {
-      const resp = await queryService.Record({ownerAddress: ownerAddress, topicName: topicName, offset: offset})
+      const resp = await queryService.Record({ ownerAddress: ownerAddress, topicName: topicName, offset: offset });
       return resp.record ?? null;
     } catch (error) {
       if (rpcErrMsgNotFound.test(error)) {
@@ -94,7 +95,7 @@ export class PanaceaClient extends StargateClient {
   async getDid(did: string): Promise<DIDDocumentWithSeq | null> {
     const queryService = new DidQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
     try {
-      const resp = await queryService.DID({didBase64: new Buffer(did).toString('base64')});
+      const resp = await queryService.DID({ didBase64: new Buffer(did).toString('base64') });
       return resp.didDocumentWithSeq ?? null;
     } catch (error) {
       if (rpcErrMsgNotFound.test(error)) {
@@ -107,7 +108,7 @@ export class PanaceaClient extends StargateClient {
   async getToken(symbol: string): Promise<Token | null> {
     const queryService = new TokenQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
     try {
-      const resp = await queryService.Token({symbol: symbol});
+      const resp = await queryService.Token({ symbol: symbol });
       return resp.token ?? null;
     } catch (error) {
       if (rpcErrMsgNotFound.test(error)) {
@@ -119,6 +120,6 @@ export class PanaceaClient extends StargateClient {
 
   async getTokens(pageRequest?: PageRequest): Promise<QueryTokensResponse> {
     const queryService = new TokenQueryClientImpl(createProtobufRpcClient(this.forceGetQueryClient()));
-    return await queryService.Tokens({pagination: pageRequest});
+    return await queryService.Tokens({ pagination: pageRequest });
   }
 }

@@ -5,7 +5,7 @@
 ```ts
 import { panaceaWalletOpts, SigningPanaceaClient } from "@medibloc/panacea-js";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import { assertIsBroadcastTxSuccess } from "@cosmjs/stargate";
+import { assertIsDeliverTxSuccess } from "@cosmjs/stargate";
 
 const mnemonic = "bulb rail ...";
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, panaceaWalletOpts);
@@ -19,8 +19,17 @@ const amount = {
   denom: "umed",
   amount: "123456789",
 };
-const result = await client.sendTokens(firstAccount.address, recipient, [amount], "memo");
-assertIsBroadcastTxSuccess(result);
+const fee = {
+  amount: [{
+    denom: "umed",
+    amount: "1000000",
+  }],
+  gas: "200000",
+};
+
+// or, you can set the fee as "auto"
+const result = await client.sendTokens(firstAccount.address, recipient, [amount], fee, "memo");
+assertIsDeliverTxSuccess(result);
 ```
 
 ## Creating AOL topics and adding records
@@ -28,7 +37,7 @@ assertIsBroadcastTxSuccess(result);
 ```ts
 import { panaceaWalletOpts, SigningPanaceaClient } from "@medibloc/panacea-js";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import { assertIsBroadcastTxSuccess } from "@cosmjs/stargate";
+import { assertIsDeliverTxSuccess } from "@cosmjs/stargate";
 import { TextEncoder } from "util";
 import Long from "long";
 
@@ -42,15 +51,15 @@ const client = await SigningPanaceaClient.connectWithSigner(tendermintRpcEndpoin
 
 const ownerAddress = firstAccount.address;
 const topicName = "topic-1"
-let result = await client.createTopic(ownerAddress, topicName, "description", "memo");
-assertIsBroadcastTxSuccess(result);
+let result = await client.createTopic(ownerAddress, topicName, "description", "auto", "memo");
+assertIsDeliverTxSuccess(result);
 
 const topic = await client.getPanaceaClient().getTopic(ownerAddress, topicName);
 console.log(topic);
 
 const writerAddress = ownerAddress;
-result = await client.addWriter(ownerAddress, topicName, writerAddress, "moniker", "description", "memo");
-assertIsBroadcastTxSuccess(result);
+result = await client.addWriter(ownerAddress, topicName, writerAddress, "moniker", "description", "auto", "memo");
+assertIsDeliverTxSuccess(result);
 
 const writer = await client.getPanaceaClient().getWriter(ownerAddress, topicName, writerAddress);
 console.log(writer);
@@ -58,8 +67,8 @@ console.log(writer);
 // Encode key and value as you want
 const key = new TextEncoder().encode("key1");
 const value = new TextEncoder().encode("value1");
-result = await client.addRecord(ownerAddress, topicName, key, value, writerAddress, "memo");
-assertIsBroadcastTxSuccess(result);
+result = await client.addRecord(ownerAddress, topicName, key, value, writerAddress, "auto", "memo");
+assertIsDeliverTxSuccess(result);
 
 const record = await client.getPanaceaClient().getRecord(ownerAddress, topicName, Long.fromInt(0));
 console.log(record);
@@ -77,7 +86,7 @@ const writerWallet = await DirectSecp256k1HdWallet.fromMnemonic("...", panaceaWa
 const tendermintRpcEndpoint = "http://localhost:26657";
 const client = await GroupSigningPanaceaClient.connectWithSigner(tendermintRpcEndpoint, [feePayerWallet, writerWallet]);
 
-const result = await client.addRecordWithFeePayer(ownerAddress, topicName, key, value, writerAddress, feePayerAddress, "");
+const result = await client.addRecordWithFeePayer(ownerAddress, topicName, key, value, writerAddress, feePayerAddress, "auto", "");
 ```
 
 ## Creating DIDs
@@ -85,7 +94,7 @@ const result = await client.addRecordWithFeePayer(ownerAddress, topicName, key, 
 ```ts
 import { panaceaWalletOpts, SigningPanaceaClient, Secp256k1, DidUtil } from "@medibloc/panacea-js";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import { assertIsBroadcastTxSuccess } from "@cosmjs/stargate";
+import { assertIsDeliverTxSuccess } from "@cosmjs/stargate";
 
 const mnemonic = "bulb rail ...";
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, panaceaWalletOpts);
@@ -129,8 +138,8 @@ const didDocument = {
 
 const signature = DidUtil.signDidDocument(privKey, didDocument);
 
-const result = await client.createDid(didDocument, verificationMethodId, signature, firstAccount.address);
-assertIsBroadcastTxSuccess(result);
+const result = await client.createDid(didDocument, verificationMethodId, signature, firstAccount.address, "auto");
+assertIsDeliverTxSuccess(result);
 
 const didDocumentWithSeq = await client.getPanaceaClient().getDid(didDocument.id);
 console.log(didDocumentWithSeq);

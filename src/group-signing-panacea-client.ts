@@ -7,18 +7,19 @@ import {
   OfflineSigner,
   TxBodyEncodeObject
 } from "@cosmjs/proto-signing";
-import { BroadcastTxResponse, SignerData, StdFee } from "@cosmjs/stargate";
-import { AuthInfo, SignerInfo, TxRaw } from "@cosmjs/stargate/build/codec/cosmos/tx/v1beta1/tx";
+import { DeliverTxResponse, SignerData, StdFee } from "@cosmjs/stargate";
 import { assert } from "@cosmjs/utils";
 import { encodeSecp256k1Pubkey } from "@cosmjs/amino";
-import { Any } from "@cosmjs/stargate/build/codec/google/protobuf/any";
-import { Coin } from "@cosmjs/stargate/build/codec/cosmos/base/v1beta1/coin";
-import { SignMode } from "@cosmjs/stargate/build/codec/cosmos/tx/signing/v1beta1/signing";
 import Long from "long";
 import { Int53 } from "@cosmjs/math";
 import { fromBase64 } from "@cosmjs/encoding";
-import { SigningPanaceaClient, SigningPanaceaClientOptions } from "./signing-panacea-client";
+import { SigningPanaceaClient } from "./signing-panacea-client";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import { SigningStargateClientOptions } from "@cosmjs/stargate/build/signingstargateclient";
+import { AuthInfo, SignerInfo, TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
+import { Any } from "cosmjs-types/google/protobuf/any";
+import { Coin } from "cosmjs-types/cosmos/base/v1beta1/coin";
+import { SignMode } from "cosmjs-types/cosmos/tx/signing/v1beta1/signing";
 
 /**
  * A class for executing transactions to Panacea with signing by multiple addresses (aka. Group Signing).
@@ -40,7 +41,7 @@ export class GroupSigningPanaceaClient extends SigningPanaceaClient {
   public static async connectWithSigners(
     endpoint: string,
     signers: OfflineSigner[],
-    options: SigningPanaceaClientOptions = {},
+    options: SigningStargateClientOptions = {},
   ): Promise<GroupSigningPanaceaClient> {
     const tmClient = await Tendermint34Client.connect(endpoint);
     return new GroupSigningPanaceaClient(tmClient, signers, options);
@@ -49,7 +50,7 @@ export class GroupSigningPanaceaClient extends SigningPanaceaClient {
   protected constructor(
     tmClient: Tendermint34Client | undefined,
     signers: OfflineSigner[],
-    options: SigningPanaceaClientOptions,
+    options: SigningStargateClientOptions,
   ) {
     // Use the first signer for SigningPanaceaClient
     super(tmClient, signers[0], options);
@@ -71,7 +72,7 @@ export class GroupSigningPanaceaClient extends SigningPanaceaClient {
    *
    * Make sure that GroupSigningPanaceaClient was created with [feePayerSigner, writerSigner]. The order matters.
    */
-  public async addRecordWithFeePayer(ownerAddress: string, topicName: string, key: Uint8Array, value: Uint8Array, writerAddress: string, feePayerAddress: string, memo?: string): Promise<BroadcastTxResponse> {
+  public async addRecordWithFeePayer(ownerAddress: string, topicName: string, key: Uint8Array, value: Uint8Array, writerAddress: string, feePayerAddress: string, fee: StdFee, memo?: string): Promise<DeliverTxResponse> {
     const msg = {
       typeUrl: GroupSigningPanaceaClient.msgTypeAddRecord,
       value: {
@@ -83,7 +84,7 @@ export class GroupSigningPanaceaClient extends SigningPanaceaClient {
         feePayerAddress: feePayerAddress,
       }
     }
-    return this.groupSignAndBroadcast([feePayerAddress, writerAddress], [msg], this.panaceaFees.addWriter, memo);
+    return this.groupSignAndBroadcast([feePayerAddress, writerAddress], [msg], fee, memo);
   }
 
   // Reference: https://github.com/cosmos/cosmjs/blob/06fbc34f72f12c30a396c3ca296f80eca9fa60b0/packages/stargate/src/signingstargateclient.ts#L280
@@ -92,7 +93,7 @@ export class GroupSigningPanaceaClient extends SigningPanaceaClient {
     messages: readonly EncodeObject[],
     fee: StdFee,
     memo = "",
-  ): Promise<BroadcastTxResponse> {
+  ): Promise<DeliverTxResponse> {
     const txRaw = await this.groupSign(signerAddresses, messages, fee, memo);
     const txBytes = TxRaw.encode(txRaw).finish();
     return this.broadcastTx(txBytes, this.broadcastTimeoutMs, this.broadcastPollIntervalMs);

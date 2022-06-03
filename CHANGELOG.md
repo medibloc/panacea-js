@@ -4,6 +4,13 @@
 
 TBD
 
+## [v2.0.1](https://github.com/medibloc/panacea-js/releases/tag/v2.0.1) - 2022-06-03
+
+### Features
+
+- [\#60](https://github.com/medibloc/panacea-js/pull/60) feat: add explicit `fee` parameters
+
+
 ## [v2.0.0](https://github.com/medibloc/panacea-js/releases/tag/v2.0.0) - 2021-07-20
 
 ### Features

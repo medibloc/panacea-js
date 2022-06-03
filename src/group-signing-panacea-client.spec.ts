@@ -65,7 +65,7 @@ describe("GroupSigningPanaceaClient", () => {
         denom: "umed",
         amount: "5000000",
       }
-      const res = await client.sendTokens(ownerAddress, writerAddress, [amount])
+      const res = await client.sendTokens(ownerAddress, writerAddress, [amount], "auto")
       expect(res).toBeTruthy();
 
       topicName = uuidv4();
@@ -75,10 +75,10 @@ describe("GroupSigningPanaceaClient", () => {
       beforeAll(async () => {
         const client = await SigningPanaceaClient.connectWithSigner(panacead.tendermintUrl, ownerWallet);
 
-        let res = await client.createTopic(ownerAddress, topicName, "", "");
+        let res = await client.createTopic(ownerAddress, topicName, "", "auto", "");
         expect(res).toBeTruthy();
 
-        res = await client.addWriter(ownerAddress, topicName, writerAddress, "", "", "");
+        res = await client.addWriter(ownerAddress, topicName, writerAddress, "", "", "auto", "");
         expect(res).toBeTruthy();
 
         client.disconnect();
@@ -90,7 +90,14 @@ describe("GroupSigningPanaceaClient", () => {
         const key = new TextEncoder().encode("key1");
         const value = new TextEncoder().encode("value1");
 
-        const res = await client.addRecordWithFeePayer(ownerAddress, topicName, key, value, writerAddress, feePayerAddress, "");
+        const fee = {
+          amount: [{
+            denom: "umed",
+            amount: "1000000",
+          }],
+          gas: "200000",
+        }
+        const res = await client.addRecordWithFeePayer(ownerAddress, topicName, key, value, writerAddress, feePayerAddress, fee, "");
         expect(res).toBeTruthy();
 
         const record = await client.getPanaceaClient().getRecord(ownerAddress, topicName, Long.fromInt(0));

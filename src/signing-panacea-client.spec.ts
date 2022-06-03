@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { TextEncoder } from "util";
 import Long from "long";
 import { DIDDocument } from "./proto/panacea/did/v2/did";
-import { isBroadcastTxSuccess } from "@cosmjs/stargate";
+import { isDeliverTxSuccess } from "@cosmjs/stargate";
 import { Secp256k1 } from "./crypto/secp256k1";
 import { DidUtil } from "./did/util";
 import assert from "assert";
@@ -48,7 +48,7 @@ describe("SigningPanaceaClient", () => {
 
     describe("createTopic", () => {
       it("works", async () => {
-        const res = await client.createTopic(ownerAddress, topicName, "description!", "memo!");
+        const res = await client.createTopic(ownerAddress, topicName, "description!", "auto", "memo!");
         expect(res).toBeTruthy();
 
         const topic = await client.getPanaceaClient().getTopic(ownerAddress, topicName);
@@ -60,7 +60,7 @@ describe("SigningPanaceaClient", () => {
     describe("addWriter", () => {
       it("works", async () => {
         const writerAddress = ownerAddress;
-        const res = await client.addWriter(ownerAddress, topicName, writerAddress, "jack", "hello", "memo!");
+        const res = await client.addWriter(ownerAddress, topicName, writerAddress, "jack", "hello", "auto", "memo!");
         expect(res).toBeTruthy();
 
         const writer = await client.getPanaceaClient().getWriter(ownerAddress, topicName, writerAddress);
@@ -81,7 +81,7 @@ describe("SigningPanaceaClient", () => {
 
         const writerClient = await SigningPanaceaClient.connectWithSigner(panacead.tendermintUrl, writerWallet);
 
-        const res = await writerClient.addRecord(ownerAddress, topicName, key, value, writerAddress, "memo!");
+        const res = await writerClient.addRecord(ownerAddress, topicName, key, value, writerAddress, "auto", "memo!");
         expect(res).toBeTruthy();
 
         const record = await client.getPanaceaClient().getRecord(ownerAddress, topicName, Long.fromInt(0));
@@ -97,7 +97,7 @@ describe("SigningPanaceaClient", () => {
     describe("deleteWriter", () => {
       it("works", async () => {
         const writerAddress = ownerAddress;
-        const res = await client.deleteWriter(ownerAddress, topicName, writerAddress, "memo!");
+        const res = await client.deleteWriter(ownerAddress, topicName, writerAddress, "auto", "memo!");
         expect(res).toBeTruthy();
 
         const writer = await client.getPanaceaClient().getWriter(ownerAddress, topicName, writerAddress);
@@ -128,8 +128,8 @@ describe("SigningPanaceaClient", () => {
       const didDocument = generateDidDocument(privKey);
       const signature = DidUtil.signDidDocument(privKey, didDocument);
 
-      const res = await client.createDid(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress);
-      expect(isBroadcastTxSuccess(res)).toBeTruthy();
+      const res = await client.createDid(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress, "auto");
+      expect(isDeliverTxSuccess(res)).toBeTruthy();
 
       const didDocumentWithSeq = await client.getPanaceaClient().getDid(didDocument.id);
       assert(didDocumentWithSeq);
@@ -145,8 +145,8 @@ describe("SigningPanaceaClient", () => {
         didDocument = generateDidDocument(privKey);
         const signature = DidUtil.signDidDocument(privKey, didDocument);
 
-        const res = await client.createDid(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress);
-        expect(isBroadcastTxSuccess(res)).toBeTruthy();
+        const res = await client.createDid(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress, "auto");
+        expect(isDeliverTxSuccess(res)).toBeTruthy();
       });
 
       it("updateDid", async () => {
@@ -156,8 +156,8 @@ describe("SigningPanaceaClient", () => {
         });
         const signature = DidUtil.signDidDocument(privKey, didDocument);
 
-        const res = await client.updateDid(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress);
-        expect(isBroadcastTxSuccess(res)).toBeTruthy();
+        const res = await client.updateDid(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress, "auto");
+        expect(isDeliverTxSuccess(res)).toBeTruthy();
 
         const didDocumentWithSeq = await client.getPanaceaClient().getDid(didDocument.id);
         assert(didDocumentWithSeq);
@@ -167,8 +167,8 @@ describe("SigningPanaceaClient", () => {
       it("deactivateDid", async () => {
         const signature = DidUtil.signDid(privKey, didDocument.id);
 
-        const res = await client.deactivateDid(didDocument.id, didDocument.verificationMethods[0].id, signature, fromAddress);
-        expect(isBroadcastTxSuccess(res)).toBeTruthy();
+        const res = await client.deactivateDid(didDocument.id, didDocument.verificationMethods[0].id, signature, fromAddress, "auto");
+        expect(isDeliverTxSuccess(res)).toBeTruthy();
 
         const didDocumentWithSeq = await client.getPanaceaClient().getDid(didDocument.id);
         expect(didDocumentWithSeq).toBeNull();

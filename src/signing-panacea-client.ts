@@ -1,12 +1,6 @@
-import {
-  DeliverTxResponse,
-  defaultRegistryTypes,
-  GasPrice,
-  SigningStargateClient,
-  StdFee
-} from "@cosmjs/stargate";
+import { defaultRegistryTypes, DeliverTxResponse, GasPrice, SigningStargateClient, StdFee } from "@cosmjs/stargate";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
-import { GeneratedType, OfflineSigner, Registry } from "@cosmjs/proto-signing";
+import { DirectSecp256k1HdWalletOptions, GeneratedType, OfflineSigner, Registry } from "@cosmjs/proto-signing";
 import { SigningStargateClientOptions } from "@cosmjs/stargate/build/signingstargateclient";
 import { PanaceaClient } from "./panacea-client";
 import { stringToPath } from "@cosmjs/crypto";
@@ -24,10 +18,10 @@ export const panaceaDefaultGasPrice = GasPrice.fromString("5umed");
 /**
  * Options for creating HD Wallet (e.g. DirectSecp256k1HdWallet) for Panacea.
  */
-export const panaceaWalletOpts = {
+export const panaceaWalletOpts: Partial<DirectSecp256k1HdWalletOptions> = {
   hdPaths: [stringToPath("m/44'/371'/0'/0/0")],
   prefix: "panacea",
-}
+};
 
 /**
  * A class for executing transactions to Panacea.
@@ -60,8 +54,8 @@ export class SigningPanaceaClient extends SigningStargateClient {
       options = { ...options, gasPrice: panaceaDefaultGasPrice };
     }
     if (!options.registry) {
-      const registry = new Registry([...defaultRegistryTypes, ...SigningPanaceaClient.panaceaRegistryTypes])
-      options = { ...options, registry: registry};
+      const registry = new Registry([...defaultRegistryTypes, ...SigningPanaceaClient.panaceaRegistryTypes]);
+      options = { ...options, registry: registry };
     }
 
     super(tmClient, signer, options);
@@ -141,7 +135,7 @@ export class SigningPanaceaClient extends SigningStargateClient {
       value: {
         did: didDocument.id,
         document: didDocument,
-        verificationMethodId:  verficationMethodId,
+        verificationMethodId: verficationMethodId,
         signature: signature,
         fromAddress: fromAddress,
       },
@@ -155,7 +149,7 @@ export class SigningPanaceaClient extends SigningStargateClient {
       value: {
         did: didDocument.id,
         document: didDocument,
-        verificationMethodId:  verficationMethodId,
+        verificationMethodId: verficationMethodId,
         signature: signature,
         fromAddress: fromAddress,
       },
@@ -168,7 +162,7 @@ export class SigningPanaceaClient extends SigningStargateClient {
       typeUrl: SigningPanaceaClient.msgTypeDeactivateDid,
       value: {
         did: did,
-        verificationMethodId:  verficationMethodId,
+        verificationMethodId: verficationMethodId,
         signature: signature,
         fromAddress: fromAddress,
       },

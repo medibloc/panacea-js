@@ -9,6 +9,7 @@ import { isDeliverTxSuccess } from "@cosmjs/stargate";
 import { Secp256k1 } from "./crypto/secp256k1";
 import { DidUtil } from "./did/util";
 import assert from "assert";
+import { MsgAddRecordResponse } from "./proto/panacea/aol/v2/tx";
 
 describe("SigningPanaceaClient", () => {
   pendingWithoutPanacead();
@@ -83,6 +84,12 @@ describe("SigningPanaceaClient", () => {
 
         const res = await writerClient.addRecord(ownerAddress, topicName, key, value, writerAddress, "auto", "memo!");
         expect(res).toBeTruthy();
+        expect(res.data).toBeTruthy();
+        expect(res.data).toHaveLength(1);
+        const resData = MsgAddRecordResponse.decode(res.data![0].data);
+        expect(resData.ownerAddress).toEqual(ownerAddress);
+        expect(resData.topicName).toEqual(topicName);
+        expect(resData.offset).toEqual(Long.fromInt(0, true));
 
         const record = await client.getPanaceaClient().getRecord(ownerAddress, topicName, Long.fromInt(0));
         assert(record);

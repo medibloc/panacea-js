@@ -158,7 +158,7 @@ const hashedBody = sha256(new TextEncoder().encode(body));
 const mnemonic = "bulb rail ...";
 const hdPath = stringToPath("m/44'/371'/0'/0/0");
 
-const privateKey = await Secp256k1.parseMnemonicToPrivateKey(panacead.mnemonic, hdPath);
+const privateKey = await Secp256k1.parseMnemonicToPrivateKey(mnemonic, hdPath);
 const {pubkey} = await CryptoSecp256k1.makeKeypair(privateKey);
 
 const signature = await CryptoSecp256k1.createSignature(hashedBody, privateKey)

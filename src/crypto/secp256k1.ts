@@ -20,8 +20,8 @@ export class Secp256k1 {
   }
 
   static async parseMnemonicToPrivateKey(mnemonic: string, hdPath: readonly Slip10RawIndex[]): Promise<Uint8Array> {
-    const mnemonicChecked = new EnglishMnemonic(mnemonic)
-    const seed = await Bip39.mnemonicToSeed(mnemonicChecked, "")
-    return Slip10.derivePath(Slip10Curve.Secp256k1, seed, hdPath).privkey
+    const mnemonicChecked = new EnglishMnemonic(mnemonic);
+    const seed = await Bip39.mnemonicToSeed(mnemonicChecked, "");
+    return Slip10.derivePath(Slip10Curve.Secp256k1, seed, hdPath).privkey;
   }
 }

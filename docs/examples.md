@@ -144,3 +144,16 @@ assertIsDeliverTxSuccess(result);
 const didDocumentWithSeq = await client.getPanaceaClient().getDid(didDocument.id);
 console.log(didDocumentWithSeq);
 ```
+
+## Convert mnemonic to Secp256k1 privateKey
+
+```ts
+import { Secp256k1 as CryptoSecp256k1, stringToPath } from "@cosmjs/crypto";
+import { Secp256k1 } from "./secp256k1";
+
+const mnemonic = "bulb rail ...";
+const hdPath = stringToPath("m/44'/371'/0'/0/0");
+
+const privateKey = await Secp256k1.parseMnemonicToPrivateKey(mnemonic, hdPath);
+const {pubkey} = await CryptoSecp256k1.makeKeypair(privateKey);
+```

@@ -1,6 +1,6 @@
 import ecc from "secp256k1";
-import {randomBytes} from "crypto";
-import {Bip39, EnglishMnemonic, Slip10, Slip10Curve, Slip10RawIndex} from "@cosmjs/crypto"
+import { randomBytes } from "crypto";
+import { Bip39, EnglishMnemonic, Slip10, Slip10Curve, Slip10RawIndex } from "@cosmjs/crypto"
 
 export class Secp256k1 {
   static generatePrivateKey(): Uint8Array {

@@ -149,7 +149,7 @@ console.log(didDocumentWithSeq);
 
 ```ts
 import { Secp256k1 as CryptoSecp256k1, stringToPath } from "@cosmjs/crypto";
-import { Secp256k1 } from "./secp256k1";
+import { Secp256k1 } from "@medibloc/panacea-js";
 
 const mnemonic = "bulb rail ...";
 const hdPath = stringToPath("m/44'/371'/0'/0/0");

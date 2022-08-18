@@ -3,6 +3,11 @@
 ## Unreleased
 
 TBD
+
+## [v2.0.2](https://github.com/medibloc/panacea-js/releases/tag/v2.0.2) - 2022-08-18
+
+### Features
+
 - [\#64](https://github.com/medibloc/panacea-js/pull/64) feat: implement a function to convert a mnemonic to a secp256k1 private key
 
 

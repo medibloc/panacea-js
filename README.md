@@ -10,7 +10,10 @@ So, it exposes CosmJS basic functions as they are, such as `connectWithSigner` a
 ### Installation
 
 ```bash
-yarn add @medibloc/panacea-js @cosmjs/proto-signing @cosmjs/stargate cosmjs-types
+yarn add @medibloc/panacea-js \
+  @cosmjs/proto-signing@0.28.4 \
+  @cosmjs/stargate@0.28.4 \
+  cosmjs-types@0.5.0
 ```
 
 ### Examples

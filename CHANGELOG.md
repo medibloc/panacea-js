@@ -3,7 +3,7 @@
 ## Unreleased
 
 TBD
-- [\#64](https://github.com/medibloc/panacea-js/pull/64) feat: implements convert mnemonic to privateKey of Secp256k1
+- [\#64](https://github.com/medibloc/panacea-js/pull/64) feat: implement a function to convert a mnemonic to a secp256k1 private key
 
 
 ## [v2.0.1](https://github.com/medibloc/panacea-js/releases/tag/v2.0.1) - 2022-06-03

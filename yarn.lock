@@ -501,7 +501,7 @@
   resolved "https://registry.yarnpkg.com/@digitalcredentials/dcc-context/-/dcc-context-1.0.0.tgz#7713bc437c90995e70e04e751001408ed59a165d"
   integrity sha512-iun3HTqOqcAoG0lz5GWx/fJYxpbKjzqq866dBo0osxs+pj/CwZDNHKXVC6sdd662tXg9EF0r4YdZ/AW6DOnS6A==
 
-"@digitalcredentials/did-io@^1.0.2":
+"@digitalcredentials/did-io@1.0.2", "@digitalcredentials/did-io@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@digitalcredentials/did-io/-/did-io-1.0.2.tgz#bc653e75112e70b221713fe1692d601394d330b3"
   integrity sha512-z6lLRe4drHYwtfxbySQJZZl2YbCPvG5UDkh/H3kAK2NSZY9GaIm9iz9A6E/J5Lu6rct/BOj1XQhtEJnzRdB8wQ==
@@ -1972,15 +1972,15 @@ cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
+crypto-ld@7.0.0, crypto-ld@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/crypto-ld/-/crypto-ld-7.0.0.tgz#ad593cce31da84e60bd14fd2b25221f97e8a3b74"
+  integrity sha512-RrXy6aB0TOhSiqsgavTQt1G8mKomKIaNLb2JZxj7A/Vi0EwmXguuBQoeiAvePfK6bDR3uQbqYnaLLs4irTWwgw==
+
 crypto-ld@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/crypto-ld/-/crypto-ld-6.0.0.tgz#cf8dcf566cb3020bdb27f0279e6cc9b46d031cd7"
   integrity sha512-XWL1LslqggNoaCI/m3I7HcvaSt9b2tYzdrXO+jHLUj9G1BvRfvV7ZTFDVY5nifYuIGAPdAGu7unPxLRustw3VA==
-
-crypto-ld@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/crypto-ld/-/crypto-ld-7.0.0.tgz#ad593cce31da84e60bd14fd2b25221f97e8a3b74"
-  integrity sha512-RrXy6aB0TOhSiqsgavTQt1G8mKomKIaNLb2JZxj7A/Vi0EwmXguuBQoeiAvePfK6bDR3uQbqYnaLLs4irTWwgw==
 
 data-uri-to-buffer@^3.0.1:
   version "3.0.1"

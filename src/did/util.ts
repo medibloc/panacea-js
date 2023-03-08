@@ -10,6 +10,10 @@ import { EcdsaSecp256k1Signature2019 } from "@medibloc/ecdsa-secp256k1-signature
 import { EcdsaSecp256k1VerificationKey2019 } from "@medibloc/ecdsa-secp256k1-verification-key-2019";
 import { securityLoader } from "@digitalcredentials/security-document-loader";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { CachedResolver } from '@digitalcredentials/did-io';
+
 
 const bs58 = require('bs58');
 
@@ -65,21 +69,66 @@ export class DidUtil {
     });
   }
 
-  static async verifyDidAuthPresentation(vp: Record<string, any>, verificationMethodId: string, pubKeyCompressed: Uint8Array) {
+  static async verifyDidAuthPresentation(vp: Record<string, any>, pubKeyCompressed: Uint8Array, didDocument: any) {
     const suite = new EcdsaSecp256k1Signature2019({
       key: await EcdsaSecp256k1VerificationKey2019.from({
         controller: vp.holder,
-        id: verificationMethodId,
+        id: vp.proof.verificationMethod,
         publicKeyBase58: bs58.encode(pubKeyCompressed),
       }),
     });
+
+    console.log(`holder: ${vp.holder}`)
+
+    const resolver = new CachedResolver();
+    resolver.use(new DidPanaceaDriver(didDocument));
+
+    const loader = securityLoader();
+    loader.setDidResolver(resolver);
 
     const result = await vc.verify({
       presentation: vp,
       suite: suite,
       challenge: "this is a challenge",
-      documentLoader: securityLoader().build(),
+      documentLoader: loader.build(),
     })
     console.log(JSON.stringify(result, null, 2));
+  }
+}
+
+class DidPanaceaDriver {
+  public readonly method: string;
+  private readonly didDocument: any;
+
+  constructor(didDocument: DIDDocument) {
+    this.method = "panacea";
+
+    const doc = {
+      "@context": "https://www.w3.org/ns/did/v1",
+      id: didDocument.id,
+      verificationMethod: didDocument.verificationMethods,
+      authentications: [didDocument.authentications[0].verificationMethodId],
+      assertionMethods: [],
+      keyAgreements: [],
+      capabilityInvocations: [],
+      capabilityDelegations: [],
+      services: []
+    }
+    this.didDocument = doc;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  async get({did, url} = {}) {
+    did = did || url;
+    if(!did) {
+      throw new TypeError('"did" must be a string.');
+    }
+
+    if (this.didDocument.id !== did) {
+      throw new Error(`unknown did: ${did}`);
+    }
+
+    return this.didDocument;
   }
 }

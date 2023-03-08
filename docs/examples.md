@@ -197,7 +197,7 @@ const jwt = await DidAuthJwt.issue(
 ### Verifying DID Auth JWT
 
 ```ts
-import { Secp256k1, DidUtil, DidAuthJwt } from "@medibloc/panacea-js";
+import { DidUtil, DidAuthJwt } from "@medibloc/panacea-js";
 
 const jwt: string = "..."; // A JWT issued by a client
 

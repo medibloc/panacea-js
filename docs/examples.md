@@ -145,6 +145,93 @@ const didDocumentWithSeq = await client.getPanaceaClient().getDid(didDocument.id
 console.log(didDocumentWithSeq);
 ```
 
+## DID Authentication using JWT
+
+### Issuing DID Auth JWT
+
+```ts
+import { Secp256k1, DidUtil, DidAuthJwt } from "@medibloc/panacea-js";
+
+// First, prepare a private key and a DID document.
+// This example assumes that you specify at least one 'authentication' method in the DID document as below.
+const privKey = Secp256k1.generatePrivateKey();
+const pubKeyCompressed = Secp256k1.getPublicKeyCompressed(privKey);
+const did = DidUtil.getDid(pubKeyCompressed);
+const verificationMethodId = `${ did }#key1`;
+const didDocument = {
+    contexts: {
+        values: [ 'https://www.w3.org/ns/did/v1' ],
+    },
+    id: did,
+    controller: undefined,
+    verificationMethods: [
+        {
+            id: verificationMethodId,
+            type: 'EcdsaSecp256k1VerificationKey2019',
+            controller: did,
+            publicKeyBase58: DidUtil.getPublicKeyBase58(pubKeyCompressed),
+        },
+    ],
+    authentications: [
+        {
+            verificationMethodId: verificationMethodId,
+            verificationMethod: undefined,
+        }
+    ],
+    assertionMethods: [],
+    keyAgreements: [],
+    capabilityInvocations: [],
+    capabilityDelegations: [],
+    services: [],
+};
+
+const jwt = await DidAuthJwt.issue(
+  didDocument.id,
+  privKey,
+  didDocument.authentications[0].verificationMethodId!, // You must use a method speicified in the 'authentications'
+  "this is a challenge",
+  3, // expirationSec
+);
+```
+
+### Verifying DID Auth JWT
+
+```ts
+import { DidUtil, DidAuthJwt } from "@medibloc/panacea-js";
+
+const jwt: string = "..."; // A JWT issued by a client
+
+// This example assumes that you already retrieved a DID document from Panacea.
+const didDocument = {
+    contexts: {
+        values: [ 'https://www.w3.org/ns/did/v1' ],
+    },
+    id: did,
+    controller: undefined,
+    verificationMethods: [
+        {
+            id: verificationMethodId,
+            type: 'EcdsaSecp256k1VerificationKey2019',
+            controller: did,
+            publicKeyBase58: DidUtil.getPublicKeyBase58(pubKeyCompressed),
+        },
+    ],
+    authentications: [
+        {
+            verificationMethodId: verificationMethodId,
+            verificationMethod: undefined,
+        }
+    ],
+    assertionMethods: [],
+    keyAgreements: [],
+    capabilityInvocations: [],
+    capabilityDelegations: [],
+    services: [],
+};
+
+await DidAuthJwt.verify(jwt, didDocument, "this is a challenge");
+```
+
 ## Convert mnemonic to Secp256k1 privateKey
 
 ```ts

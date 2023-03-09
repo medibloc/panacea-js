@@ -1,5 +1,5 @@
 import { sha256 } from "@cosmjs/crypto";
-import { DIDDocument, DataWithSeq } from "../proto/panacea/did/v2/did";
+import { DIDDocument, DataWithSeq, VerificationRelationship, VerificationMethod } from "../proto/panacea/did/v2/did";
 import Long from "long";
 import { Secp256k1 } from "../crypto/secp256k1";
 
@@ -36,5 +36,31 @@ export class DidUtil {
       services: [],
     }
     return this.signDidDocument(privKey, didDocument, sequence);
+  }
+
+  // Find a verification method using ID.
+  // If 'relationships' are specified, find the verification method from 'relationships'.
+  //     In this case, 'methods' are used as a reference for 'relationships'.
+  // If 'relationships' are not specified, find the verification method only from 'methods'.
+  // If the verification method is not found, throw an error.
+  static findVerificationMethod(id: string, methods: VerificationMethod[], relationships?: VerificationRelationship[]): VerificationMethod {
+    if (relationships) {
+      for (const relationship of relationships) {
+        if (relationship.verificationMethod !== undefined && relationship.verificationMethod.id === id) {
+          return relationship.verificationMethod;
+        }
+        if (relationship.verificationMethodId === id) {
+          return this.findVerificationMethod(id, methods);
+        }
+      }
+    } else {
+      for (const method of methods) {
+        if (method.id === id) {
+          return method;
+        }
+      }
+    }
+
+    throw new Error(`unable to find verification method: ${id}`);
   }
 }

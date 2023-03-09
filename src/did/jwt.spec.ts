@@ -96,7 +96,7 @@ describe("DidAuthJwt", () => {
   });
 
   it("verify: wrong verification method ID", async () => {
-    const wrongMethodId = didDocument.assertionMethods[0].verificationMethodId! // use assertionMethods instead of authentications
+    const wrongMethodId = didDocument.assertionMethods[0].verificationMethod!.id! // use assertionMethods instead of authentications
     const jwt = await DidAuthJwt.issue(didDocument.id, privKey, wrongMethodId, challenge, 3);
 
     await expect(async () => {

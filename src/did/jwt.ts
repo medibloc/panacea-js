@@ -34,6 +34,7 @@ export class DidAuthJwt {
       throw new Error(`unexpected challenge: ${payload.challenge}`);
     }
 
+    // This expects that the method is specified in the 'authentications' field in the DID doc.
     const vm = DidUtil.findVerificationMethod(
       payload.verificationMethod as string,
       didDocument.verificationMethods,

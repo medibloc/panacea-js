@@ -4,6 +4,13 @@
 
 TBD
 
+## [v2.0.3](https://github.com/medibloc/panacea-js/releases/tag/v2.0.3) - 2023-03-13
+
+### Features
+
+- [\#68](https://github.com/medibloc/panacea-js/pull/68) feat: add DID Auth in JWT
+
+
 ## [v2.0.2](https://github.com/medibloc/panacea-js/releases/tag/v2.0.2) - 2022-08-18
 
 ### Features

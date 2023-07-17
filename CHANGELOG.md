@@ -4,6 +4,11 @@
 
 TBD
 
+## [v2.0.5](https://github.com/medibloc/panacea-js/releases/tag/v2.0.5) - 2023-07-17
+
+### Features
+- [\#74](https://github.com/medibloc/panacea-js/pull/74) feat: add offline and createMsg function and move to client
+
 ## [v2.0.4](https://github.com/medibloc/panacea-js/releases/tag/v2.0.4) - 2023-07-05
 
 ### Features

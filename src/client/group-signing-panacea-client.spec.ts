@@ -1,4 +1,4 @@
-import { panacead, pendingWithoutPanacead } from "./testutils";
+import { panacead, pendingWithoutPanacead } from "../testutils";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { panaceaWalletOpts, SigningPanaceaClient } from "./signing-panacea-client";
 import { GroupSigningPanaceaClient } from "./group-signing-panacea-client";

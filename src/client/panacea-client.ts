@@ -4,20 +4,20 @@ import {
   QueryClientImpl as AolQueryClientImpl,
   QueryTopicsResponse,
   QueryWritersResponse
-} from "./proto/panacea/aol/v2/query";
+} from "../proto/panacea/aol/v2/query";
 import {
   QueryClientImpl as DidQueryClientImpl,
-} from "./proto/panacea/did/v2/query";
+} from "../proto/panacea/did/v2/query";
 import {
   QueryClientImpl as TokenQueryClientImpl, QueryTokensResponse,
-} from "./proto/panacea/token/v2/query";
-import { Topic } from "./proto/panacea/aol/v2/topic";
-import { PageRequest } from "./proto/cosmos/base/query/v1beta1/pagination";
-import { Writer } from "./proto/panacea/aol/v2/writer";
-import { Record } from "./proto/panacea/aol/v2/record";
+} from "../proto/panacea/token/v2/query";
+import { Topic } from "../proto/panacea/aol/v2/topic";
+import { PageRequest } from "../proto/cosmos/base/query/v1beta1/pagination";
+import { Writer } from "../proto/panacea/aol/v2/writer";
+import { Record } from "../proto/panacea/aol/v2/record";
 import Long from "long";
-import { DIDDocumentWithSeq } from "./proto/panacea/did/v2/did";
-import { Token } from "./proto/panacea/token/v2/token";
+import { DIDDocumentWithSeq } from "../proto/panacea/did/v2/did";
+import { Token } from "../proto/panacea/token/v2/token";
 import { StargateClientOptions } from "@cosmjs/stargate/build/stargateclient";
 
 const rpcErrMsgNotFound = /rpc error: code = NotFound/i;

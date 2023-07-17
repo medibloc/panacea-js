@@ -1,16 +1,19 @@
-import { panacead, pendingWithoutPanacead } from "./testutils";
-import { panaceaWalletOpts, SigningPanaceaClient } from "./signing-panacea-client";
+import { panacead, pendingWithoutPanacead } from '../testutils';
+import { panaceaWalletOpts, SigningPanaceaClient } from './signing-panacea-client';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import { v4 as uuidv4 } from "uuid";
-import { TextEncoder } from "util";
-import Long from "long";
-import { DIDDocument } from "./proto/panacea/did/v2/did";
-import { isDeliverTxSuccess } from "@cosmjs/stargate";
-import { Secp256k1 } from "./crypto/secp256k1";
-import { DidUtil } from "./did/util";
-import assert from "assert";
+import { v4 as uuidv4 } from 'uuid';
+import { TextEncoder } from 'util';
+import Long from 'long';
+import { DIDDocument } from '../proto/panacea/did/v2/did';
+import { isDeliverTxSuccess } from '@cosmjs/stargate';
+import { Secp256k1 } from '../crypto/secp256k1';
+import { DidUtil } from '../did/util';
+import assert from 'assert';
+import { PanaceaClient } from './panacea-client';
+import { assertDefinedAndNotNull } from '@cosmjs/utils';
+import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 
-describe("SigningPanaceaClient", () => {
+describe('SigningPanaceaClient', () => {
   pendingWithoutPanacead();
 
   let wallet: DirectSecp256k1HdWallet;
@@ -19,15 +22,15 @@ describe("SigningPanaceaClient", () => {
     wallet = await DirectSecp256k1HdWallet.fromMnemonic(panacead.mnemonic, panaceaWalletOpts);
   });
 
-  describe("connectWithSigner", () => {
-    it("works", async () => {
+  describe('connectWithSigner', () => {
+    it('works', async () => {
       const client = await SigningPanaceaClient.connectWithSigner(panacead.tendermintUrl, wallet);
       expect(client).toBeTruthy();
       client.disconnect();
     });
   });
 
-  describe("AOL", () => {
+  describe('AOL', () => {
     let ownerAddress: string;
     let topicName: string;
     let client: SigningPanaceaClient;
@@ -46,42 +49,42 @@ describe("SigningPanaceaClient", () => {
       client.disconnect();
     });
 
-    describe("createTopic", () => {
-      it("works", async () => {
-        const res = await client.createTopic(ownerAddress, topicName, "description!", "auto", "memo!");
+    describe('createTopic', () => {
+      it('works', async () => {
+        const res = await client.createTopic(ownerAddress, topicName, 'description!', 'auto', 'memo!');
         expect(res).toBeTruthy();
 
         const topic = await client.getPanaceaClient().getTopic(ownerAddress, topicName);
         assert(topic);
-        expect(topic.description).toEqual("description!");
+        expect(topic.description).toEqual('description!');
       });
     });
 
-    describe("addWriter", () => {
-      it("works", async () => {
+    describe('addWriter', () => {
+      it('works', async () => {
         const writerAddress = ownerAddress;
-        const res = await client.addWriter(ownerAddress, topicName, writerAddress, "jack", "hello", "auto", "memo!");
+        const res = await client.addWriter(ownerAddress, topicName, writerAddress, 'jack', 'hello', 'auto', 'memo!');
         expect(res).toBeTruthy();
 
         const writer = await client.getPanaceaClient().getWriter(ownerAddress, topicName, writerAddress);
         assert(writer);
-        expect(writer.moniker).toEqual("jack");
-        expect(writer.description).toEqual("hello");
+        expect(writer.moniker).toEqual('jack');
+        expect(writer.description).toEqual('hello');
       });
     });
 
-    describe("addRecord", () => {
-      it("works", async () => {
+    describe('addRecord', () => {
+      it('works', async () => {
         // In this test, writer == owner
         const writerAddress = ownerAddress;
         const writerWallet = wallet;
 
-        const key = new TextEncoder().encode("key1");
-        const value = new TextEncoder().encode("value1");
+        const key = new TextEncoder().encode('key1');
+        const value = new TextEncoder().encode('value1');
 
         const writerClient = await SigningPanaceaClient.connectWithSigner(panacead.tendermintUrl, writerWallet);
 
-        const res = await writerClient.addRecord(ownerAddress, topicName, key, value, writerAddress, "auto", "memo!");
+        const res = await writerClient.addRecord(ownerAddress, topicName, key, value, writerAddress, 'auto', 'memo!');
         expect(res).toBeTruthy();
 
         const record = await client.getPanaceaClient().getRecord(ownerAddress, topicName, Long.fromInt(0));
@@ -94,10 +97,10 @@ describe("SigningPanaceaClient", () => {
       });
     });
 
-    describe("deleteWriter", () => {
-      it("works", async () => {
+    describe('deleteWriter', () => {
+      it('works', async () => {
         const writerAddress = ownerAddress;
-        const res = await client.deleteWriter(ownerAddress, topicName, writerAddress, "auto", "memo!");
+        const res = await client.deleteWriter(ownerAddress, topicName, writerAddress, 'auto', 'memo!');
         expect(res).toBeTruthy();
 
         const writer = await client.getPanaceaClient().getWriter(ownerAddress, topicName, writerAddress);
@@ -106,9 +109,11 @@ describe("SigningPanaceaClient", () => {
     });
   });
 
-  describe("DID", () => {
+  describe('DID', () => {
     let fromAddress: string;
     let client: SigningPanaceaClient;
+    let queryClient: PanaceaClient;
+    let offlineClient: SigningPanaceaClient;
 
     beforeAll(async () => {
       const [firstAccount] = await wallet.getAccounts();
@@ -117,18 +122,20 @@ describe("SigningPanaceaClient", () => {
 
     beforeEach(async () => {
       client = await SigningPanaceaClient.connectWithSigner(panacead.tendermintUrl, wallet);
+      queryClient = await PanaceaClient.connect(panacead.tendermintUrl);
+      offlineClient = await SigningPanaceaClient.offline(wallet);
     });
 
     afterEach(() => {
       client.disconnect();
     });
 
-    it("createDid", async () => {
+    it('createDid', async () => {
       const privKey = Secp256k1.generatePrivateKey();
       const didDocument = generateDidDocument(privKey);
       const signature = DidUtil.signDidDocument(privKey, didDocument);
 
-      const res = await client.createDid(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress, "auto");
+      const res = await client.createDid(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress, 'auto');
       expect(isDeliverTxSuccess(res)).toBeTruthy();
 
       const didDocumentWithSeq = await client.getPanaceaClient().getDid(didDocument.id);
@@ -136,7 +143,34 @@ describe("SigningPanaceaClient", () => {
       expect(didDocumentWithSeq.document).toEqual(didDocument);
     });
 
-    describe("mutateDid", () => {
+    it('createDidWithOfflineSigner', async () => {
+      const privKey = Secp256k1.generatePrivateKey();
+      const didDocument = generateDidDocument(privKey);
+      const signature = DidUtil.signDidDocument(privKey, didDocument);
+      const address = (await wallet.getAccounts())[0].address;
+
+      const account = await queryClient.getAccount(address);
+      assertDefinedAndNotNull(account);
+
+      const createDidMsg = offlineClient.createDidMsg(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress);
+      const signerData = {
+        accountNumber: account.accountNumber,
+        sequence: account.sequence,
+        chainId: await queryClient.getChainId(),
+      };
+
+      const fee = offlineClient.createFee(200000);  // 5umed * 200000 = 1000000umed(1MED)
+      const memo = 'This is memo.';
+
+      const txRaw = await offlineClient.sign(address, [createDidMsg], fee, memo, signerData);
+      const txBytes = TxRaw.encode(txRaw).finish();
+
+      const res = await client.broadcastTx(txBytes, 300, 8000);
+      console.log(res);
+      expect(isDeliverTxSuccess(res)).toBeTruthy();
+    });
+
+    describe('mutateDid', () => {
       let privKey: Uint8Array;
       let didDocument: DIDDocument;
 
@@ -145,18 +179,18 @@ describe("SigningPanaceaClient", () => {
         didDocument = generateDidDocument(privKey);
         const signature = DidUtil.signDidDocument(privKey, didDocument);
 
-        const res = await client.createDid(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress, "auto");
+        const res = await client.createDid(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress, 'auto');
         expect(isDeliverTxSuccess(res)).toBeTruthy();
       });
 
-      it("updateDid", async () => {
+      it('updateDid', async () => {
         didDocument.assertionMethods.push({
           verificationMethodId: didDocument.verificationMethods[0].id,
           verificationMethod: undefined,
         });
         const signature = DidUtil.signDidDocument(privKey, didDocument);
 
-        const res = await client.updateDid(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress, "auto");
+        const res = await client.updateDid(didDocument, didDocument.verificationMethods[0].id, signature, fromAddress, 'auto');
         expect(isDeliverTxSuccess(res)).toBeTruthy();
 
         const didDocumentWithSeq = await client.getPanaceaClient().getDid(didDocument.id);
@@ -164,10 +198,10 @@ describe("SigningPanaceaClient", () => {
         expect(didDocumentWithSeq.document).toEqual(didDocument);
       });
 
-      it("deactivateDid", async () => {
+      it('deactivateDid', async () => {
         const signature = DidUtil.signDid(privKey, didDocument.id);
 
-        const res = await client.deactivateDid(didDocument.id, didDocument.verificationMethods[0].id, signature, fromAddress, "auto");
+        const res = await client.deactivateDid(didDocument.id, didDocument.verificationMethods[0].id, signature, fromAddress, 'auto');
         expect(isDeliverTxSuccess(res)).toBeTruthy();
 
         const didDocumentWithSeq = await client.getPanaceaClient().getDid(didDocument.id);
@@ -201,7 +235,7 @@ function generateDidDocument(privKey: Uint8Array): DIDDocument {
       {
         verificationMethodId: verificationMethodId,
         verificationMethod: undefined,
-      }
+      },
     ],
     assertionMethods: [],
     keyAgreements: [],

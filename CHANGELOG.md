@@ -4,6 +4,11 @@
 
 TBD
 
+## [v2.0.4](https://github.com/medibloc/panacea-js/releases/tag/v2.0.4) - 2023-07-05
+
+### Features
+- [\#71](https://github.com/medibloc/panacea-js/pull/71) feat: export jwt in index.ts
+
 ## [v2.0.3](https://github.com/medibloc/panacea-js/releases/tag/v2.0.3) - 2023-03-13
 
 ### Features

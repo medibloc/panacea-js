@@ -1,9 +1,13 @@
 import { sha256 } from "@cosmjs/crypto";
-import { DIDDocument, DataWithSeq, VerificationRelationship, VerificationMethod } from "../proto/panacea/did/v2/did";
+import {
+  DIDDocument,
+  DataWithSeq,
+  VerificationRelationship,
+  VerificationMethod,
+} from "../proto/panacea/did/v2/did";
 import Long from "long";
-import { Secp256k1 } from "../crypto/secp256k1";
-
-const bs58 = require('bs58');
+import { Secp256k1 } from "../crypto";
+import bs58 from "bs58";
 
 export class DidUtil {
   static getDid(pubKeyCompressed: Uint8Array): string {
@@ -14,15 +18,26 @@ export class DidUtil {
     return bs58.encode(pubKeyCompressed);
   }
 
-  static signDidDocument(privKey: Uint8Array, didDocument: DIDDocument, sequence: Long = Long.fromInt(0)): Uint8Array {
+  static signDidDocument(
+    privKey: Uint8Array,
+    didDocument: DIDDocument,
+    sequence: Long = Long.fromInt(0),
+  ): Uint8Array {
     const dataWithSeq: DataWithSeq = {
       data: DIDDocument.encode(didDocument).finish(),
       sequence: sequence,
     };
-    return Secp256k1.sign(sha256(DataWithSeq.encode(dataWithSeq).finish()), privKey);
+    return Secp256k1.sign(
+      sha256(DataWithSeq.encode(dataWithSeq).finish()),
+      privKey,
+    );
   }
 
-  static signDid(privKey: Uint8Array, did: string, sequence: Long = Long.fromInt(0)): Uint8Array {
+  static signDid(
+    privKey: Uint8Array,
+    did: string,
+    sequence: Long = Long.fromInt(0),
+  ): Uint8Array {
     const didDocument: DIDDocument = {
       contexts: undefined,
       id: did,
@@ -34,7 +49,7 @@ export class DidUtil {
       capabilityInvocations: [],
       capabilityDelegations: [],
       services: [],
-    }
+    };
     return this.signDidDocument(privKey, didDocument, sequence);
   }
 
@@ -43,10 +58,17 @@ export class DidUtil {
   //     In this case, 'methods' are used as a reference for 'relationships'.
   // If 'relationships' are not specified, find the verification method only from 'methods'.
   // If the verification method is not found, throw an error.
-  static findVerificationMethod(id: string, methods: VerificationMethod[], relationships?: VerificationRelationship[]): VerificationMethod {
+  static findVerificationMethod(
+    id: string,
+    methods: VerificationMethod[],
+    relationships?: VerificationRelationship[],
+  ): VerificationMethod {
     if (relationships) {
       for (const relationship of relationships) {
-        if (relationship.verificationMethod !== undefined && relationship.verificationMethod.id === id) {
+        if (
+          relationship.verificationMethod !== undefined &&
+          relationship.verificationMethod.id === id
+        ) {
           return relationship.verificationMethod;
         }
         if (relationship.verificationMethodId === id) {

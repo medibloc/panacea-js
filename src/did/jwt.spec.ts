@@ -1,11 +1,10 @@
-import { Secp256k1 } from "../crypto";
+import { Secp256k1 } from "../crypto/secp256k1";
 import { DidUtil } from "./util";
 import { DidAuthJwt } from "./jwt";
 import { DIDDocument } from "../proto/panacea/did/v2/did";
 import { sleep } from "@cosmjs/utils";
 
 describe("DidAuthJwt", () => {
-
   let privKey: Uint8Array;
   let didDocument: DIDDocument;
   const challenge = "this is a challenge";
@@ -17,14 +16,14 @@ describe("DidAuthJwt", () => {
 
     didDocument = {
       contexts: {
-        values: [ 'https://www.w3.org/ns/did/v1' ],
+        values: ["https://www.w3.org/ns/did/v1"],
       },
       id: did,
       controller: undefined,
       verificationMethods: [
         {
           id: `${did}#key1`,
-          type: 'EcdsaSecp256k1VerificationKey2019',
+          type: "EcdsaSecp256k1VerificationKey2019",
           controller: did,
           publicKeyBase58: DidUtil.getPublicKeyBase58(pubKey),
         },
@@ -33,18 +32,18 @@ describe("DidAuthJwt", () => {
         {
           verificationMethodId: `${did}#key1`,
           verificationMethod: undefined,
-        }
+        },
       ],
       assertionMethods: [
         {
           verificationMethodId: undefined,
           verificationMethod: {
             id: `${did}#key2`,
-            type: 'EcdsaSecp256k1VerificationKey2019',
+            type: "EcdsaSecp256k1VerificationKey2019",
             controller: did,
             publicKeyBase58: DidUtil.getPublicKeyBase58(pubKey),
           },
-        }
+        },
       ],
       keyAgreements: [],
       capabilityInvocations: [],
@@ -54,7 +53,13 @@ describe("DidAuthJwt", () => {
   });
 
   it("issue and verify", async () => {
-    const jwt = await DidAuthJwt.issue(didDocument.id, privKey, didDocument.authentications[0].verificationMethodId!, challenge, 3);
+    const jwt = await DidAuthJwt.issue(
+      didDocument.id,
+      privKey,
+      didDocument.authentications[0].verificationMethodId!,
+      challenge,
+      3,
+    );
 
     await expect(async () => {
       await DidAuthJwt.verify(jwt, didDocument, challenge);
@@ -69,7 +74,13 @@ describe("DidAuthJwt", () => {
 
   it("verify: unexpected challenge", async () => {
     const wrongChallenge = "dummy";
-    const jwt = await DidAuthJwt.issue(didDocument.id, privKey, didDocument.authentications[0].verificationMethodId!, wrongChallenge, 3);
+    const jwt = await DidAuthJwt.issue(
+      didDocument.id,
+      privKey,
+      didDocument.authentications[0].verificationMethodId!,
+      wrongChallenge,
+      3,
+    );
 
     await expect(async () => {
       await DidAuthJwt.verify(jwt, didDocument, challenge);
@@ -77,7 +88,13 @@ describe("DidAuthJwt", () => {
   });
 
   it("verify: expired", async () => {
-    const jwt = await DidAuthJwt.issue(didDocument.id, privKey, didDocument.authentications[0].verificationMethodId!, challenge, 0);
+    const jwt = await DidAuthJwt.issue(
+      didDocument.id,
+      privKey,
+      didDocument.authentications[0].verificationMethodId!,
+      challenge,
+      0,
+    );
 
     await sleep(1000);
 
@@ -88,7 +105,13 @@ describe("DidAuthJwt", () => {
 
   it("verify: signed with wrong private key", async () => {
     const anotherPrivKey = await Secp256k1.generatePrivateKey();
-    const jwt = await DidAuthJwt.issue(didDocument.id, anotherPrivKey, didDocument.authentications[0].verificationMethodId!, challenge, 3);
+    const jwt = await DidAuthJwt.issue(
+      didDocument.id,
+      anotherPrivKey,
+      didDocument.authentications[0].verificationMethodId!,
+      challenge,
+      3,
+    );
 
     await expect(async () => {
       await DidAuthJwt.verify(jwt, didDocument, challenge);
@@ -96,8 +119,15 @@ describe("DidAuthJwt", () => {
   });
 
   it("verify: wrong verification method ID", async () => {
-    const wrongMethodId = didDocument.assertionMethods[0].verificationMethod!.id! // use assertionMethods instead of authentications
-    const jwt = await DidAuthJwt.issue(didDocument.id, privKey, wrongMethodId, challenge, 3);
+    const wrongMethodId =
+      didDocument.assertionMethods[0].verificationMethod!.id!; // use assertionMethods instead of authentications
+    const jwt = await DidAuthJwt.issue(
+      didDocument.id,
+      privKey,
+      wrongMethodId,
+      challenge,
+      3,
+    );
 
     await expect(async () => {
       await DidAuthJwt.verify(jwt, didDocument, challenge);

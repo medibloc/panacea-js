@@ -1,10 +1,10 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { Owner } from "../../../panacea/aol/v2/owner";
-import { Topic } from "../../../panacea/aol/v2/topic";
-import { Writer } from "../../../panacea/aol/v2/writer";
-import { Record } from "../../../panacea/aol/v2/record";
+import { Owner } from "./owner";
+import { Record } from "./record";
+import { Topic } from "./topic";
+import { Writer } from "./writer";
 
 export const protobufPackage = "panacea.aol.v2";
 
@@ -36,198 +36,192 @@ export interface GenesisState_RecordsEntry {
   value: Record | undefined;
 }
 
-const baseGenesisState: object = {};
+function createBaseGenesisState(): GenesisState {
+  return { owners: {}, topics: {}, writers: {}, records: {} };
+}
 
 export const GenesisState = {
-  encode(
-    message: GenesisState,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     Object.entries(message.owners).forEach(([key, value]) => {
-      GenesisState_OwnersEntry.encode(
-        { key: key as any, value },
-        writer.uint32(10).fork()
-      ).ldelim();
+      GenesisState_OwnersEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).ldelim();
     });
     Object.entries(message.topics).forEach(([key, value]) => {
-      GenesisState_TopicsEntry.encode(
-        { key: key as any, value },
-        writer.uint32(18).fork()
-      ).ldelim();
+      GenesisState_TopicsEntry.encode({ key: key as any, value }, writer.uint32(18).fork()).ldelim();
     });
     Object.entries(message.writers).forEach(([key, value]) => {
-      GenesisState_WritersEntry.encode(
-        { key: key as any, value },
-        writer.uint32(26).fork()
-      ).ldelim();
+      GenesisState_WritersEntry.encode({ key: key as any, value }, writer.uint32(26).fork()).ldelim();
     });
     Object.entries(message.records).forEach(([key, value]) => {
-      GenesisState_RecordsEntry.encode(
-        { key: key as any, value },
-        writer.uint32(34).fork()
-      ).ldelim();
+      GenesisState_RecordsEntry.encode({ key: key as any, value }, writer.uint32(34).fork()).ldelim();
     });
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): GenesisState {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseGenesisState } as GenesisState;
-    message.owners = {};
-    message.topics = {};
-    message.writers = {};
-    message.records = {};
+    const message = createBaseGenesisState();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          const entry1 = GenesisState_OwnersEntry.decode(
-            reader,
-            reader.uint32()
-          );
+          if (tag !== 10) {
+            break;
+          }
+
+          const entry1 = GenesisState_OwnersEntry.decode(reader, reader.uint32());
           if (entry1.value !== undefined) {
             message.owners[entry1.key] = entry1.value;
           }
-          break;
+          continue;
         case 2:
-          const entry2 = GenesisState_TopicsEntry.decode(
-            reader,
-            reader.uint32()
-          );
+          if (tag !== 18) {
+            break;
+          }
+
+          const entry2 = GenesisState_TopicsEntry.decode(reader, reader.uint32());
           if (entry2.value !== undefined) {
             message.topics[entry2.key] = entry2.value;
           }
-          break;
+          continue;
         case 3:
-          const entry3 = GenesisState_WritersEntry.decode(
-            reader,
-            reader.uint32()
-          );
+          if (tag !== 26) {
+            break;
+          }
+
+          const entry3 = GenesisState_WritersEntry.decode(reader, reader.uint32());
           if (entry3.value !== undefined) {
             message.writers[entry3.key] = entry3.value;
           }
-          break;
+          continue;
         case 4:
-          const entry4 = GenesisState_RecordsEntry.decode(
-            reader,
-            reader.uint32()
-          );
+          if (tag !== 34) {
+            break;
+          }
+
+          const entry4 = GenesisState_RecordsEntry.decode(reader, reader.uint32());
           if (entry4.value !== undefined) {
             message.records[entry4.key] = entry4.value;
           }
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): GenesisState {
-    const message = { ...baseGenesisState } as GenesisState;
-    message.owners = {};
-    message.topics = {};
-    message.writers = {};
-    message.records = {};
-    if (object.owners !== undefined && object.owners !== null) {
-      Object.entries(object.owners).forEach(([key, value]) => {
-        message.owners[key] = Owner.fromJSON(value);
-      });
-    }
-    if (object.topics !== undefined && object.topics !== null) {
-      Object.entries(object.topics).forEach(([key, value]) => {
-        message.topics[key] = Topic.fromJSON(value);
-      });
-    }
-    if (object.writers !== undefined && object.writers !== null) {
-      Object.entries(object.writers).forEach(([key, value]) => {
-        message.writers[key] = Writer.fromJSON(value);
-      });
-    }
-    if (object.records !== undefined && object.records !== null) {
-      Object.entries(object.records).forEach(([key, value]) => {
-        message.records[key] = Record.fromJSON(value);
-      });
-    }
-    return message;
+    return {
+      owners: isObject(object.owners)
+        ? Object.entries(object.owners).reduce<{ [key: string]: Owner }>((acc, [key, value]) => {
+          acc[key] = Owner.fromJSON(value);
+          return acc;
+        }, {})
+        : {},
+      topics: isObject(object.topics)
+        ? Object.entries(object.topics).reduce<{ [key: string]: Topic }>((acc, [key, value]) => {
+          acc[key] = Topic.fromJSON(value);
+          return acc;
+        }, {})
+        : {},
+      writers: isObject(object.writers)
+        ? Object.entries(object.writers).reduce<{ [key: string]: Writer }>((acc, [key, value]) => {
+          acc[key] = Writer.fromJSON(value);
+          return acc;
+        }, {})
+        : {},
+      records: isObject(object.records)
+        ? Object.entries(object.records).reduce<{ [key: string]: Record }>((acc, [key, value]) => {
+          acc[key] = Record.fromJSON(value);
+          return acc;
+        }, {})
+        : {},
+    };
   },
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
-    obj.owners = {};
     if (message.owners) {
-      Object.entries(message.owners).forEach(([k, v]) => {
-        obj.owners[k] = Owner.toJSON(v);
-      });
+      const entries = Object.entries(message.owners);
+      if (entries.length > 0) {
+        obj.owners = {};
+        entries.forEach(([k, v]) => {
+          obj.owners[k] = Owner.toJSON(v);
+        });
+      }
     }
-    obj.topics = {};
     if (message.topics) {
-      Object.entries(message.topics).forEach(([k, v]) => {
-        obj.topics[k] = Topic.toJSON(v);
-      });
+      const entries = Object.entries(message.topics);
+      if (entries.length > 0) {
+        obj.topics = {};
+        entries.forEach(([k, v]) => {
+          obj.topics[k] = Topic.toJSON(v);
+        });
+      }
     }
-    obj.writers = {};
     if (message.writers) {
-      Object.entries(message.writers).forEach(([k, v]) => {
-        obj.writers[k] = Writer.toJSON(v);
-      });
+      const entries = Object.entries(message.writers);
+      if (entries.length > 0) {
+        obj.writers = {};
+        entries.forEach(([k, v]) => {
+          obj.writers[k] = Writer.toJSON(v);
+        });
+      }
     }
-    obj.records = {};
     if (message.records) {
-      Object.entries(message.records).forEach(([k, v]) => {
-        obj.records[k] = Record.toJSON(v);
-      });
+      const entries = Object.entries(message.records);
+      if (entries.length > 0) {
+        obj.records = {};
+        entries.forEach(([k, v]) => {
+          obj.records[k] = Record.toJSON(v);
+        });
+      }
     }
     return obj;
   },
 
-  fromPartial(object: DeepPartial<GenesisState>): GenesisState {
-    const message = { ...baseGenesisState } as GenesisState;
-    message.owners = {};
-    message.topics = {};
-    message.writers = {};
-    message.records = {};
-    if (object.owners !== undefined && object.owners !== null) {
-      Object.entries(object.owners).forEach(([key, value]) => {
-        if (value !== undefined) {
-          message.owners[key] = Owner.fromPartial(value);
-        }
-      });
-    }
-    if (object.topics !== undefined && object.topics !== null) {
-      Object.entries(object.topics).forEach(([key, value]) => {
-        if (value !== undefined) {
-          message.topics[key] = Topic.fromPartial(value);
-        }
-      });
-    }
-    if (object.writers !== undefined && object.writers !== null) {
-      Object.entries(object.writers).forEach(([key, value]) => {
-        if (value !== undefined) {
-          message.writers[key] = Writer.fromPartial(value);
-        }
-      });
-    }
-    if (object.records !== undefined && object.records !== null) {
-      Object.entries(object.records).forEach(([key, value]) => {
-        if (value !== undefined) {
-          message.records[key] = Record.fromPartial(value);
-        }
-      });
-    }
+  create<I extends Exact<DeepPartial<GenesisState>, I>>(base?: I): GenesisState {
+    return GenesisState.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
+    const message = createBaseGenesisState();
+    message.owners = Object.entries(object.owners ?? {}).reduce<{ [key: string]: Owner }>((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = Owner.fromPartial(value);
+      }
+      return acc;
+    }, {});
+    message.topics = Object.entries(object.topics ?? {}).reduce<{ [key: string]: Topic }>((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = Topic.fromPartial(value);
+      }
+      return acc;
+    }, {});
+    message.writers = Object.entries(object.writers ?? {}).reduce<{ [key: string]: Writer }>((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = Writer.fromPartial(value);
+      }
+      return acc;
+    }, {});
+    message.records = Object.entries(object.records ?? {}).reduce<{ [key: string]: Record }>((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = Record.fromPartial(value);
+      }
+      return acc;
+    }, {});
     return message;
   },
 };
 
-const baseGenesisState_OwnersEntry: object = { key: "" };
+function createBaseGenesisState_OwnersEntry(): GenesisState_OwnersEntry {
+  return { key: "", value: undefined };
+}
 
 export const GenesisState_OwnersEntry = {
-  encode(
-    message: GenesisState_OwnersEntry,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GenesisState_OwnersEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -237,84 +231,71 @@ export const GenesisState_OwnersEntry = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): GenesisState_OwnersEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): GenesisState_OwnersEntry {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseGenesisState_OwnersEntry,
-    } as GenesisState_OwnersEntry;
+    const message = createBaseGenesisState_OwnersEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.key = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.value = Owner.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): GenesisState_OwnersEntry {
-    const message = {
-      ...baseGenesisState_OwnersEntry,
-    } as GenesisState_OwnersEntry;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = String(object.key);
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = Owner.fromJSON(object.value);
-    } else {
-      message.value = undefined;
-    }
-    return message;
+    return {
+      key: isSet(object.key) ? globalThis.String(object.key) : "",
+      value: isSet(object.value) ? Owner.fromJSON(object.value) : undefined,
+    };
   },
 
   toJSON(message: GenesisState_OwnersEntry): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined &&
-      (obj.value = message.value ? Owner.toJSON(message.value) : undefined);
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    if (message.value !== undefined) {
+      obj.value = Owner.toJSON(message.value);
+    }
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<GenesisState_OwnersEntry>
-  ): GenesisState_OwnersEntry {
-    const message = {
-      ...baseGenesisState_OwnersEntry,
-    } as GenesisState_OwnersEntry;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = object.key;
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = Owner.fromPartial(object.value);
-    } else {
-      message.value = undefined;
-    }
+  create<I extends Exact<DeepPartial<GenesisState_OwnersEntry>, I>>(base?: I): GenesisState_OwnersEntry {
+    return GenesisState_OwnersEntry.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GenesisState_OwnersEntry>, I>>(object: I): GenesisState_OwnersEntry {
+    const message = createBaseGenesisState_OwnersEntry();
+    message.key = object.key ?? "";
+    message.value = (object.value !== undefined && object.value !== null) ? Owner.fromPartial(object.value) : undefined;
     return message;
   },
 };
 
-const baseGenesisState_TopicsEntry: object = { key: "" };
+function createBaseGenesisState_TopicsEntry(): GenesisState_TopicsEntry {
+  return { key: "", value: undefined };
+}
 
 export const GenesisState_TopicsEntry = {
-  encode(
-    message: GenesisState_TopicsEntry,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GenesisState_TopicsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -324,84 +305,71 @@ export const GenesisState_TopicsEntry = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): GenesisState_TopicsEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): GenesisState_TopicsEntry {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseGenesisState_TopicsEntry,
-    } as GenesisState_TopicsEntry;
+    const message = createBaseGenesisState_TopicsEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.key = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.value = Topic.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): GenesisState_TopicsEntry {
-    const message = {
-      ...baseGenesisState_TopicsEntry,
-    } as GenesisState_TopicsEntry;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = String(object.key);
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = Topic.fromJSON(object.value);
-    } else {
-      message.value = undefined;
-    }
-    return message;
+    return {
+      key: isSet(object.key) ? globalThis.String(object.key) : "",
+      value: isSet(object.value) ? Topic.fromJSON(object.value) : undefined,
+    };
   },
 
   toJSON(message: GenesisState_TopicsEntry): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined &&
-      (obj.value = message.value ? Topic.toJSON(message.value) : undefined);
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    if (message.value !== undefined) {
+      obj.value = Topic.toJSON(message.value);
+    }
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<GenesisState_TopicsEntry>
-  ): GenesisState_TopicsEntry {
-    const message = {
-      ...baseGenesisState_TopicsEntry,
-    } as GenesisState_TopicsEntry;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = object.key;
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = Topic.fromPartial(object.value);
-    } else {
-      message.value = undefined;
-    }
+  create<I extends Exact<DeepPartial<GenesisState_TopicsEntry>, I>>(base?: I): GenesisState_TopicsEntry {
+    return GenesisState_TopicsEntry.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GenesisState_TopicsEntry>, I>>(object: I): GenesisState_TopicsEntry {
+    const message = createBaseGenesisState_TopicsEntry();
+    message.key = object.key ?? "";
+    message.value = (object.value !== undefined && object.value !== null) ? Topic.fromPartial(object.value) : undefined;
     return message;
   },
 };
 
-const baseGenesisState_WritersEntry: object = { key: "" };
+function createBaseGenesisState_WritersEntry(): GenesisState_WritersEntry {
+  return { key: "", value: undefined };
+}
 
 export const GenesisState_WritersEntry = {
-  encode(
-    message: GenesisState_WritersEntry,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GenesisState_WritersEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -411,84 +379,73 @@ export const GenesisState_WritersEntry = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): GenesisState_WritersEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): GenesisState_WritersEntry {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseGenesisState_WritersEntry,
-    } as GenesisState_WritersEntry;
+    const message = createBaseGenesisState_WritersEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.key = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.value = Writer.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): GenesisState_WritersEntry {
-    const message = {
-      ...baseGenesisState_WritersEntry,
-    } as GenesisState_WritersEntry;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = String(object.key);
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = Writer.fromJSON(object.value);
-    } else {
-      message.value = undefined;
-    }
-    return message;
+    return {
+      key: isSet(object.key) ? globalThis.String(object.key) : "",
+      value: isSet(object.value) ? Writer.fromJSON(object.value) : undefined,
+    };
   },
 
   toJSON(message: GenesisState_WritersEntry): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined &&
-      (obj.value = message.value ? Writer.toJSON(message.value) : undefined);
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    if (message.value !== undefined) {
+      obj.value = Writer.toJSON(message.value);
+    }
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<GenesisState_WritersEntry>
-  ): GenesisState_WritersEntry {
-    const message = {
-      ...baseGenesisState_WritersEntry,
-    } as GenesisState_WritersEntry;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = object.key;
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = Writer.fromPartial(object.value);
-    } else {
-      message.value = undefined;
-    }
+  create<I extends Exact<DeepPartial<GenesisState_WritersEntry>, I>>(base?: I): GenesisState_WritersEntry {
+    return GenesisState_WritersEntry.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GenesisState_WritersEntry>, I>>(object: I): GenesisState_WritersEntry {
+    const message = createBaseGenesisState_WritersEntry();
+    message.key = object.key ?? "";
+    message.value = (object.value !== undefined && object.value !== null)
+      ? Writer.fromPartial(object.value)
+      : undefined;
     return message;
   },
 };
 
-const baseGenesisState_RecordsEntry: object = { key: "" };
+function createBaseGenesisState_RecordsEntry(): GenesisState_RecordsEntry {
+  return { key: "", value: undefined };
+}
 
 export const GenesisState_RecordsEntry = {
-  encode(
-    message: GenesisState_RecordsEntry,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GenesisState_RecordsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -498,97 +455,88 @@ export const GenesisState_RecordsEntry = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): GenesisState_RecordsEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): GenesisState_RecordsEntry {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseGenesisState_RecordsEntry,
-    } as GenesisState_RecordsEntry;
+    const message = createBaseGenesisState_RecordsEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.key = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.value = Record.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): GenesisState_RecordsEntry {
-    const message = {
-      ...baseGenesisState_RecordsEntry,
-    } as GenesisState_RecordsEntry;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = String(object.key);
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = Record.fromJSON(object.value);
-    } else {
-      message.value = undefined;
-    }
-    return message;
+    return {
+      key: isSet(object.key) ? globalThis.String(object.key) : "",
+      value: isSet(object.value) ? Record.fromJSON(object.value) : undefined,
+    };
   },
 
   toJSON(message: GenesisState_RecordsEntry): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined &&
-      (obj.value = message.value ? Record.toJSON(message.value) : undefined);
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    if (message.value !== undefined) {
+      obj.value = Record.toJSON(message.value);
+    }
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<GenesisState_RecordsEntry>
-  ): GenesisState_RecordsEntry {
-    const message = {
-      ...baseGenesisState_RecordsEntry,
-    } as GenesisState_RecordsEntry;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = object.key;
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = Record.fromPartial(object.value);
-    } else {
-      message.value = undefined;
-    }
+  create<I extends Exact<DeepPartial<GenesisState_RecordsEntry>, I>>(base?: I): GenesisState_RecordsEntry {
+    return GenesisState_RecordsEntry.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GenesisState_RecordsEntry>, I>>(object: I): GenesisState_RecordsEntry {
+    const message = createBaseGenesisState_RecordsEntry();
+    message.key = object.key ?? "";
+    message.value = (object.value !== undefined && object.value !== null)
+      ? Record.fromPartial(object.value)
+      : undefined;
     return message;
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined
-  | Long;
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isObject(value: any): boolean {
+  return typeof value === "object" && value !== null;
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

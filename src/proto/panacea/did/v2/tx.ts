@@ -1,12 +1,12 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { DIDDocument } from "../../../panacea/did/v2/did";
+import { DIDDocument } from "./did";
 
 export const protobufPackage = "panacea.did.v2";
 
 /** MsgCreateDID defines the Msg/CreateDID request type. */
-export interface MsgCreateDID {
+export interface MsgCreateDIDRequest {
   did: string;
   document: DIDDocument | undefined;
   verificationMethodId: string;
@@ -15,10 +15,11 @@ export interface MsgCreateDID {
 }
 
 /** MsgCreateDIDResponse defines the Msg/CreateDID response type. */
-export interface MsgCreateDIDResponse {}
+export interface MsgCreateDIDResponse {
+}
 
 /** MsgUpdateDID defines the Msg/UpdateDID request type. */
-export interface MsgUpdateDID {
+export interface MsgUpdateDIDRequest {
   did: string;
   document: DIDDocument | undefined;
   verificationMethodId: string;
@@ -27,10 +28,11 @@ export interface MsgUpdateDID {
 }
 
 /** MsgUpdateDIDResponse defines the Msg/UpdateDID response type. */
-export interface MsgUpdateDIDResponse {}
+export interface MsgUpdateDIDResponse {
+}
 
 /** MsgDeactivateDID defines the Msg/DeactivateDID request type. */
-export interface MsgDeactivateDID {
+export interface MsgDeactivateDIDRequest {
   did: string;
   verificationMethodId: string;
   signature: Uint8Array;
@@ -38,19 +40,15 @@ export interface MsgDeactivateDID {
 }
 
 /** MsgDeactivateDIDResponse defines the Msg/DeactivateDID response type. */
-export interface MsgDeactivateDIDResponse {}
+export interface MsgDeactivateDIDResponse {
+}
 
-const baseMsgCreateDID: object = {
-  did: "",
-  verificationMethodId: "",
-  fromAddress: "",
-};
+function createBaseMsgCreateDIDRequest(): MsgCreateDIDRequest {
+  return { did: "", document: undefined, verificationMethodId: "", signature: new Uint8Array(0), fromAddress: "" };
+}
 
-export const MsgCreateDID = {
-  encode(
-    message: MsgCreateDID,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+export const MsgCreateDIDRequest = {
+  encode(message: MsgCreateDIDRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.did !== "") {
       writer.uint32(10).string(message.did);
     }
@@ -69,152 +67,130 @@ export const MsgCreateDID = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateDID {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateDIDRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgCreateDID } as MsgCreateDID;
-    message.signature = new Uint8Array();
+    const message = createBaseMsgCreateDIDRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.did = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.document = DIDDocument.decode(reader, reader.uint32());
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.verificationMethodId = reader.string();
-          break;
+          continue;
         case 4:
+          if (tag !== 34) {
+            break;
+          }
+
           message.signature = reader.bytes();
-          break;
+          continue;
         case 5:
+          if (tag !== 42) {
+            break;
+          }
+
           message.fromAddress = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
-  fromJSON(object: any): MsgCreateDID {
-    const message = { ...baseMsgCreateDID } as MsgCreateDID;
-    message.signature = new Uint8Array();
-    if (object.did !== undefined && object.did !== null) {
-      message.did = String(object.did);
-    } else {
-      message.did = "";
-    }
-    if (object.document !== undefined && object.document !== null) {
-      message.document = DIDDocument.fromJSON(object.document);
-    } else {
-      message.document = undefined;
-    }
-    if (
-      object.verificationMethodId !== undefined &&
-      object.verificationMethodId !== null
-    ) {
-      message.verificationMethodId = String(object.verificationMethodId);
-    } else {
-      message.verificationMethodId = "";
-    }
-    if (object.signature !== undefined && object.signature !== null) {
-      message.signature = bytesFromBase64(object.signature);
-    }
-    if (object.fromAddress !== undefined && object.fromAddress !== null) {
-      message.fromAddress = String(object.fromAddress);
-    } else {
-      message.fromAddress = "";
-    }
-    return message;
+  fromJSON(object: any): MsgCreateDIDRequest {
+    return {
+      did: isSet(object.did) ? globalThis.String(object.did) : "",
+      document: isSet(object.document) ? DIDDocument.fromJSON(object.document) : undefined,
+      verificationMethodId: isSet(object.verificationMethodId) ? globalThis.String(object.verificationMethodId) : "",
+      signature: isSet(object.signature) ? bytesFromBase64(object.signature) : new Uint8Array(0),
+      fromAddress: isSet(object.fromAddress) ? globalThis.String(object.fromAddress) : "",
+    };
   },
 
-  toJSON(message: MsgCreateDID): unknown {
+  toJSON(message: MsgCreateDIDRequest): unknown {
     const obj: any = {};
-    message.did !== undefined && (obj.did = message.did);
-    message.document !== undefined &&
-      (obj.document = message.document
-        ? DIDDocument.toJSON(message.document)
-        : undefined);
-    message.verificationMethodId !== undefined &&
-      (obj.verificationMethodId = message.verificationMethodId);
-    message.signature !== undefined &&
-      (obj.signature = base64FromBytes(
-        message.signature !== undefined ? message.signature : new Uint8Array()
-      ));
-    message.fromAddress !== undefined &&
-      (obj.fromAddress = message.fromAddress);
+    if (message.did !== "") {
+      obj.did = message.did;
+    }
+    if (message.document !== undefined) {
+      obj.document = DIDDocument.toJSON(message.document);
+    }
+    if (message.verificationMethodId !== "") {
+      obj.verificationMethodId = message.verificationMethodId;
+    }
+    if (message.signature.length !== 0) {
+      obj.signature = base64FromBytes(message.signature);
+    }
+    if (message.fromAddress !== "") {
+      obj.fromAddress = message.fromAddress;
+    }
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgCreateDID>): MsgCreateDID {
-    const message = { ...baseMsgCreateDID } as MsgCreateDID;
-    if (object.did !== undefined && object.did !== null) {
-      message.did = object.did;
-    } else {
-      message.did = "";
-    }
-    if (object.document !== undefined && object.document !== null) {
-      message.document = DIDDocument.fromPartial(object.document);
-    } else {
-      message.document = undefined;
-    }
-    if (
-      object.verificationMethodId !== undefined &&
-      object.verificationMethodId !== null
-    ) {
-      message.verificationMethodId = object.verificationMethodId;
-    } else {
-      message.verificationMethodId = "";
-    }
-    if (object.signature !== undefined && object.signature !== null) {
-      message.signature = object.signature;
-    } else {
-      message.signature = new Uint8Array();
-    }
-    if (object.fromAddress !== undefined && object.fromAddress !== null) {
-      message.fromAddress = object.fromAddress;
-    } else {
-      message.fromAddress = "";
-    }
+  create<I extends Exact<DeepPartial<MsgCreateDIDRequest>, I>>(base?: I): MsgCreateDIDRequest {
+    return MsgCreateDIDRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgCreateDIDRequest>, I>>(object: I): MsgCreateDIDRequest {
+    const message = createBaseMsgCreateDIDRequest();
+    message.did = object.did ?? "";
+    message.document = (object.document !== undefined && object.document !== null)
+      ? DIDDocument.fromPartial(object.document)
+      : undefined;
+    message.verificationMethodId = object.verificationMethodId ?? "";
+    message.signature = object.signature ?? new Uint8Array(0);
+    message.fromAddress = object.fromAddress ?? "";
     return message;
   },
 };
 
-const baseMsgCreateDIDResponse: object = {};
+function createBaseMsgCreateDIDResponse(): MsgCreateDIDResponse {
+  return {};
+}
 
 export const MsgCreateDIDResponse = {
-  encode(
-    _: MsgCreateDIDResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgCreateDIDResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgCreateDIDResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateDIDResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgCreateDIDResponse } as MsgCreateDIDResponse;
+    const message = createBaseMsgCreateDIDResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(_: any): MsgCreateDIDResponse {
-    const message = { ...baseMsgCreateDIDResponse } as MsgCreateDIDResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgCreateDIDResponse): unknown {
@@ -222,23 +198,21 @@ export const MsgCreateDIDResponse = {
     return obj;
   },
 
-  fromPartial(_: DeepPartial<MsgCreateDIDResponse>): MsgCreateDIDResponse {
-    const message = { ...baseMsgCreateDIDResponse } as MsgCreateDIDResponse;
+  create<I extends Exact<DeepPartial<MsgCreateDIDResponse>, I>>(base?: I): MsgCreateDIDResponse {
+    return MsgCreateDIDResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgCreateDIDResponse>, I>>(_: I): MsgCreateDIDResponse {
+    const message = createBaseMsgCreateDIDResponse();
     return message;
   },
 };
 
-const baseMsgUpdateDID: object = {
-  did: "",
-  verificationMethodId: "",
-  fromAddress: "",
-};
+function createBaseMsgUpdateDIDRequest(): MsgUpdateDIDRequest {
+  return { did: "", document: undefined, verificationMethodId: "", signature: new Uint8Array(0), fromAddress: "" };
+}
 
-export const MsgUpdateDID = {
-  encode(
-    message: MsgUpdateDID,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+export const MsgUpdateDIDRequest = {
+  encode(message: MsgUpdateDIDRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.did !== "") {
       writer.uint32(10).string(message.did);
     }
@@ -257,152 +231,130 @@ export const MsgUpdateDID = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateDID {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateDIDRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgUpdateDID } as MsgUpdateDID;
-    message.signature = new Uint8Array();
+    const message = createBaseMsgUpdateDIDRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.did = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.document = DIDDocument.decode(reader, reader.uint32());
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.verificationMethodId = reader.string();
-          break;
+          continue;
         case 4:
+          if (tag !== 34) {
+            break;
+          }
+
           message.signature = reader.bytes();
-          break;
+          continue;
         case 5:
+          if (tag !== 42) {
+            break;
+          }
+
           message.fromAddress = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
-  fromJSON(object: any): MsgUpdateDID {
-    const message = { ...baseMsgUpdateDID } as MsgUpdateDID;
-    message.signature = new Uint8Array();
-    if (object.did !== undefined && object.did !== null) {
-      message.did = String(object.did);
-    } else {
-      message.did = "";
-    }
-    if (object.document !== undefined && object.document !== null) {
-      message.document = DIDDocument.fromJSON(object.document);
-    } else {
-      message.document = undefined;
-    }
-    if (
-      object.verificationMethodId !== undefined &&
-      object.verificationMethodId !== null
-    ) {
-      message.verificationMethodId = String(object.verificationMethodId);
-    } else {
-      message.verificationMethodId = "";
-    }
-    if (object.signature !== undefined && object.signature !== null) {
-      message.signature = bytesFromBase64(object.signature);
-    }
-    if (object.fromAddress !== undefined && object.fromAddress !== null) {
-      message.fromAddress = String(object.fromAddress);
-    } else {
-      message.fromAddress = "";
-    }
-    return message;
+  fromJSON(object: any): MsgUpdateDIDRequest {
+    return {
+      did: isSet(object.did) ? globalThis.String(object.did) : "",
+      document: isSet(object.document) ? DIDDocument.fromJSON(object.document) : undefined,
+      verificationMethodId: isSet(object.verificationMethodId) ? globalThis.String(object.verificationMethodId) : "",
+      signature: isSet(object.signature) ? bytesFromBase64(object.signature) : new Uint8Array(0),
+      fromAddress: isSet(object.fromAddress) ? globalThis.String(object.fromAddress) : "",
+    };
   },
 
-  toJSON(message: MsgUpdateDID): unknown {
+  toJSON(message: MsgUpdateDIDRequest): unknown {
     const obj: any = {};
-    message.did !== undefined && (obj.did = message.did);
-    message.document !== undefined &&
-      (obj.document = message.document
-        ? DIDDocument.toJSON(message.document)
-        : undefined);
-    message.verificationMethodId !== undefined &&
-      (obj.verificationMethodId = message.verificationMethodId);
-    message.signature !== undefined &&
-      (obj.signature = base64FromBytes(
-        message.signature !== undefined ? message.signature : new Uint8Array()
-      ));
-    message.fromAddress !== undefined &&
-      (obj.fromAddress = message.fromAddress);
+    if (message.did !== "") {
+      obj.did = message.did;
+    }
+    if (message.document !== undefined) {
+      obj.document = DIDDocument.toJSON(message.document);
+    }
+    if (message.verificationMethodId !== "") {
+      obj.verificationMethodId = message.verificationMethodId;
+    }
+    if (message.signature.length !== 0) {
+      obj.signature = base64FromBytes(message.signature);
+    }
+    if (message.fromAddress !== "") {
+      obj.fromAddress = message.fromAddress;
+    }
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgUpdateDID>): MsgUpdateDID {
-    const message = { ...baseMsgUpdateDID } as MsgUpdateDID;
-    if (object.did !== undefined && object.did !== null) {
-      message.did = object.did;
-    } else {
-      message.did = "";
-    }
-    if (object.document !== undefined && object.document !== null) {
-      message.document = DIDDocument.fromPartial(object.document);
-    } else {
-      message.document = undefined;
-    }
-    if (
-      object.verificationMethodId !== undefined &&
-      object.verificationMethodId !== null
-    ) {
-      message.verificationMethodId = object.verificationMethodId;
-    } else {
-      message.verificationMethodId = "";
-    }
-    if (object.signature !== undefined && object.signature !== null) {
-      message.signature = object.signature;
-    } else {
-      message.signature = new Uint8Array();
-    }
-    if (object.fromAddress !== undefined && object.fromAddress !== null) {
-      message.fromAddress = object.fromAddress;
-    } else {
-      message.fromAddress = "";
-    }
+  create<I extends Exact<DeepPartial<MsgUpdateDIDRequest>, I>>(base?: I): MsgUpdateDIDRequest {
+    return MsgUpdateDIDRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateDIDRequest>, I>>(object: I): MsgUpdateDIDRequest {
+    const message = createBaseMsgUpdateDIDRequest();
+    message.did = object.did ?? "";
+    message.document = (object.document !== undefined && object.document !== null)
+      ? DIDDocument.fromPartial(object.document)
+      : undefined;
+    message.verificationMethodId = object.verificationMethodId ?? "";
+    message.signature = object.signature ?? new Uint8Array(0);
+    message.fromAddress = object.fromAddress ?? "";
     return message;
   },
 };
 
-const baseMsgUpdateDIDResponse: object = {};
+function createBaseMsgUpdateDIDResponse(): MsgUpdateDIDResponse {
+  return {};
+}
 
 export const MsgUpdateDIDResponse = {
-  encode(
-    _: MsgUpdateDIDResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgUpdateDIDResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgUpdateDIDResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateDIDResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgUpdateDIDResponse } as MsgUpdateDIDResponse;
+    const message = createBaseMsgUpdateDIDResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(_: any): MsgUpdateDIDResponse {
-    const message = { ...baseMsgUpdateDIDResponse } as MsgUpdateDIDResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgUpdateDIDResponse): unknown {
@@ -410,23 +362,21 @@ export const MsgUpdateDIDResponse = {
     return obj;
   },
 
-  fromPartial(_: DeepPartial<MsgUpdateDIDResponse>): MsgUpdateDIDResponse {
-    const message = { ...baseMsgUpdateDIDResponse } as MsgUpdateDIDResponse;
+  create<I extends Exact<DeepPartial<MsgUpdateDIDResponse>, I>>(base?: I): MsgUpdateDIDResponse {
+    return MsgUpdateDIDResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateDIDResponse>, I>>(_: I): MsgUpdateDIDResponse {
+    const message = createBaseMsgUpdateDIDResponse();
     return message;
   },
 };
 
-const baseMsgDeactivateDID: object = {
-  did: "",
-  verificationMethodId: "",
-  fromAddress: "",
-};
+function createBaseMsgDeactivateDIDRequest(): MsgDeactivateDIDRequest {
+  return { did: "", verificationMethodId: "", signature: new Uint8Array(0), fromAddress: "" };
+}
 
-export const MsgDeactivateDID = {
-  encode(
-    message: MsgDeactivateDID,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+export const MsgDeactivateDIDRequest = {
+  encode(message: MsgDeactivateDIDRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.did !== "") {
       writer.uint32(10).string(message.did);
     }
@@ -442,139 +392,116 @@ export const MsgDeactivateDID = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeactivateDID {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeactivateDIDRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgDeactivateDID } as MsgDeactivateDID;
-    message.signature = new Uint8Array();
+    const message = createBaseMsgDeactivateDIDRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.did = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.verificationMethodId = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.signature = reader.bytes();
-          break;
+          continue;
         case 4:
+          if (tag !== 34) {
+            break;
+          }
+
           message.fromAddress = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
-  fromJSON(object: any): MsgDeactivateDID {
-    const message = { ...baseMsgDeactivateDID } as MsgDeactivateDID;
-    message.signature = new Uint8Array();
-    if (object.did !== undefined && object.did !== null) {
-      message.did = String(object.did);
-    } else {
-      message.did = "";
-    }
-    if (
-      object.verificationMethodId !== undefined &&
-      object.verificationMethodId !== null
-    ) {
-      message.verificationMethodId = String(object.verificationMethodId);
-    } else {
-      message.verificationMethodId = "";
-    }
-    if (object.signature !== undefined && object.signature !== null) {
-      message.signature = bytesFromBase64(object.signature);
-    }
-    if (object.fromAddress !== undefined && object.fromAddress !== null) {
-      message.fromAddress = String(object.fromAddress);
-    } else {
-      message.fromAddress = "";
-    }
-    return message;
+  fromJSON(object: any): MsgDeactivateDIDRequest {
+    return {
+      did: isSet(object.did) ? globalThis.String(object.did) : "",
+      verificationMethodId: isSet(object.verificationMethodId) ? globalThis.String(object.verificationMethodId) : "",
+      signature: isSet(object.signature) ? bytesFromBase64(object.signature) : new Uint8Array(0),
+      fromAddress: isSet(object.fromAddress) ? globalThis.String(object.fromAddress) : "",
+    };
   },
 
-  toJSON(message: MsgDeactivateDID): unknown {
+  toJSON(message: MsgDeactivateDIDRequest): unknown {
     const obj: any = {};
-    message.did !== undefined && (obj.did = message.did);
-    message.verificationMethodId !== undefined &&
-      (obj.verificationMethodId = message.verificationMethodId);
-    message.signature !== undefined &&
-      (obj.signature = base64FromBytes(
-        message.signature !== undefined ? message.signature : new Uint8Array()
-      ));
-    message.fromAddress !== undefined &&
-      (obj.fromAddress = message.fromAddress);
+    if (message.did !== "") {
+      obj.did = message.did;
+    }
+    if (message.verificationMethodId !== "") {
+      obj.verificationMethodId = message.verificationMethodId;
+    }
+    if (message.signature.length !== 0) {
+      obj.signature = base64FromBytes(message.signature);
+    }
+    if (message.fromAddress !== "") {
+      obj.fromAddress = message.fromAddress;
+    }
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgDeactivateDID>): MsgDeactivateDID {
-    const message = { ...baseMsgDeactivateDID } as MsgDeactivateDID;
-    if (object.did !== undefined && object.did !== null) {
-      message.did = object.did;
-    } else {
-      message.did = "";
-    }
-    if (
-      object.verificationMethodId !== undefined &&
-      object.verificationMethodId !== null
-    ) {
-      message.verificationMethodId = object.verificationMethodId;
-    } else {
-      message.verificationMethodId = "";
-    }
-    if (object.signature !== undefined && object.signature !== null) {
-      message.signature = object.signature;
-    } else {
-      message.signature = new Uint8Array();
-    }
-    if (object.fromAddress !== undefined && object.fromAddress !== null) {
-      message.fromAddress = object.fromAddress;
-    } else {
-      message.fromAddress = "";
-    }
+  create<I extends Exact<DeepPartial<MsgDeactivateDIDRequest>, I>>(base?: I): MsgDeactivateDIDRequest {
+    return MsgDeactivateDIDRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgDeactivateDIDRequest>, I>>(object: I): MsgDeactivateDIDRequest {
+    const message = createBaseMsgDeactivateDIDRequest();
+    message.did = object.did ?? "";
+    message.verificationMethodId = object.verificationMethodId ?? "";
+    message.signature = object.signature ?? new Uint8Array(0);
+    message.fromAddress = object.fromAddress ?? "";
     return message;
   },
 };
 
-const baseMsgDeactivateDIDResponse: object = {};
+function createBaseMsgDeactivateDIDResponse(): MsgDeactivateDIDResponse {
+  return {};
+}
 
 export const MsgDeactivateDIDResponse = {
-  encode(
-    _: MsgDeactivateDIDResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgDeactivateDIDResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgDeactivateDIDResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeactivateDIDResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgDeactivateDIDResponse,
-    } as MsgDeactivateDIDResponse;
+    const message = createBaseMsgDeactivateDIDResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(_: any): MsgDeactivateDIDResponse {
-    const message = {
-      ...baseMsgDeactivateDIDResponse,
-    } as MsgDeactivateDIDResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgDeactivateDIDResponse): unknown {
@@ -582,12 +509,11 @@ export const MsgDeactivateDIDResponse = {
     return obj;
   },
 
-  fromPartial(
-    _: DeepPartial<MsgDeactivateDIDResponse>
-  ): MsgDeactivateDIDResponse {
-    const message = {
-      ...baseMsgDeactivateDIDResponse,
-    } as MsgDeactivateDIDResponse;
+  create<I extends Exact<DeepPartial<MsgDeactivateDIDResponse>, I>>(base?: I): MsgDeactivateDIDResponse {
+    return MsgDeactivateDIDResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgDeactivateDIDResponse>, I>>(_: I): MsgDeactivateDIDResponse {
+    const message = createBaseMsgDeactivateDIDResponse();
     return message;
   },
 };
@@ -595,111 +521,89 @@ export const MsgDeactivateDIDResponse = {
 /** Msg defines the Msg service. */
 export interface Msg {
   /** CreateDID defines a method for creating a DID. */
-  CreateDID(request: MsgCreateDID): Promise<MsgCreateDIDResponse>;
+  CreateDID(request: MsgCreateDIDRequest): Promise<MsgCreateDIDResponse>;
   /** UpdateDID defines a method for updating a DID. */
-  UpdateDID(request: MsgUpdateDID): Promise<MsgUpdateDIDResponse>;
+  UpdateDID(request: MsgUpdateDIDRequest): Promise<MsgUpdateDIDResponse>;
   /** DeactivateDID defines a method for deactivating a DID. */
-  DeactivateDID(request: MsgDeactivateDID): Promise<MsgDeactivateDIDResponse>;
+  DeactivateDID(request: MsgDeactivateDIDRequest): Promise<MsgDeactivateDIDResponse>;
 }
 
+export const MsgServiceName = "panacea.did.v2.Msg";
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || MsgServiceName;
     this.rpc = rpc;
     this.CreateDID = this.CreateDID.bind(this);
     this.UpdateDID = this.UpdateDID.bind(this);
     this.DeactivateDID = this.DeactivateDID.bind(this);
   }
-  CreateDID(request: MsgCreateDID): Promise<MsgCreateDIDResponse> {
-    const data = MsgCreateDID.encode(request).finish();
-    const promise = this.rpc.request("panacea.did.v2.Msg", "CreateDID", data);
-    return promise.then((data) =>
-      MsgCreateDIDResponse.decode(new _m0.Reader(data))
-    );
+  CreateDID(request: MsgCreateDIDRequest): Promise<MsgCreateDIDResponse> {
+    const data = MsgCreateDIDRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "CreateDID", data);
+    return promise.then((data) => MsgCreateDIDResponse.decode(_m0.Reader.create(data)));
   }
 
-  UpdateDID(request: MsgUpdateDID): Promise<MsgUpdateDIDResponse> {
-    const data = MsgUpdateDID.encode(request).finish();
-    const promise = this.rpc.request("panacea.did.v2.Msg", "UpdateDID", data);
-    return promise.then((data) =>
-      MsgUpdateDIDResponse.decode(new _m0.Reader(data))
-    );
+  UpdateDID(request: MsgUpdateDIDRequest): Promise<MsgUpdateDIDResponse> {
+    const data = MsgUpdateDIDRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "UpdateDID", data);
+    return promise.then((data) => MsgUpdateDIDResponse.decode(_m0.Reader.create(data)));
   }
 
-  DeactivateDID(request: MsgDeactivateDID): Promise<MsgDeactivateDIDResponse> {
-    const data = MsgDeactivateDID.encode(request).finish();
-    const promise = this.rpc.request(
-      "panacea.did.v2.Msg",
-      "DeactivateDID",
-      data
-    );
-    return promise.then((data) =>
-      MsgDeactivateDIDResponse.decode(new _m0.Reader(data))
-    );
+  DeactivateDID(request: MsgDeactivateDIDRequest): Promise<MsgDeactivateDIDResponse> {
+    const data = MsgDeactivateDIDRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "DeactivateDID", data);
+    return promise.then((data) => MsgDeactivateDIDResponse.decode(_m0.Reader.create(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
-
-const atob: (b64: string) => string =
-  globalThis.atob ||
-  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
-  const bin = atob(b64);
-  const arr = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; ++i) {
-    arr[i] = bin.charCodeAt(i);
+  if ((globalThis as any).Buffer) {
+    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
+  } else {
+    const bin = globalThis.atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; ++i) {
+      arr[i] = bin.charCodeAt(i);
+    }
+    return arr;
   }
-  return arr;
 }
 
-const btoa: (bin: string) => string =
-  globalThis.btoa ||
-  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
-  const bin: string[] = [];
-  for (const byte of arr) {
-    bin.push(String.fromCharCode(byte));
+  if ((globalThis as any).Buffer) {
+    return globalThis.Buffer.from(arr).toString("base64");
+  } else {
+    const bin: string[] = [];
+    arr.forEach((byte) => {
+      bin.push(globalThis.String.fromCharCode(byte));
+    });
+    return globalThis.btoa(bin.join(""));
   }
-  return btoa(bin.join(""));
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined
-  | Long;
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

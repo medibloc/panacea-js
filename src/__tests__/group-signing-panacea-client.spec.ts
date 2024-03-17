@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { TextEncoder } from "util";
 import { Secp256k1HdWallet } from "@cosmjs/amino";
 import assert from "assert";
-import { panacead } from "./utils/test-utils";
+import { panacead } from "../utils/test-utils";
 import {
   panaceaWalletOpts,
   SigningPanaceaClient,

@@ -1,5 +1,5 @@
 import { PanaceaClient } from "../client/panacea-client";
-import { panacead } from "./utils/test-utils";
+import { panacead } from "../utils/test-utils";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { panaceaWalletOpts } from "../client/signing-panacea-client";
 

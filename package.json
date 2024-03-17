@@ -20,7 +20,7 @@
   "scripts": {
     "proto-gen": "./protocgen.sh",
     "build": "tsc",
-    "test": "jest",
+    "test": "jest --runInBand",
     "lint": "eslint src --ext .ts",
     "prettify": "prettier --write ."
   },

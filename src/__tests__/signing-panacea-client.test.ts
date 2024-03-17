@@ -1,5 +1,5 @@
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import { panacead } from "./utils/test-utils";
+import { panacead } from "../utils/test-utils";
 import {
   panaceaWalletOpts,
   SigningPanaceaClient,

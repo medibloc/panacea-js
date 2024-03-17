@@ -6,7 +6,7 @@ import {
 import { TextEncoder } from "util";
 import * as jose from "jose";
 import { Secp256k1 } from "../crypto";
-import { panacead } from "./utils/test-utils";
+import { panacead } from "../utils/test-utils";
 
 describe("Secp256k1", () => {
   it("parseMnemonicToPrivateKey", async () => {

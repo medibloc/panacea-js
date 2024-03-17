@@ -1,14 +1,20 @@
 import ecc from "secp256k1";
 import { randomBytes } from "crypto";
-import { Bip39, EnglishMnemonic, Slip10, Slip10Curve, Slip10RawIndex } from "@cosmjs/crypto"
-import * as jose from 'jose'
+import {
+  Bip39,
+  EnglishMnemonic,
+  Slip10,
+  Slip10Curve,
+  Slip10RawIndex,
+} from "@cosmjs/crypto";
+import * as jose from "jose";
 import { base64url } from "jose";
 
 export class Secp256k1 {
   static generatePrivateKey(): Uint8Array {
-    let privKey
+    let privKey;
     do {
-      privKey = randomBytes(32)
+      privKey = randomBytes(32);
     } while (!ecc.privateKeyVerify(privKey));
     return privKey;
   }
@@ -28,7 +34,9 @@ export class Secp256k1 {
 
   // Convert a raw private key to JWK
   static convertPrivateKeyToJWK(privKey: Uint8Array): jose.JWK {
-    const jwk = this.convertPublicKeyToJWK(Secp256k1.getPublicKeyUncompressed(privKey));
+    const jwk = this.convertPublicKeyToJWK(
+      Secp256k1.getPublicKeyUncompressed(privKey),
+    );
     jwk.d = base64url.encode(privKey);
     return jwk;
   }
@@ -47,7 +55,10 @@ export class Secp256k1 {
     return ecc.ecdsaSign(data32, privKey).signature;
   }
 
-  static async parseMnemonicToPrivateKey(mnemonic: string, hdPath: readonly Slip10RawIndex[]): Promise<Uint8Array> {
+  static async parseMnemonicToPrivateKey(
+    mnemonic: string,
+    hdPath: readonly Slip10RawIndex[],
+  ): Promise<Uint8Array> {
     const mnemonicChecked = new EnglishMnemonic(mnemonic);
     const seed = await Bip39.mnemonicToSeed(mnemonicChecked, "");
     return Slip10.derivePath(Slip10Curve.Secp256k1, seed, hdPath).privkey;

@@ -5,13 +5,12 @@ name: ci
 
 on:
   push:
-    branches:    # only for pushes on master
-    - master
-  pull_request:  # for all PRs regardless of its base branch
+    branches: # only for pushes on master
+      - master
+  pull_request: # for all PRs regardless of its base branch
 
 jobs:
   build-test:
-
     runs-on: ubuntu-latest
 
     env:
@@ -19,34 +18,20 @@ jobs:
       MNEMONIC: ${{ secrets.TEST_MNEMONIC }}
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Use Node.js 14.x
-      uses: actions/setup-node@v1
-      with:
-        node-version: 14.x
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x
 
-    - name: Install dependencies
-      run: yarn install
+      - name: Install dependencies
+        run: yarn install
 
-    - name: Build
-      run: yarn build
+      - name: Build
+        run: yarn build
 
-    - name: Run a panacea-core docker container
-      run: |
-        docker run --rm -d \
-          -e CHAIN_ID="${CHAIN_ID}" \
-          -e MNEMONIC="${MNEMONIC}" \
-          -p 26657:26657 \
-          -v $(pwd)/scripts:/root/scripts \
-          --name core \
-          ghcr.io/medibloc/panacea-core:master \
-          bash /root/scripts/panacea-core/init.sh
-
-        wget -qO- https://raw.githubusercontent.com/eficode/wait-for/v2.1.2/wait-for | sh -s -- localhost:26657 -t 30
-
-    - name: Run tests
-      env:
-        PANACEAD_ENABLED: true
-        TENDERMINT_URL: http://localhost:26657
-      run: yarn test
+      - name: Run tests
+        env:
+          PANACEAD_ENABLED: true
+        run: yarn test

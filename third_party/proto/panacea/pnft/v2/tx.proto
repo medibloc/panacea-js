@@ -1,0 +1,92 @@
+syntax = "proto3";
+package panacea.pnft.v2;
+
+option go_package = "github.com/medibloc/panacea-core/x/pnft/types";
+option java_multiple_files = true;
+
+service Msg {
+  rpc CreateDenom(MsgCreateDenomRequest) returns (MsgCreateDenomResponse);
+
+  rpc UpdateDenom(MsgUpdateDenomRequest) returns (MsgUpdateDenomResponse);
+
+  rpc DeleteDenom(MsgDeleteDenomRequest) returns (MsgDeleteDenomResponse);
+
+  rpc TransferDenom(MsgTransferDenomRequest) returns (MsgTransferDenomResponse);
+
+  rpc MintPNFT(MsgMintPNFTRequest) returns (MsgMintPNFTResponse);
+
+  rpc TransferPNFT(MsgTransferPNFTRequest) returns (MsgTransferPNFTResponse);
+
+  rpc BurnPNFT(MsgBurnPNFTRequest) returns (MsgBurnPNFTResponse);
+}
+
+message MsgCreateDenomRequest {
+  string id = 1;
+  string name = 2;
+  string symbol = 3;
+  string description = 4;
+  string uri = 5;
+  string uri_hash = 6;
+  string data = 7;
+  string creator = 8;
+}
+
+message MsgCreateDenomResponse {}
+
+message MsgUpdateDenomRequest {
+  string id = 1;
+  string name = 2;
+  string symbol = 3;
+  string description = 4;
+  string uri = 5;
+  string uri_hash = 6;
+  string data = 7;
+  string updater = 8;
+}
+
+message MsgUpdateDenomResponse {}
+
+message MsgDeleteDenomRequest {
+  string id = 1;
+  string remover = 2;
+}
+
+message MsgDeleteDenomResponse {}
+
+message MsgTransferDenomRequest {
+  string id = 1;
+  string sender = 2;
+  string receiver = 3;
+}
+
+message MsgTransferDenomResponse {}
+
+message MsgMintPNFTRequest {
+  string denom_id = 1;
+  string id = 2;
+  string name = 3;
+  string description = 4;
+  string uri = 5;
+  string uri_hash = 6;
+  string data = 7;
+  string creator = 8;
+}
+
+message MsgMintPNFTResponse {}
+
+message MsgTransferPNFTRequest {
+  string denom_id = 1;
+  string id = 2;
+  string sender = 3;
+  string receiver = 4;
+}
+
+message MsgTransferPNFTResponse {}
+
+message MsgBurnPNFTRequest {
+  string denom_id = 1;
+  string id = 2;
+  string burner = 3;
+}
+
+message MsgBurnPNFTResponse {}

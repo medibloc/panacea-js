@@ -11,122 +11,116 @@ export interface Topic {
   totalWriters: Long;
 }
 
-const baseTopic: object = {
-  description: "",
-  totalRecords: Long.UZERO,
-  totalWriters: Long.UZERO,
-};
+function createBaseTopic(): Topic {
+  return { description: "", totalRecords: Long.UZERO, totalWriters: Long.UZERO };
+}
 
 export const Topic = {
   encode(message: Topic, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.description !== "") {
       writer.uint32(10).string(message.description);
     }
-    if (!message.totalRecords.isZero()) {
+    if (!message.totalRecords.equals(Long.UZERO)) {
       writer.uint32(16).uint64(message.totalRecords);
     }
-    if (!message.totalWriters.isZero()) {
+    if (!message.totalWriters.equals(Long.UZERO)) {
       writer.uint32(24).uint64(message.totalWriters);
     }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Topic {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseTopic } as Topic;
+    const message = createBaseTopic();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.description = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 16) {
+            break;
+          }
+
           message.totalRecords = reader.uint64() as Long;
-          break;
+          continue;
         case 3:
+          if (tag !== 24) {
+            break;
+          }
+
           message.totalWriters = reader.uint64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): Topic {
-    const message = { ...baseTopic } as Topic;
-    if (object.description !== undefined && object.description !== null) {
-      message.description = String(object.description);
-    } else {
-      message.description = "";
-    }
-    if (object.totalRecords !== undefined && object.totalRecords !== null) {
-      message.totalRecords = Long.fromString(object.totalRecords);
-    } else {
-      message.totalRecords = Long.UZERO;
-    }
-    if (object.totalWriters !== undefined && object.totalWriters !== null) {
-      message.totalWriters = Long.fromString(object.totalWriters);
-    } else {
-      message.totalWriters = Long.UZERO;
-    }
-    return message;
+    return {
+      description: isSet(object.description) ? globalThis.String(object.description) : "",
+      totalRecords: isSet(object.totalRecords) ? Long.fromValue(object.totalRecords) : Long.UZERO,
+      totalWriters: isSet(object.totalWriters) ? Long.fromValue(object.totalWriters) : Long.UZERO,
+    };
   },
 
   toJSON(message: Topic): unknown {
     const obj: any = {};
-    message.description !== undefined &&
-      (obj.description = message.description);
-    message.totalRecords !== undefined &&
-      (obj.totalRecords = (message.totalRecords || Long.UZERO).toString());
-    message.totalWriters !== undefined &&
-      (obj.totalWriters = (message.totalWriters || Long.UZERO).toString());
+    if (message.description !== "") {
+      obj.description = message.description;
+    }
+    if (!message.totalRecords.equals(Long.UZERO)) {
+      obj.totalRecords = (message.totalRecords || Long.UZERO).toString();
+    }
+    if (!message.totalWriters.equals(Long.UZERO)) {
+      obj.totalWriters = (message.totalWriters || Long.UZERO).toString();
+    }
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Topic>): Topic {
-    const message = { ...baseTopic } as Topic;
-    if (object.description !== undefined && object.description !== null) {
-      message.description = object.description;
-    } else {
-      message.description = "";
-    }
-    if (object.totalRecords !== undefined && object.totalRecords !== null) {
-      message.totalRecords = object.totalRecords as Long;
-    } else {
-      message.totalRecords = Long.UZERO;
-    }
-    if (object.totalWriters !== undefined && object.totalWriters !== null) {
-      message.totalWriters = object.totalWriters as Long;
-    } else {
-      message.totalWriters = Long.UZERO;
-    }
+  create<I extends Exact<DeepPartial<Topic>, I>>(base?: I): Topic {
+    return Topic.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Topic>, I>>(object: I): Topic {
+    const message = createBaseTopic();
+    message.description = object.description ?? "";
+    message.totalRecords = (object.totalRecords !== undefined && object.totalRecords !== null)
+      ? Long.fromValue(object.totalRecords)
+      : Long.UZERO;
+    message.totalWriters = (object.totalWriters !== undefined && object.totalWriters !== null)
+      ? Long.fromValue(object.totalWriters)
+      : Long.UZERO;
     return message;
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined
-  | Long;
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

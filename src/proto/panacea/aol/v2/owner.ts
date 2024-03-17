@@ -9,82 +9,82 @@ export interface Owner {
   totalTopics: Long;
 }
 
-const baseOwner: object = { totalTopics: Long.UZERO };
+function createBaseOwner(): Owner {
+  return { totalTopics: Long.UZERO };
+}
 
 export const Owner = {
   encode(message: Owner, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (!message.totalTopics.isZero()) {
+    if (!message.totalTopics.equals(Long.UZERO)) {
       writer.uint32(8).uint64(message.totalTopics);
     }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Owner {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseOwner } as Owner;
+    const message = createBaseOwner();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 8) {
+            break;
+          }
+
           message.totalTopics = reader.uint64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): Owner {
-    const message = { ...baseOwner } as Owner;
-    if (object.totalTopics !== undefined && object.totalTopics !== null) {
-      message.totalTopics = Long.fromString(object.totalTopics);
-    } else {
-      message.totalTopics = Long.UZERO;
-    }
-    return message;
+    return { totalTopics: isSet(object.totalTopics) ? Long.fromValue(object.totalTopics) : Long.UZERO };
   },
 
   toJSON(message: Owner): unknown {
     const obj: any = {};
-    message.totalTopics !== undefined &&
-      (obj.totalTopics = (message.totalTopics || Long.UZERO).toString());
+    if (!message.totalTopics.equals(Long.UZERO)) {
+      obj.totalTopics = (message.totalTopics || Long.UZERO).toString();
+    }
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Owner>): Owner {
-    const message = { ...baseOwner } as Owner;
-    if (object.totalTopics !== undefined && object.totalTopics !== null) {
-      message.totalTopics = object.totalTopics as Long;
-    } else {
-      message.totalTopics = Long.UZERO;
-    }
+  create<I extends Exact<DeepPartial<Owner>, I>>(base?: I): Owner {
+    return Owner.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Owner>, I>>(object: I): Owner {
+    const message = createBaseOwner();
+    message.totalTopics = (object.totalTopics !== undefined && object.totalTopics !== null)
+      ? Long.fromValue(object.totalTopics)
+      : Long.UZERO;
     return message;
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined
-  | Long;
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

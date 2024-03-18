@@ -1,7 +1,14 @@
 {
-  "name": "panacea-js",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "@medibloc/panacea-js",
+  "version": "2.2.1",
+  "description": "The official Panacea Javascript SDK written in Typescript",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "repository": "git@github.com:medibloc/panacea-js.git",
   "keywords": [
     "medibloc",

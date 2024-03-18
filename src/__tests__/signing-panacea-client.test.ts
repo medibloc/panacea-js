@@ -3,9 +3,9 @@ import { panacead } from "../utils/test-utils";
 import {
   panaceaWalletOpts,
   SigningPanaceaClient,
-} from "../client/signing-panacea-client";
+} from '../client';
 import { v4 } from "uuid";
-import { PanaceaClient } from "../client/panacea-client";
+import { PanaceaClient } from '../client';
 import { Secp256k1 } from "../crypto";
 import { DIDDocument } from "../proto/panacea/did/v2/did";
 import { DidUtil } from "../did";
@@ -46,6 +46,7 @@ describe("", () => {
     });
 
     it("All aol test", async () => {
+      console.log(`create topic. ownerAddress(${ownerAddress}), topicName(${topicName})`);
       const createTopicReq = {
         ownerAddress: ownerAddress,
         topicName: topicName,
@@ -65,7 +66,9 @@ describe("", () => {
       expect(createTopicReq.description).toBe(topic?.description);
       expect(0).toBe(topic?.totalWriters.toNumber());
       expect(0).toBe(topic?.totalRecords.toNumber());
+      console.log(`create topic success. ownerAddress(${ownerAddress}), topicName(${topicName})`);
 
+      console.log(`add writer. ownerAddress(${ownerAddress}), writer(${ownerAddress}) topicName(${topicName})`);
       const addWriterReq = {
         ownerAddress: ownerAddress,
         writerAddress: ownerAddress,
@@ -90,9 +93,12 @@ describe("", () => {
         .getWriter(ownerAddress, topicName, ownerAddress);
       expect(addWriterReq.moniker).toBe(writer?.moniker);
       expect(addWriterReq.description).toBe(writer?.description);
+      console.log(`add writer success. ownerAddress(${ownerAddress}), writer(${ownerAddress}) topicName(${topicName})`);
 
       const key = new TextEncoder().encode("key1");
       const value = new TextEncoder().encode("value1");
+
+      console.log(`add record. ownerAddress(${ownerAddress}), writer(${ownerAddress}) topicName(${topicName}) key(${key.toString()}) value(${value.toString()})`);
       const addRecordRes = await client.addRecord(
         {
           key: key,
@@ -119,6 +125,7 @@ describe("", () => {
       expect(record?.key.toString()).toBe(key.toString());
       expect(record?.value.toString()).toBe(value.toString());
       expect(record?.writerAddress).toBe(ownerAddress);
+      console.log(`add record success. ownerAddress(${ownerAddress}), writer(${ownerAddress}) topicName(${topicName}) key(${key.toString()}) value(${value.toString()})`);
     });
   });
 
@@ -148,6 +155,7 @@ describe("", () => {
       const didDocument = generateDidDocument(privKey);
       let signature = DidUtil.signDidDocument(privKey, didDocument);
 
+      console.log(`create did. did(${didDocument.id}) verificationMethodId(${didDocument.verificationMethods[0].id})`);
       const createDidReq = {
         did: didDocument.id,
         document: didDocument,
@@ -156,7 +164,6 @@ describe("", () => {
         fromAddress: fromAddress,
       };
       let res = await client.createDid(createDidReq, "auto");
-      console.log("create", res);
       expect(isDeliverTxSuccess(res)).toBeTruthy();
 
       let getDIDDocumentWithSeq = await client
@@ -174,7 +181,9 @@ describe("", () => {
         didDocument,
         getDIDDocumentWithSeq.sequence,
       );
+      console.log(`create did success. did(${didDocument.id}) verificationMethodId(${didDocument.verificationMethods[0].id})`);
 
+      console.log(`update did. did(${didDocument.id}) verificationMethodId(${didDocument.verificationMethods[0].id})`);
       const updateDidReq = {
         did: didDocument.id,
         document: didDocument,
@@ -193,6 +202,7 @@ describe("", () => {
       console.log(getDIDDocumentWithSeq?.sequence.toNumber());
       assert(getDIDDocumentWithSeq);
       expect(getDIDDocumentWithSeq.document).toEqual(didDocument);
+      console.log(`update did success. did(${didDocument.id}) verificationMethodId(${didDocument.verificationMethods[0].id})`);
     });
 
     it("create DID with offline signer", async () => {
@@ -275,6 +285,7 @@ describe("", () => {
         data: "no data",
         creator: fromAddress,
       };
+      console.log(`create denom. denomId(${denomId}) creator(${fromAddress})`);
       let res = await client.createDenom(createDenomReq, fee);
       expect(isDeliverTxSuccess(res)).toBeTruthy();
 
@@ -288,7 +299,9 @@ describe("", () => {
       expect(denom!.uri).toBe("");
       expect(denom!.uriHash).toBe("");
       expect(denom!.owner).toBe(fromAddress);
+      console.log(`create denom success. denomId(${denomId}) creator(${fromAddress})`);
 
+      console.log(`update denom. denomId(${denomId}) creator(${fromAddress})`);
       const updateDenomReq = {
         id: denomId,
         name: "mediboc test update denom",
@@ -312,8 +325,10 @@ describe("", () => {
       expect(denom!.uri).toBe(updateDenomReq.uri);
       expect(denom!.uriHash).toBe(updateDenomReq.uriHash);
       expect(denom!.owner).toBe(fromAddress);
+      console.log(`update denom success. denomId(${denomId}) creator(${fromAddress})`);
 
       const pnftId = v4();
+      console.log(`mint pnft. denomId(${denomId}) pnftId(${pnftId}) creator(${fromAddress})`);
       const firstPnftReq = {
         denomId: denomId,
         id: pnftId,
@@ -336,6 +351,7 @@ describe("", () => {
       expect(pnft!.uriHash).toBe("");
       expect(pnft!.creator).toBe(fromAddress);
       expect(pnft!.owner).toBe(fromAddress);
+      console.log(`mint pnft success. denomId(${denomId}) pnftId(${pnftId}) creator(${fromAddress})`);
 
       const transferPnftReq = {
         denomId: denomId,
@@ -343,6 +359,7 @@ describe("", () => {
         sender: fromAddress,
         receiver: toAddress,
       };
+      console.log(`transfer pnft. denomId(${denomId}) pnftId(${pnftId}) creator(${fromAddress}) to(${toAddress}`);
       res = await client.transferPNFT(transferPnftReq, fee);
       expect(isDeliverTxSuccess(res)).toBeTruthy();
 
@@ -357,6 +374,7 @@ describe("", () => {
       expect(pnft!.uriHash).toBe("");
       expect(pnft!.creator).toBe(fromAddress);
       expect(pnft!.owner).toBe(toAddress);
+      console.log(`transfer pnft success. denomId(${denomId}) pnftId(${pnftId}) creator(${fromAddress}) to(${toAddress}`);
 
       ////////////////////// Burn Pnft////////////////////////
 
@@ -368,6 +386,7 @@ describe("", () => {
         data: "no data",
         creator: fromAddress,
       };
+      console.log(`burn pnft. denomId(${denomId}) pnftId(${secondPNftReq.id}) creator(${fromAddress})`);
       res = await client.mintPNFT(secondPNftReq, fee);
       expect(isDeliverTxSuccess(res)).toBeTruthy();
 
@@ -382,6 +401,7 @@ describe("", () => {
 
       pnft = await client.getPanaceaClient().getPnft(denomId, secondPNftReq.id);
       expect(pnft).toBeUndefined();
+      console.log(`burn pnft success. denomId(${denomId}) pnftId(${secondPNftReq.id}) creator(${fromAddress})`);
     });
   });
 });

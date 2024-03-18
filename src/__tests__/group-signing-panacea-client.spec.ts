@@ -2,7 +2,6 @@ import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { v4 as uuidv4 } from "uuid";
 import { TextEncoder } from "util";
 import { Secp256k1HdWallet } from "@cosmjs/amino";
-import assert from "assert";
 import { panacead } from "../utils/test-utils";
 import {
   panaceaWalletOpts,
@@ -150,10 +149,10 @@ describe("GroupSigningPanaceaClient", () => {
         const record = await client
           .getPanaceaClient()
           .getRecord(ownerAddress, topicName, 0);
-        assert(record);
-        expect(record.writerAddress).toEqual(writerAddress);
-        expect(record.key).toEqual(key);
-        expect(record.value).toEqual(value);
+        expect(record).toBeTruthy();
+        expect(record!.writerAddress).toEqual(writerAddress);
+        expect(record!.key).toEqual(key);
+        expect(record!.value).toEqual(value);
 
         client.disconnect();
       });

@@ -2,10 +2,15 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
+    "allowJs": false,
+    "declaration": true,
     "strict": true,
     "esModuleInterop": true,
-    "outDir": "./dist"
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "src",
+    "disableSizeLimit": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"]
 }

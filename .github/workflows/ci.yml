@@ -13,10 +13,6 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
 
-    env:
-      CHAIN_ID: testing
-      MNEMONIC: ${{ secrets.TEST_MNEMONIC }}
-
     steps:
       - uses: actions/checkout@v2
 
@@ -31,7 +27,5 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Run tests
-        env:
-          PANACEAD_ENABLED: true
+      - name: Run unit tests
         run: yarn test

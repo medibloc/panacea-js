@@ -6,7 +6,9 @@ import {
 import { TextEncoder } from "util";
 import * as jose from "jose";
 import { Secp256k1 } from "../crypto";
-import { panacead } from "../utils/test-utils";
+
+const testMnemonic =
+  "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about";
 
 describe("Secp256k1", () => {
   it("parseMnemonicToPrivateKey", async () => {
@@ -15,7 +17,7 @@ describe("Secp256k1", () => {
     const hdPath = stringToPath("m/44'/371'/0'/0/0");
 
     const privateKey = await Secp256k1.parseMnemonicToPrivateKey(
-      panacead.mnemonic,
+      testMnemonic,
       hdPath,
     );
     const { pubkey } = await CryptoSecp256k1.makeKeypair(privateKey);

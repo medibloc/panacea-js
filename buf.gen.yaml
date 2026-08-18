@@ -1,0 +1,8 @@
+version: v1
+plugins:
+  - plugin: ts_proto
+    out: src/proto
+    opt:
+      - esModuleInterop=true
+      - forceLong=long
+      - useOptional=true

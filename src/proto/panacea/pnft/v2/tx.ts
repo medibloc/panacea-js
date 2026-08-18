@@ -1231,6 +1231,11 @@ export const MsgBurnPNFTResponse = {
   },
 };
 
+/**
+ * Msg is retained only for wire compatibility with legacy PNFT transactions
+ * and messages embedded in historical gov, group, and authz Any values.
+ * PNFT execution is disabled; new integrations must use panacea.nft.v1.Msg.
+ */
 export interface Msg {
   CreateDenom(request: MsgCreateDenomRequest): Promise<MsgCreateDenomResponse>;
   UpdateDenom(request: MsgUpdateDenomRequest): Promise<MsgUpdateDenomResponse>;

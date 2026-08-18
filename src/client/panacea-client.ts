@@ -5,8 +5,7 @@ import {
   StargateClientOptions,
 } from "@cosmjs/stargate";
 import { Topic } from "../proto/panacea/aol/v2/topic";
-import { Tendermint37Client } from "@cosmjs/tendermint-rpc/build/tendermint37";
-import { CometClient } from "@cosmjs/tendermint-rpc";
+import { CometClient, connectComet } from "@cosmjs/tendermint-rpc";
 import { PageRequest } from "../proto/cosmos/base/query/v1beta1/pagination";
 import {
   QueryClientImpl as AolQueryClientImpl,
@@ -45,7 +44,7 @@ export class PanaceaClient extends StargateClient {
    * Creates a PanaceaClient.
    */
   static async connect(endpoint: string): Promise<PanaceaClient> {
-    const tmClient = await Tendermint37Client.connect(endpoint);
+    const tmClient = await connectComet(endpoint);
     return new PanaceaClient(tmClient, {});
   }
 

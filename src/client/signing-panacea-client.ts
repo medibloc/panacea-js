@@ -13,9 +13,8 @@ import {
   OfflineSigner,
   Registry,
 } from "@cosmjs/proto-signing";
-import { Tendermint37Client } from "@cosmjs/tendermint-rpc/build/tendermint37";
 import { PanaceaClient } from "./panacea-client";
-import { CometClient } from "@cosmjs/tendermint-rpc";
+import { CometClient, connectComet } from "@cosmjs/tendermint-rpc";
 import {
   MsgAddRecordRequest,
   MsgAddWriterRequest,
@@ -113,7 +112,7 @@ export class SigningPanaceaClient extends SigningStargateClient {
     signer: OfflineSigner,
     options: SigningStargateClientOptions = {},
   ) {
-    const tmClient = await Tendermint37Client.connect(endpoint);
+    const tmClient = await connectComet(endpoint);
     return new SigningPanaceaClient(tmClient, signer, options);
   }
 

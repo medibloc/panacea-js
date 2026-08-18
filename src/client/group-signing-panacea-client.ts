@@ -14,7 +14,7 @@ import {
   SigningStargateClientOptions,
   StdFee,
 } from "@cosmjs/stargate";
-import { Tendermint37Client } from "@cosmjs/tendermint-rpc/build/tendermint37";
+import { CometClient, connectComet } from "@cosmjs/tendermint-rpc";
 import { AuthInfo, SignerInfo, TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { encodeSecp256k1Pubkey } from "@cosmjs/amino";
 import { Int53 } from "@cosmjs/math";
@@ -46,12 +46,12 @@ export class GroupSigningPanaceaClient extends SigningPanaceaClient {
     signers: OfflineSigner[],
     options: SigningStargateClientOptions = {},
   ): Promise<GroupSigningPanaceaClient> {
-    const tmClient = await Tendermint37Client.connect(endpoint);
+    const tmClient = await connectComet(endpoint);
     return new GroupSigningPanaceaClient(tmClient, signers, options);
   }
 
   protected constructor(
-    tmClient: Tendermint37Client | undefined,
+    tmClient: CometClient | undefined,
     signers: OfflineSigner[],
     options: SigningStargateClientOptions,
   ) {

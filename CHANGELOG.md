@@ -2,11 +2,17 @@
 
 ## Unreleased
 
-TBD
-
 ### Features
 
-- []() feat:
+- Support Panacea Core v2.3.0 and CometBFT v0.38 RPC connections.
+- Add Panacea NFT class, mint, transfer, revoke, burn, and query APIs.
+- Vendor protobuf schemas from Panacea Core v2.3.0.
+
+### Deprecated
+
+- Legacy PNFT APIs are retained for Panacea Core v2.2.x compatibility. Panacea
+  Core v2.3.0 removes PNFT queries and rejects legacy PNFT transactions; use
+  the Panacea NFT APIs instead.
 
 ## [v2.0.4](https://github.com/medibloc/panacea-js/releases/tag/v2.0.4) - 2023-07-05
 

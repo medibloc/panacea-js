@@ -149,24 +149,39 @@ export class PanaceaClient extends StargateClient {
     );
   }
 
+  /**
+   * @deprecated Panacea Core v2.2.x only. Use getNftRecords() with Core v2.3.0+.
+   */
   async getDenoms(pagination?: PageRequest): Promise<QueryDenomsResponse> {
     return this.pnftQueryClient.Denoms({ pagination });
   }
 
+  /**
+   * @deprecated Panacea Core v2.2.x only. Use getNftRecords() with Core v2.3.0+.
+   */
   async getDenomsByOwner(owner: string): Promise<QueryDenomsByOwnerResponse> {
     return this.pnftQueryClient.DenomsByOwner({ owner });
   }
 
+  /**
+   * @deprecated Panacea Core v2.2.x only. Use getNftClassRecord() with Core v2.3.0+.
+   */
   async getDenom(id: string): Promise<Denom | undefined> {
     return fetchWithFallback(() => this.pnftQueryClient.Denom({ id })).then(
       (res) => res?.denom,
     );
   }
 
+  /**
+   * @deprecated Panacea Core v2.2.x only. Use getNftRecords() with Core v2.3.0+.
+   */
   async getPnfts(denomId: string): Promise<QueryPNFTsResponse> {
     return this.pnftQueryClient.PNFTs({ denomId });
   }
 
+  /**
+   * @deprecated Panacea Core v2.2.x only. Use getNftRecords() with Core v2.3.0+.
+   */
   async getPnftsByOwner(
     denomId: string,
     owner: string,
@@ -174,6 +189,9 @@ export class PanaceaClient extends StargateClient {
     return this.pnftQueryClient.PNFTsByDenomOwner({ denomId, owner });
   }
 
+  /**
+   * @deprecated Panacea Core v2.2.x only. Use getNftRecord() with Core v2.3.0+.
+   */
   async getPnft(denomId: string, id: string): Promise<Pnft | undefined> {
     return fetchWithFallback(() =>
       this.pnftQueryClient.PNFT({ denomId, id }),

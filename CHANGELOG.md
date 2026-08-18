@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [v2.3.0](https://github.com/medibloc/panacea-js/releases/tag/v2.3.0) - 2026-08-18
+
 ### Features
 
 - Support Panacea Core v2.3.0 and CometBFT v0.38 RPC connections.
@@ -13,6 +15,14 @@
 - Legacy PNFT APIs are retained for Panacea Core v2.2.x compatibility. Panacea
   Core v2.3.0 removes PNFT queries and rejects legacy PNFT transactions; use
   the Panacea NFT APIs instead.
+
+## [v2.2.1](https://github.com/medibloc/panacea-js/releases/tag/v2.2.1) - 2024-03-18
+
+### Features
+
+- Add offline signing and message creation APIs.
+- Upgrade CosmJS to v0.32.3 and add PNFT support for Panacea Core v2.2.x.
+- Publish the scoped `@medibloc/panacea-js` package with compiled TypeScript declarations.
 
 ## [v2.0.4](https://github.com/medibloc/panacea-js/releases/tag/v2.0.4) - 2023-07-05
 

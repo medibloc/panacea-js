@@ -1,3 +1,5 @@
+// Vendored from cosmossdk.io/x/nft v0.1.1 because the split module's proto
+// sources are not included in the repository's Cosmos SDK Buf dependency.
 syntax = "proto3";
 package cosmos.nft.v1beta1;
 

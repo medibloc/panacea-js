@@ -36,6 +36,14 @@ import {
   MsgTransferPNFTRequest,
   MsgUpdateDenomRequest,
 } from "../proto/panacea/pnft/v2/tx";
+import {
+  MsgBurnRequest,
+  MsgCreateClassRequest,
+  MsgMintRequest,
+  MsgRevokeRequest,
+  MsgUpdateControllerRequest,
+} from "../proto/panacea/nft/v1/tx";
+import { MsgSend } from "cosmjs-types/cosmos/nft/v1beta1/tx";
 
 export const panaceaDefaultGasPrice = GasPrice.fromString("5umed");
 
@@ -57,6 +65,13 @@ export class SigningPanaceaClient extends SigningStargateClient {
   static msgTypeCreateDid = "/panacea.did.v2.MsgCreateDIDRequest";
   static msgTypeUpdateDid = "/panacea.did.v2.MsgUpdateDIDRequest";
   static msgTypeDeactivateDid = "/panacea.did.v2.MsgDeactivateDIDRequest";
+  static msgTypeCreateNftClass = "/panacea.nft.v1.MsgCreateClassRequest";
+  static msgTypeUpdateNftController =
+    "/panacea.nft.v1.MsgUpdateControllerRequest";
+  static msgTypeMintNft = "/panacea.nft.v1.MsgMintRequest";
+  static msgTypeTransferNft = "/cosmos.nft.v1beta1.MsgSend";
+  static msgTypeRevokeNft = "/panacea.nft.v1.MsgRevokeRequest";
+  static msgTypeBurnNft = "/panacea.nft.v1.MsgBurnRequest";
   static msgTypeCreateDenom = "/panacea.pnft.v2.MsgCreateDenomRequest";
   static msgTypeUpdateDenom = "/panacea.pnft.v2.MsgUpdateDenomRequest";
   static msgTypeTransferDenom = "/panacea.pnft.v2.MsgTransferDenomRequest";
@@ -74,6 +89,15 @@ export class SigningPanaceaClient extends SigningStargateClient {
       [SigningPanaceaClient.msgTypeCreateDid, MsgCreateDIDRequest],
       [SigningPanaceaClient.msgTypeUpdateDid, MsgUpdateDIDRequest],
       [SigningPanaceaClient.msgTypeDeactivateDid, MsgDeactivateDIDRequest],
+      [SigningPanaceaClient.msgTypeCreateNftClass, MsgCreateClassRequest],
+      [
+        SigningPanaceaClient.msgTypeUpdateNftController,
+        MsgUpdateControllerRequest,
+      ],
+      [SigningPanaceaClient.msgTypeMintNft, MsgMintRequest],
+      [SigningPanaceaClient.msgTypeTransferNft, MsgSend],
+      [SigningPanaceaClient.msgTypeRevokeNft, MsgRevokeRequest],
+      [SigningPanaceaClient.msgTypeBurnNft, MsgBurnRequest],
       [SigningPanaceaClient.msgTypeCreateDenom, MsgCreateDenomRequest],
       [SigningPanaceaClient.msgTypeUpdateDenom, MsgUpdateDenomRequest],
       [SigningPanaceaClient.msgTypeTransferDenom, MsgTransferDenomRequest],
@@ -212,6 +236,78 @@ export class SigningPanaceaClient extends SigningStargateClient {
       value: MsgDeactivateDIDRequest.create(request),
     };
     return this.signAndBroadcast(request.fromAddress!, [msg], fee, memo);
+  }
+
+  async createNftClass(
+    request: Partial<MsgCreateClassRequest>,
+    fee: StdFee | "auto",
+    memo?: string,
+  ): Promise<DeliverTxResponse> {
+    const msg: Msg<MsgCreateClassRequest> = {
+      typeUrl: SigningPanaceaClient.msgTypeCreateNftClass,
+      value: MsgCreateClassRequest.create(request),
+    };
+    return this.signAndBroadcast(request.creator!, [msg], fee, memo);
+  }
+
+  async updateNftController(
+    request: Partial<MsgUpdateControllerRequest>,
+    fee: StdFee | "auto",
+    memo?: string,
+  ): Promise<DeliverTxResponse> {
+    const msg: Msg<MsgUpdateControllerRequest> = {
+      typeUrl: SigningPanaceaClient.msgTypeUpdateNftController,
+      value: MsgUpdateControllerRequest.create(request),
+    };
+    return this.signAndBroadcast(request.controller!, [msg], fee, memo);
+  }
+
+  async mintNft(
+    request: Partial<MsgMintRequest>,
+    fee: StdFee | "auto",
+    memo?: string,
+  ): Promise<DeliverTxResponse> {
+    const msg: Msg<MsgMintRequest> = {
+      typeUrl: SigningPanaceaClient.msgTypeMintNft,
+      value: MsgMintRequest.create(request),
+    };
+    return this.signAndBroadcast(request.controller!, [msg], fee, memo);
+  }
+
+  async transferNft(
+    request: Partial<MsgSend>,
+    fee: StdFee | "auto",
+    memo?: string,
+  ): Promise<DeliverTxResponse> {
+    const msg: Msg<MsgSend> = {
+      typeUrl: SigningPanaceaClient.msgTypeTransferNft,
+      value: MsgSend.fromPartial(request),
+    };
+    return this.signAndBroadcast(request.sender!, [msg], fee, memo);
+  }
+
+  async revokeNft(
+    request: Partial<MsgRevokeRequest>,
+    fee: StdFee | "auto",
+    memo?: string,
+  ): Promise<DeliverTxResponse> {
+    const msg: Msg<MsgRevokeRequest> = {
+      typeUrl: SigningPanaceaClient.msgTypeRevokeNft,
+      value: MsgRevokeRequest.create(request),
+    };
+    return this.signAndBroadcast(request.controller!, [msg], fee, memo);
+  }
+
+  async burnNft(
+    request: Partial<MsgBurnRequest>,
+    fee: StdFee | "auto",
+    memo?: string,
+  ): Promise<DeliverTxResponse> {
+    const msg: Msg<MsgBurnRequest> = {
+      typeUrl: SigningPanaceaClient.msgTypeBurnNft,
+      value: MsgBurnRequest.create(request),
+    };
+    return this.signAndBroadcast(request.owner!, [msg], fee, memo);
   }
 
   async createDenom(

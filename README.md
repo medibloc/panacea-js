@@ -2,7 +2,7 @@
 
 The `panacea-js` is the official [Panacea](https://github.com/medibloc/panacea-core) Javascript SDK written in Typescript, powered by [CosmJS](https://github.com/cosmos/cosmjs).
 
-The `panacea-js` extends the CosmJS in order to provide [Panacea-specific features](https://github.com/medibloc/panacea-core#key-features) (AOL, DID, PNFT).
+The `panacea-js` extends the CosmJS in order to provide [Panacea-specific features](https://github.com/medibloc/panacea-core#key-features) (AOL, DID, NFT).
 So, it exposes CosmJS basic functions as they are, such as `connectWithSigner` and `sendTokens`.
 
 ## Usage
@@ -31,7 +31,7 @@ yarn build
 To run simple unit tests,
 ```bash
 yarn test
-````
+```
 
 To run integration tests with [panacea-core](https://github.com/medibloc/panacea-core), start a `panacea-core` daemon first.
 ```bash
@@ -41,7 +41,7 @@ docker run --rm -d \
   -p 26657:26657 \
   -v $(pwd)/scripts:/root/scripts \
   --name core \
-  ghcr.io/medibloc/panacea-core:v2.2.0 \
+  ghcr.io/medibloc/panacea-core:v2.3.0 \
   bash /root/scripts/panacea-core/init.sh
 ```
 

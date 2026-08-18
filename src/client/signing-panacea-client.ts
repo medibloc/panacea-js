@@ -310,6 +310,9 @@ export class SigningPanaceaClient extends SigningStargateClient {
     return this.signAndBroadcast(request.owner!, [msg], fee, memo);
   }
 
+  /**
+   * @deprecated Panacea Core v2.2.x only. Use createNftClass() with Core v2.3.0+.
+   */
   async createDenom(
     request: Partial<MsgCreateDenomRequest>,
     fee: StdFee | "auto",
@@ -322,6 +325,9 @@ export class SigningPanaceaClient extends SigningStargateClient {
     return this.signAndBroadcast(request.creator!, [msg], fee, memo);
   }
 
+  /**
+   * @deprecated Panacea Core v2.2.x only. Panacea NFT class metadata is immutable in Core v2.3.0+.
+   */
   async updateDenom(
     request: Partial<MsgUpdateDenomRequest>,
     fee: StdFee | "auto",
@@ -334,6 +340,9 @@ export class SigningPanaceaClient extends SigningStargateClient {
     return this.signAndBroadcast(request.updater!, [msg], fee, memo);
   }
 
+  /**
+   * @deprecated Panacea Core v2.2.x only. Use updateNftController() with Core v2.3.0+.
+   */
   async transferDenom(
     request: Partial<MsgTransferDenomRequest>,
     fee: StdFee | "auto",
@@ -346,6 +355,9 @@ export class SigningPanaceaClient extends SigningStargateClient {
     return this.signAndBroadcast(request.sender!, [msg], fee, memo);
   }
 
+  /**
+   * @deprecated Panacea Core v2.2.x only. Panacea NFT classes cannot be deleted in Core v2.3.0+.
+   */
   async deleteDenom(
     request: Partial<MsgDeleteDenomRequest>,
     fee: StdFee | "auto",
@@ -358,6 +370,9 @@ export class SigningPanaceaClient extends SigningStargateClient {
     return this.signAndBroadcast(request.remover!, [msg], fee, memo);
   }
 
+  /**
+   * @deprecated Panacea Core v2.2.x only. Use mintNft() with Core v2.3.0+.
+   */
   async mintPNFT(
     request: Partial<MsgMintPNFTRequest>,
     fee: StdFee | "auto",
@@ -370,6 +385,9 @@ export class SigningPanaceaClient extends SigningStargateClient {
     return this.signAndBroadcast(request.creator!, [msg], fee, memo);
   }
 
+  /**
+   * @deprecated Panacea Core v2.2.x only. Use transferNft() with Core v2.3.0+.
+   */
   async transferPNFT(
     request: Partial<MsgTransferPNFTRequest>,
     fee: StdFee | "auto",
@@ -382,6 +400,9 @@ export class SigningPanaceaClient extends SigningStargateClient {
     return this.signAndBroadcast(request.sender!, [msg], fee, memo);
   }
 
+  /**
+   * @deprecated Panacea Core v2.2.x only. Use burnNft() with Core v2.3.0+.
+   */
   async burnPNFT(
     request: Partial<MsgBurnPNFTRequest>,
     fee: StdFee | "auto",

@@ -270,97 +270,87 @@ const privateKey = await Secp256k1.parseMnemonicToPrivateKey(mnemonic, hdPath);
 const {pubkey} = await CryptoSecp256k1.makeKeypair(privateKey);
 ```
 
-### Pnft
+## Panacea NFT
+
+Panacea Core v2.3.0 replaces the legacy PNFT module with `panacea.nft.v1`.
+Legacy PNFT methods remain available only for connecting to Core v2.2.x.
 
 ```ts
-const mnemonic = "bulb rail ...";
-const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, panaceaWalletOpts);
-const [ firstAccount ] = await wallet.getAccounts();
-console.log(firstAccount);
-const fromAddress = firstAccount.address;
+import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import { assertIsDeliverTxSuccess } from "@cosmjs/stargate";
+import {
+  BasicNFTData,
+  panaceaWalletOpts,
+  SigningPanaceaClient,
+  TransferPolicy,
+} from "@medibloc/panacea-js";
+import Long from "long";
 
-const tendermintRpcEndpoint = "http://localhost:26657";
-const client = await SigningPanaceaClient.connectWithSigner(tendermintRpcEndpoint, wallet);
+const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
+  "bulb rail ...",
+  panaceaWalletOpts,
+);
+const [{ address }] = await wallet.getAccounts();
+const client = await SigningPanaceaClient.connectWithSigner(
+  "http://localhost:26657",
+  wallet,
+);
 
-const createDenomReq = {
-  id: denomId,
-  name: "medibloc test create denom",
-  symbol: "medibloc",
-  description: "medibloc denom description",
-  data: "no data",
-  creator: fromAddress,
-};
-let res = await client.createDenom(createDenomReq, fee);
-console.log(res)
+const localClassId = "certificates";
+const classId = `${address}:${localClassId}`;
+let result = await client.createNftClass(
+  {
+    creator: address,
+    localClassId,
+    name: "Certificates",
+    symbol: "CERT",
+    description: "Completion certificates",
+    transferPolicy: TransferPolicy.TRANSFER_POLICY_OWNER_TRANSFERABLE,
+    revocable: true,
+    maxSupply: Long.fromInt(100, true),
+  },
+  "auto",
+);
+assertIsDeliverTxSuccess(result);
 
-let denom = await client.getPanaceaClient().getDenom(denomId);
-console.log(denom);
-
-const updateDenomReq = {
-  id: denomId,
-  name: "mediboc test update denom",
-  symbol: "medibloc limited",
-  description: "change denom test",
-  uri: "medibloc uri",
-  uriHash: "medibloc uri hash",
-  data: "clean",
-  updater: fromAddress,
-};
-res = await client.updateDenom(updateDenomReq, fee);
-console.log(res);
-
-denom = await client.getPanaceaClient().getDenom(denomId);
-console.log(denom);
-
-const pnftId = v4();
-const firstPnftReq = {
-  denomId: denomId,
-  id: pnftId,
-  name: "medibloc test nft",
-  description: "This is medibloc first nft",
-  data: "no data",
-  creator: fromAddress,
-};
-res = await client.mintPNFT(firstPnftReq, fee);
-console.log(res);
-
-let pnft = await client.getPanaceaClient().getPnft(denomId, pnftId);
-console.log(pnft);
-
-const transferPnftReq = {
-  denomId: denomId,
-  id: pnftId,
-  sender: fromAddress,
-  receiver: toAddress,
-};
-res = await client.transferPNFT(transferPnftReq, fee);
-console.log(res);
-
-pnft = await client.getPanaceaClient().getPnft(denomId, pnftId);
-console.log(pnft);
-
-////////////////////// Burn Pnft////////////////////////
-
-const secondPNftReq = {
-  denomId: denomId,
-  id: v4(),
-  name: "medibloc test nft",
-  description: "This is medibloc first nft",
-  data: "no data",
-  creator: fromAddress,
-};
-res = await client.mintPNFT(secondPNftReq, fee);
-console.log(res);
-
-const burnPnftReq = {
-  denomId: denomId,
-  id: secondPNftReq.id,
-  burner: fromAddress,
+const metadata = BasicNFTData.create({
+  name: "Certificate #1",
+  description: "Course completion certificate",
+  imageUri: "https://example.com/certificate.png",
+});
+const data = {
+  typeUrl: "/panacea.nft.v1.BasicNFTData",
+  value: BasicNFTData.encode(metadata).finish(),
 };
 
-res = await client.burnPNFT(burnPnftReq, fee);
-console.log(res);
+result = await client.mintNft(
+  {
+    classId,
+    nftId: "certificate.1",
+    controller: address,
+    recipient: address,
+    data,
+  },
+  "auto",
+);
+assertIsDeliverTxSuccess(result);
 
-pnft = await client.getPanaceaClient().getPnft(denomId, secondPNftReq.id);
-console.log(pnft);
+const record = await client
+  .getPanaceaClient()
+  .getNftRecord(classId, "certificate.1");
+console.log(record?.live);
+
+result = await client.transferNft(
+  {
+    classId,
+    id: "certificate.1",
+    sender: address,
+    receiver: "panacea1...",
+  },
+  "auto",
+);
+assertIsDeliverTxSuccess(result);
 ```
+
+Use `updateNftController()`, `revokeNft()`, and `burnNft()` for the remaining
+Panacea NFT lifecycle operations.

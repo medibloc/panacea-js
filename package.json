@@ -1,15 +1,22 @@
 {
   "name": "@medibloc/panacea-js",
   "version": "2.3.0",
-  "description": "The official Panacea Javascript SDK written in Typescript",
+  "description": "The official Panacea JavaScript SDK written in TypeScript",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=18"
   },
-  "repository": "git@github.com:medibloc/panacea-js.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/medibloc/panacea-js.git"
+  },
   "keywords": [
     "medibloc",
     "javascript",
@@ -29,7 +36,8 @@
     "build": "tsc",
     "test": "jest --runInBand",
     "lint": "eslint src --ext .ts",
-    "prettify": "prettier --write ."
+    "prettify": "prettier --write .",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

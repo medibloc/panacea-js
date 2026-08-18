@@ -50,6 +50,7 @@
     "@cosmjs/math": "^0.32.3",
     "@cosmjs/proto-signing": "^0.32.3",
     "@cosmjs/stargate": "^0.32.3",
+    "@cosmjs/tendermint-rpc": "^0.32.3",
     "@types/secp256k1": "^4.0.6",
     "@types/uuid": "^9.0.8",
     "bs58": "^5.0.0",

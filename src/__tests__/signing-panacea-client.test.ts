@@ -12,6 +12,12 @@ import { DidUtil } from "../did";
 import { isDeliverTxSuccess } from "@cosmjs/stargate";
 import assert from "assert";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
+import Long from "long";
+import {
+  BasicNFTData,
+  LiveNFTStatus,
+  TransferPolicy,
+} from "../nft";
 
 jest.setTimeout(60000);
 
@@ -250,10 +256,11 @@ describe("", () => {
     });
   });
 
-  describe("Pnft", () => {
+  describe("NFT", () => {
     let fromAddress: string;
     let toAddress: string;
     let client: SigningPanaceaClient;
+    let toClient: SigningPanaceaClient;
 
     beforeAll(async () => {
       const [firstAccount] = await wallet.getAccounts();
@@ -262,146 +269,134 @@ describe("", () => {
         panacead.tendermintUrl,
         wallet,
       );
-      toAddress = (
-        await (
-          await DirectSecp256k1HdWallet.generate(24, panaceaWalletOpts)
-        ).getAccounts()
-      )[0].address;
+      const toWallet = await DirectSecp256k1HdWallet.generate(
+        24,
+        panaceaWalletOpts,
+      );
+      toAddress = (await toWallet.getAccounts())[0].address;
+      toClient = await SigningPanaceaClient.connectWithSigner(
+        panacead.tendermintUrl,
+        toWallet,
+      );
+
+      const fundResult = await client.sendTokens(
+        fromAddress,
+        toAddress,
+        [{ denom: "umed", amount: "5000000" }],
+        "auto",
+      );
+      expect(isDeliverTxSuccess(fundResult)).toBeTruthy();
     });
 
-    afterEach(() => {
+    afterAll(() => {
       client.disconnect();
+      toClient.disconnect();
     });
 
-    it("All pnft test", async () => {
-      const fee = client.createFee(200000);
-      const denomId = v4();
-
-      const createDenomReq = {
-        id: denomId,
-        name: "medibloc test create denom",
-        symbol: "medibloc",
-        description: "medibloc denom description",
-        data: "no data",
-        creator: fromAddress,
-      };
-      console.log(`create denom. denomId(${denomId}) creator(${fromAddress})`);
-      let res = await client.createDenom(createDenomReq, fee);
-      expect(isDeliverTxSuccess(res)).toBeTruthy();
-
-      let denom = await client.getPanaceaClient().getDenom(denomId);
-      expect(denom).toBeTruthy();
-      expect(denom!.id).toBe(createDenomReq.id);
-      expect(denom!.name).toBe(createDenomReq.name);
-      expect(denom!.symbol).toBe(createDenomReq.symbol);
-      expect(denom!.description).toBe(createDenomReq.description);
-      expect(denom!.data).toBe(createDenomReq.data);
-      expect(denom!.uri).toBe("");
-      expect(denom!.uriHash).toBe("");
-      expect(denom!.owner).toBe(fromAddress);
-      console.log(`create denom success. denomId(${denomId}) creator(${fromAddress})`);
-
-      console.log(`update denom. denomId(${denomId}) creator(${fromAddress})`);
-      const updateDenomReq = {
-        id: denomId,
-        name: "mediboc test update denom",
-        symbol: "medibloc limited",
-        description: "change denom test",
-        uri: "medibloc uri",
-        uriHash: "medibloc uri hash",
-        data: "clean",
-        updater: fromAddress,
-      };
-      res = await client.updateDenom(updateDenomReq, fee);
-      expect(isDeliverTxSuccess(res)).toBeTruthy();
-
-      denom = await client.getPanaceaClient().getDenom(denomId);
-      expect(denom).toBeTruthy();
-      expect(denom!.id).toBe(updateDenomReq.id);
-      expect(denom!.name).toBe(updateDenomReq.name);
-      expect(denom!.symbol).toBe(updateDenomReq.symbol);
-      expect(denom!.description).toBe(updateDenomReq.description);
-      expect(denom!.data).toBe(updateDenomReq.data);
-      expect(denom!.uri).toBe(updateDenomReq.uri);
-      expect(denom!.uriHash).toBe(updateDenomReq.uriHash);
-      expect(denom!.owner).toBe(fromAddress);
-      console.log(`update denom success. denomId(${denomId}) creator(${fromAddress})`);
-
-      const pnftId = v4();
-      console.log(`mint pnft. denomId(${denomId}) pnftId(${pnftId}) creator(${fromAddress})`);
-      const firstPnftReq = {
-        denomId: denomId,
-        id: pnftId,
-        name: "medibloc test nft",
-        description: "This is medibloc first nft",
-        data: "no data",
-        creator: fromAddress,
-      };
-      res = await client.mintPNFT(firstPnftReq, fee);
-      expect(isDeliverTxSuccess(res)).toBeTruthy();
-
-      let pnft = await client.getPanaceaClient().getPnft(denomId, pnftId);
-      expect(pnft).toBeTruthy();
-      expect(pnft!.denomId).toBe(firstPnftReq.denomId);
-      expect(pnft!.id).toBe(firstPnftReq.id);
-      expect(pnft!.name).toBe(firstPnftReq.name);
-      expect(pnft!.description).toBe(firstPnftReq.description);
-      expect(pnft!.data).toBe(firstPnftReq.data);
-      expect(pnft!.uri).toBe("");
-      expect(pnft!.uriHash).toBe("");
-      expect(pnft!.creator).toBe(fromAddress);
-      expect(pnft!.owner).toBe(fromAddress);
-      console.log(`mint pnft success. denomId(${denomId}) pnftId(${pnftId}) creator(${fromAddress})`);
-
-      const transferPnftReq = {
-        denomId: denomId,
-        id: pnftId,
-        sender: fromAddress,
-        receiver: toAddress,
-      };
-      console.log(`transfer pnft. denomId(${denomId}) pnftId(${pnftId}) creator(${fromAddress}) to(${toAddress}`);
-      res = await client.transferPNFT(transferPnftReq, fee);
-      expect(isDeliverTxSuccess(res)).toBeTruthy();
-
-      pnft = await client.getPanaceaClient().getPnft(denomId, pnftId);
-      expect(pnft).toBeTruthy();
-      expect(pnft!.denomId).toBe(firstPnftReq.denomId);
-      expect(pnft!.id).toBe(firstPnftReq.id);
-      expect(pnft!.name).toBe(firstPnftReq.name);
-      expect(pnft!.description).toBe(firstPnftReq.description);
-      expect(pnft!.data).toBe(firstPnftReq.data);
-      expect(pnft!.uri).toBe("");
-      expect(pnft!.uriHash).toBe("");
-      expect(pnft!.creator).toBe(fromAddress);
-      expect(pnft!.owner).toBe(toAddress);
-      console.log(`transfer pnft success. denomId(${denomId}) pnftId(${pnftId}) creator(${fromAddress}) to(${toAddress}`);
-
-      ////////////////////// Burn Pnft////////////////////////
-
-      const secondPNftReq = {
-        denomId: denomId,
-        id: v4(),
-        name: "medibloc test nft",
-        description: "This is medibloc first nft",
-        data: "no data",
-        creator: fromAddress,
-      };
-      console.log(`burn pnft. denomId(${denomId}) pnftId(${secondPNftReq.id}) creator(${fromAddress})`);
-      res = await client.mintPNFT(secondPNftReq, fee);
-      expect(isDeliverTxSuccess(res)).toBeTruthy();
-
-      const burnPnftReq = {
-        denomId: denomId,
-        id: secondPNftReq.id,
-        burner: fromAddress,
+    it("creates, mints, transfers, revokes, and burns an NFT", async () => {
+      const fee = client.createFee(500000);
+      const suffix = v4().replace(/-/g, "");
+      const localClassId = `sdk.${suffix}`;
+      const classId = `${fromAddress}:${localClassId}`;
+      const nftId = `certificate.${suffix}`;
+      const metadata = BasicNFTData.create({
+        name: "Certificate",
+        description: "Panacea JS integration test",
+        imageUri: "https://example.test/certificate.png",
+      });
+      const data = {
+        typeUrl: "/panacea.nft.v1.BasicNFTData",
+        value: BasicNFTData.encode(metadata).finish(),
       };
 
-      res = await client.burnPNFT(burnPnftReq, fee);
+      let res = await client.createNftClass(
+        {
+          creator: fromAddress,
+          localClassId,
+          name: "SDK Certificate",
+          symbol: "SDKCERT",
+          description: "Panacea JS integration test class",
+          uri: "https://example.test/class.json",
+          uriHash: `sha256:${"a".repeat(64)}`,
+          transferPolicy:
+            TransferPolicy.TRANSFER_POLICY_OWNER_TRANSFERABLE,
+          revocable: true,
+          maxSupply: Long.fromInt(2, true),
+        },
+        fee,
+      );
       expect(isDeliverTxSuccess(res)).toBeTruthy();
 
-      pnft = await client.getPanaceaClient().getPnft(denomId, secondPNftReq.id);
-      expect(pnft).toBeUndefined();
-      console.log(`burn pnft success. denomId(${denomId}) pnftId(${secondPNftReq.id}) creator(${fromAddress})`);
+      const classRecord = await client
+        .getPanaceaClient()
+        .getNftClassRecord(classId);
+      expect(classRecord?.class?.id).toBe(classId);
+      expect(classRecord?.policy?.controller).toBe(fromAddress);
+      expect(classRecord?.policy?.transferPolicy).toBe(
+        TransferPolicy.TRANSFER_POLICY_OWNER_TRANSFERABLE,
+      );
+
+      res = await client.mintNft(
+        {
+          classId,
+          nftId,
+          controller: fromAddress,
+          recipient: fromAddress,
+          uri: "https://example.test/certificate.json",
+          uriHash: `sha256:${"b".repeat(64)}`,
+          data,
+        },
+        fee,
+      );
+      expect(isDeliverTxSuccess(res)).toBeTruthy();
+
+      let record = await client.getPanaceaClient().getNftRecord(classId, nftId);
+      expect(record?.live?.owner).toBe(fromAddress);
+      expect(record?.live?.status).toBe(
+        LiveNFTStatus.LIVE_NFT_STATUS_ACTIVE,
+      );
+      expect(BasicNFTData.decode(record!.live!.nft!.data!.value)).toEqual(
+        metadata,
+      );
+
+      const records = await client
+        .getPanaceaClient()
+        .getNftRecords({ classId, owner: fromAddress });
+      expect(records.nftRecords.map(({ nft }) => nft?.id)).toContain(nftId);
+
+      res = await client.transferNft(
+        { classId, id: nftId, sender: fromAddress, receiver: toAddress },
+        fee,
+      );
+      expect(isDeliverTxSuccess(res)).toBeTruthy();
+
+      record = await client.getPanaceaClient().getNftRecord(classId, nftId);
+      expect(record?.live?.owner).toBe(toAddress);
+
+      res = await client.revokeNft(
+        { classId, nftId, controller: fromAddress },
+        fee,
+      );
+      expect(isDeliverTxSuccess(res)).toBeTruthy();
+
+      record = await client.getPanaceaClient().getNftRecord(classId, nftId);
+      expect(record?.live?.status).toBe(
+        LiveNFTStatus.LIVE_NFT_STATUS_REVOKED,
+      );
+      expect(record?.live?.revocation?.revokedBy).toBe(fromAddress);
+
+      res = await toClient.burnNft(
+        { classId, nftId, owner: toAddress },
+        fee,
+      );
+      expect(isDeliverTxSuccess(res)).toBeTruthy();
+
+      record = await client.getPanaceaClient().getNftRecord(classId, nftId);
+      expect(record?.live).toBeUndefined();
+      expect(record?.burnTombstone?.burnedBy).toBe(toAddress);
+      expect(
+        BasicNFTData.decode(record!.burnTombstone!.data!.value),
+      ).toEqual(metadata);
     });
   });
 });

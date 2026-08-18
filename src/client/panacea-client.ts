@@ -26,10 +26,17 @@ import {
 import { QueryClientImpl as DidQueryClientImpl } from "../proto/panacea/did/v2/query";
 import { Denom } from "../proto/panacea/pnft/v2/denom";
 import { Pnft } from "../proto/panacea/pnft/v2/pnft";
+import { ClassRecord, NFTRecord } from "../proto/panacea/nft/v1/nft";
+import {
+  QueryClientImpl as NftQueryClientImpl,
+  QueryNFTRecordsRequest,
+  QueryNFTRecordsResponse,
+} from "../proto/panacea/nft/v1/query";
 
 export class PanaceaClient extends StargateClient {
   private readonly aolQueryClient: AolQueryClientImpl;
   private readonly didQueryClient: DidQueryClientImpl;
+  private readonly nftQueryClient: NftQueryClientImpl;
   private readonly pnftQueryClient: PnftQueryClientImpl;
 
   constructor(tmClient: CometClient, options: StargateClientOptions) {
@@ -37,6 +44,7 @@ export class PanaceaClient extends StargateClient {
     const pbRpcClient = createProtobufRpcClient(new QueryClient(tmClient));
     this.aolQueryClient = new AolQueryClientImpl(pbRpcClient);
     this.didQueryClient = new DidQueryClientImpl(pbRpcClient);
+    this.nftQueryClient = new NftQueryClientImpl(pbRpcClient);
     this.pnftQueryClient = new PnftQueryClientImpl(pbRpcClient);
   }
 
@@ -116,6 +124,29 @@ export class PanaceaClient extends StargateClient {
         didBase64: Buffer.from(did).toString("base64"),
       }),
     ).then((res) => res?.didDocumentWithSeq);
+  }
+
+  async getNftClassRecord(classId: string): Promise<ClassRecord | undefined> {
+    return fetchWithFallback(() =>
+      this.nftQueryClient.ClassRecord({ classId }),
+    ).then((res) => res?.classRecord);
+  }
+
+  async getNftRecord(
+    classId: string,
+    nftId: string,
+  ): Promise<NFTRecord | undefined> {
+    return fetchWithFallback(() =>
+      this.nftQueryClient.NFTRecord({ classId, nftId }),
+    ).then((res) => res?.nftRecord);
+  }
+
+  async getNftRecords(
+    request: Partial<QueryNFTRecordsRequest> = {},
+  ): Promise<QueryNFTRecordsResponse> {
+    return this.nftQueryClient.NFTRecords(
+      QueryNFTRecordsRequest.create(request),
+    );
   }
 
   async getDenoms(pagination?: PageRequest): Promise<QueryDenomsResponse> {

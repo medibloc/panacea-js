@@ -1,5 +1,4 @@
-import ecc from "secp256k1";
-import { randomBytes } from "crypto";
+import { secp256k1 } from "@noble/curves/secp256k1";
 import {
   Bip39,
   EnglishMnemonic,
@@ -12,24 +11,20 @@ import { base64url } from "jose";
 
 export class Secp256k1 {
   static generatePrivateKey(): Uint8Array {
-    let privKey;
-    do {
-      privKey = randomBytes(32);
-    } while (!ecc.privateKeyVerify(privKey));
-    return privKey;
+    return secp256k1.utils.randomSecretKey();
   }
 
   static getPublicKeyCompressed(privKey: Uint8Array): Uint8Array {
-    return ecc.publicKeyCreate(privKey);
+    return secp256k1.getPublicKey(privKey, true);
   }
 
   static getPublicKeyUncompressed(privKey: Uint8Array): Uint8Array {
-    return ecc.publicKeyCreate(privKey, false);
+    return secp256k1.getPublicKey(privKey, false);
   }
 
   // Uncompress public key if it's compressed. If not, do nothing.
   static uncompressPublicKey(pubKey: Uint8Array): Uint8Array {
-    return ecc.publicKeyConvert(pubKey, false);
+    return secp256k1.Point.fromHex(pubKey).toBytes(false);
   }
 
   // Convert a raw private key to JWK
@@ -52,7 +47,12 @@ export class Secp256k1 {
   }
 
   static sign(data32: Uint8Array, privKey: Uint8Array): Uint8Array {
-    return ecc.ecdsaSign(data32, privKey).signature;
+    if (data32.length !== 32) {
+      throw new Error("input data must be exactly 32 bytes");
+    }
+    return secp256k1
+      .sign(data32, privKey, { lowS: true, prehash: false })
+      .toBytes("compact");
   }
 
   static async parseMnemonicToPrivateKey(

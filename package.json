@@ -42,6 +42,7 @@
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.27",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "eslint": "^8.57.0",
@@ -49,7 +50,8 @@
     "prettier": "^3.2.5",
     "ts-jest": "^29.1.2",
     "ts-proto": "^1.169.1",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.2",
+    "uuid": "^11.1.1"
   },
   "dependencies": {
     "@cosmjs/amino": "^0.32.3",
@@ -60,11 +62,9 @@
     "@cosmjs/stargate": "^0.32.3",
     "@cosmjs/tendermint-rpc": "^0.32.3",
     "@types/secp256k1": "^4.0.6",
-    "@types/uuid": "^9.0.8",
     "bs58": "^5.0.0",
     "cosmjs-types": "^0.9.0",
     "jose": "^5.2.3",
-    "secp256k1": "^5.0.0",
-    "uuid": "^9.0.1"
+    "secp256k1": "^5.0.2"
   }
 }

@@ -12,8 +12,8 @@ Panacea JS 2.3.x targets Panacea Core 2.3.x. Legacy PNFT APIs remain available o
 
 ```bash
 yarn add @medibloc/panacea-js \
-  @cosmjs/proto-signing@0.32.3 \
-  @cosmjs/stargate@0.32.3 \
+  @cosmjs/proto-signing@0.34.1 \
+  @cosmjs/stargate@0.34.1 \
   cosmjs-types@0.9.0
 ```
 

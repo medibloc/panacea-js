@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## [v2.3.1](https://github.com/medibloc/panacea-js/releases/tag/v2.3.1) - 2026-08-21
+
+### Changed
+
+- Upgrade CosmJS from v0.32.3 to v0.34.1.
+- Replace `secp256k1` with `@noble/curves`.
+- Update runtime and transitive dependencies.
+
 ## [v2.3.0](https://github.com/medibloc/panacea-js/releases/tag/v2.3.0) - 2026-08-18
 
 ### Features

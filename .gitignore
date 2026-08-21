@@ -1,5 +1,6 @@
 #General
 .DS_Store
+.local/
 
 # Distribution folders
 dist

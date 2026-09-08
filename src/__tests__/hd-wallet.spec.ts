@@ -30,7 +30,9 @@ describe("Panacea HD wallet", () => {
       const xpub = await derivePanaceaBranchXpub(testMnemonic);
       const wallet = await createPanaceaWallet(testMnemonic, index);
       const [account] = await wallet.getAccounts();
+      const publicKey = HDKey.fromExtendedKey(xpub).deriveChild(index).publicKey;
 
+      expect(publicKey).toEqual(account.pubkey);
       expect(derivePanaceaAddress(xpub, index)).toBe(account.address);
     },
   );

@@ -1,5 +1,48 @@
 # Examples
 
+## Deriving customer addresses without private keys
+
+Generate one branch xpub in the offline environment where the mnemonic is
+managed. The fixed branch path is `m/44'/371'/0'/0`.
+
+```ts
+import { derivePanaceaBranchXpub } from "@medibloc/panacea-js";
+
+const xpub = await derivePanaceaBranchXpub("bulb rail ...");
+```
+
+Store only the xpub on the application server. It can derive customer
+addresses from non-hardened indices without access to the mnemonic or any
+private key.
+
+```ts
+import { derivePanaceaAddress } from "@medibloc/panacea-js";
+
+const customerIndex = 123;
+const address = derivePanaceaAddress(xpub, customerIndex);
+```
+
+If signing is needed, recreate the same indexed wallet only in an environment
+that is allowed to access the mnemonic.
+
+```ts
+import {
+  createPanaceaWallet,
+  SigningPanaceaClient,
+} from "@medibloc/panacea-js";
+
+const wallet = await createPanaceaWallet("bulb rail ...", customerIndex);
+const client = await SigningPanaceaClient.connectWithSigner(
+  tendermintRpcEndpoint,
+  wallet,
+);
+```
+
+The application owns index allocation and stores the mapping between its
+customer identifier, index, and derived address. Treat the xpub as sensitive:
+it reveals every address in the branch and should never be stored together
+with a derived child private key.
+
 ## Sending tokens
 
 ```ts

@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## [v2.3.2](https://github.com/medibloc/panacea-js/releases/tag/v2.3.2) - 2026-09-09
+
+### Features
+
+- Add HD wallet utilities for deriving a public branch xpub, deriving indexed
+  Panacea addresses without private keys, and recreating the corresponding
+  CosmJS wallet from a mnemonic.
+- Support an optional BIP-39 passphrase while keeping the Panacea derivation
+  path fixed at `m/44'/371'/0'/0/{index}`.
+
+### Changed
+
+- Add `@scure/bip32` v1.7.0 as an exact dependency for CommonJS-compatible
+  BIP-32 public derivation.
+
 ## [v2.3.1](https://github.com/medibloc/panacea-js/releases/tag/v2.3.1) - 2026-08-21
 
 ### Changed

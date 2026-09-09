@@ -1,11 +1,12 @@
 {
   "name": "@medibloc/panacea-js",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "The official Panacea JavaScript SDK written in TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "docs/examples.md"
   ],
   "publishConfig": {
     "access": "public"
@@ -23,7 +24,10 @@
     "typescript",
     "library",
     "panacea",
-    "cosmjs"
+    "cosmjs",
+    "bip32",
+    "hd-wallet",
+    "xpub"
   ],
   "author": "MediBloc <dev@medibloc.org>",
   "license": "Apache-2.0",
@@ -37,7 +41,9 @@
     "test": "jest --runInBand",
     "lint": "eslint src --ext .ts",
     "prettify": "prettier --write .",
-    "prepublishOnly": "npm run build"
+    "release:check": "npm run lint && npm test && npm pack --dry-run",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run lint && npm test"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

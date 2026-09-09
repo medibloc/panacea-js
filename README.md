@@ -21,6 +21,14 @@ yarn add @medibloc/panacea-js \
 
 See [docs/examples.md](docs/examples.md) for usage examples.
 
+### HD wallet utilities
+
+The SDK can generate a branch xpub offline, derive indexed Panacea addresses
+on a server without private keys, and recreate the matching CosmJS wallet when
+the mnemonic is available. The fixed address path is
+`m/44'/371'/0'/0/{index}`. See the
+[HD wallet example](docs/examples.md#deriving-customer-addresses-without-private-keys).
+
 ## Development
 
 Install dependencies and build the project.

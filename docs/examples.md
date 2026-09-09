@@ -87,7 +87,8 @@ import Long from "long";
 const mnemonic = "bulb rail ...";
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, panaceaWalletOpts);
 const [firstAccount] = await wallet.getAccounts();
-console.log(firstAccount);
+const ownerAddress = firstAccount.address;
+const writerAddress = ownerAddress;
 
 const tendermintRpcEndpoint = "http://localhost:26657";
 const client = await SigningPanaceaClient.connectWithSigner(tendermintRpcEndpoint, wallet);
@@ -95,7 +96,7 @@ const client = await SigningPanaceaClient.connectWithSigner(tendermintRpcEndpoin
 const topicName = "topic-1";
 
 const createTopicReq = {
-  ownerAddress: firstAccount.address,
+  ownerAddress: ownerAddress,
   topicName: topicName,
   description: "description",
 };
@@ -144,7 +145,7 @@ const feePayerWallet = await DirectSecp256k1HdWallet.fromMnemonic("...", panacea
 const writerWallet = await DirectSecp256k1HdWallet.fromMnemonic("...", panaceaWalletOpts);
 
 const tendermintRpcEndpoint = "http://localhost:26657";
-const client = await GroupSigningPanaceaClient.connectWithSigner(tendermintRpcEndpoint, [feePayerWallet, writerWallet]);
+const client = await GroupSigningPanaceaClient.connectWithSigners(tendermintRpcEndpoint, [feePayerWallet, writerWallet]);
 
 const result = await client.addRecordWithFeePayer(ownerAddress, topicName, key, value, writerAddress, feePayerAddress, "auto", "");
 ```
